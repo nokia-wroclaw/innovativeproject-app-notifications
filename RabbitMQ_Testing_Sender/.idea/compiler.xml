@@ -7,10 +7,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="RabbitMQ_Testing" />
+        <module name="RabbitMQ_Testing_Sender" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="RabbitMQ_Testing" target="1.5" />
+      <module name="RabbitMQ_Testing_Sender" target="1.7" />
     </bytecodeTargetLevel>
   </component>
 </project>

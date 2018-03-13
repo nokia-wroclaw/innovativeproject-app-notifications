@@ -1,0 +1,7 @@
+{
+      "topic": "TestingNotification",
+      "message": "This is system testing notification ",
+      "provider": "System admin",
+      "timestamp": "",
+      "priority": 0
+}
