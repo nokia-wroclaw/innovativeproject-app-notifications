@@ -1,0 +1,34 @@
+RabbitMQ
+	ï	Plusy:
+		o	Dobry do przechowywania danych oczekujπcych w kolejce
+		o	Dobrze napisana i zrozumia≥a dokumentacja 
+		o	Dobry do przesy≥ania punkt-punkt
+		o	Gwarantuje, øe wiadomoúÊ bÍdzie w kolejce, dopÛki nie zostanie z niej zdjÍta
+		o	Oficjalnie wspiera wielu klientÛw Java, JavaScript, C# , Erlang i protoko≥Ûw 
+		o	Jest samowystarczalnπ us≥ugπ na serwerze
+	ï	Minusy:
+		o	Po zdjÍciu z kolejki wiadomoúÊ jest usuwana
+		o	Wielu odbiorcÛw tego samego zestawu danych wymaga duplikatu kolejki
+
+Apache Kafka
+	ï	Plusy:
+		o	Dobra do strumieniowanie w czasie rzeczywistym;
+		o	Dobra do przetwarzania strumieniowego
+		o	Przechowuje dane nawet po zdjÍciu z kolejki ( historia wiadomoúci )
+	ï	Minusy:
+		o	Oficjalnie wspierany jedynie klienta Java
+		o	Niekompletna dokumentacja
+		o	Wymaga ZooKeepería
+
+
+
+
+
+
+
+
+èrÛd≥a:
+	ï	https://content.pivotal.io/blog/understanding-when-to-use-rabbitmq-or-apache-kafka
+	ï	https://www.rabbitmq.com/
+	ï	https://softwaremill.com/using-kafka-as-a-message-queue/
+	ï	http://kth.diva-portal.org/smash/get/diva2:813137/FULLTEXT01.pdf
