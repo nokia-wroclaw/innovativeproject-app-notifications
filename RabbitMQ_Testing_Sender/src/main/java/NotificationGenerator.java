@@ -34,13 +34,13 @@ public class NotificationGenerator {
         connectToQueue();
         sendJSON();
         TimeUnit.SECONDS.sleep(1);
- /*       sendJSON();
-        TimeUnit.SECONDS.sleep(1);
         sendJSON();
         TimeUnit.SECONDS.sleep(1);
         sendJSON();
         TimeUnit.SECONDS.sleep(1);
-        sendJSON();*/
+        sendJSON();
+        TimeUnit.SECONDS.sleep(1);
+        sendJSON();
 
         closeConnection();
     }

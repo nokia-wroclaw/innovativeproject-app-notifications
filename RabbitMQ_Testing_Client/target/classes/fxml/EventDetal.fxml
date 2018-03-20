@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="pane-frontgroung" stylesheets="@../ApplicationStyle.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ApplicationController">
+   <children>
+      <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <center>
+            <Label fx:id="Content" text="content" BorderPane.alignment="CENTER">
+               <padding>
+                  <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+               </padding>
+            </Label>
+         </center>
+         <top>
+            <Label fx:id="Title" text="titlr" BorderPane.alignment="CENTER" />
+         </top>
+      </BorderPane>
+   </children>
+</AnchorPane>

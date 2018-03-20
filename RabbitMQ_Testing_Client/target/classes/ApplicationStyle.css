@@ -1,0 +1,98 @@
+/* colors */
+*{
+	color-grey : rgb(50,50,50) ;
+	color-darkGrey : rgb(20,20,20);
+	color-midGrey : rgb(35,35,35);
+	color-liteGrey : rgb(80,80,80) ;
+	
+	color-liteBlue: rgb(100,150,200);
+	
+	color-darkRed : rgb(100,50,50);
+	color-liteRed : rgb(200,100,100);
+}
+.scroll-bar:horizontal, .scroll-bar:vertical{
+    -fx-background-color:transparent;
+}
+
+.split-pane-divider {
+  -fx-padding: 0 2 0 2 ;
+  
+  -fx-border-style: hidden solid hidden solid;
+  -fx-border-color: color-darkGrey;
+  -fx-border-radius: 4;
+  
+  -fx-background-color: color-midGrey;
+  -fx-background-radius: 4;
+    
+}
+
+.label{
+	-fx-text-fill: color-liteBlue;		
+}
+
+.scroll-pane {
+   -fx-background-color: transparent;
+}
+.scroll-pane > .viewport {
+   -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical{
+    -fx-background-color:transparent;
+}
+
+
+/* base */
+.pane-base{
+	-fx-background-color : color-darkGrey;
+}
+
+/*  backgroung  */
+.pane-backgroung{
+	-fx-border-width: 2;
+	-fx-border-color: color-darkGrey ;
+	
+	-fx-background-color : color-grey;
+}
+
+/*  frontgroung  */
+.pane-frontgroung{
+	-fx-background-color : color-midGrey;
+	-fx-background-radius: 8;
+}
+
+.button-event{
+	-fx-background-color : color-liteGrey;
+	-fx-background-radius: 8;	
+}
+.button-event:hover{
+	-fx-background-color : color-darkGrey;
+}
+.button-event:pressed{
+	-fx-background-color : color-liteBlue;
+}
+.button-event > .button:focused {
+	-fx-border-style : hidden hidden solid hidden;
+	-fx-border-width : 5;
+	-fx-border-color : color-liteBlue;
+}
+
+.button-event .label{
+	-fx-text-fill: color-liteBlue;	
+}
+.button-event:pressed .label{
+	-fx-text-fill: color-darkGrey;	
+}
+
+.button-menu{
+	-fx-background-color : color-liteGrey;
+	-fx-text-fill: color-liteBlue;
+	-fx-background-radius: 8;
+}
+.button-menu:hover{
+	 -fx-background-color : color-grey;
+ }
+.button-menu:pressed{
+	  -fx-background-color : color-liteBlue;
+	  -fx-text-fill: color-liteGrey;
+  }
