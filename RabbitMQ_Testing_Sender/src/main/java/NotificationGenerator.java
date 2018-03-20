@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
@@ -31,13 +34,13 @@ public class NotificationGenerator {
         connectToQueue();
         sendJSON();
         TimeUnit.SECONDS.sleep(1);
-        sendJSON();
+ /*       sendJSON();
         TimeUnit.SECONDS.sleep(1);
         sendJSON();
         TimeUnit.SECONDS.sleep(1);
         sendJSON();
         TimeUnit.SECONDS.sleep(1);
-        sendJSON();
+        sendJSON();*/
 
         closeConnection();
     }
@@ -59,6 +62,13 @@ public class NotificationGenerator {
         String stringJSON = readFile("./src/main/resources/message.json");
 
         notificationJSON = new JSONObject(stringJSON);
+
+        Date time =  Calendar.getInstance().getTime();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String date1 = format.format(time);
+
+        notificationJSON.put("timeStamp",date1);
+        stringJSON = notificationJSON.toString();
 
         channel.basicPublish("", QUEUE_NAME, null, stringJSON.getBytes());
 

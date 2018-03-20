@@ -2,6 +2,6 @@
       "topic": "TestingNotification",
       "message": "This is system testing notification ",
       "provider": "System admin",
-      "timestamp": "",
+      "timeStamp": null ,
       "priority": 0
 }

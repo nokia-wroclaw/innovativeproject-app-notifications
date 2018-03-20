@@ -1,27 +1,35 @@
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.*;
-import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 
 public class NotificationReceiver {
     private final static String QUEUE_NAME = "JSON_canal";
 
-    private ArrayList<JSONObject> notificationsJSON;
+    private ArrayList<Notification> notifications;
 
     private Connection connection;
     private Channel channel;
 
     NotificationReceiver() throws IOException, TimeoutException, InterruptedException {
 
-        notificationsJSON = new ArrayList<JSONObject>();
+        notifications = new ArrayList<Notification>();
         connectToQueue();
         receiveJSONs();
+        char sysIn;
 
-        while( System.in.read() != 'q'){ TimeUnit.MICROSECONDS.sleep(10);}
+        do{
+            sysIn = (char) System.in.read();
+            if(sysIn == 'd' && !(notifications.isEmpty())){
+                System.out.println(notifications.get(notifications.size()-1));
+            }
+        }
+        while( sysIn != 'q');
+
         closeConnection();
 
     }
@@ -42,13 +50,25 @@ public class NotificationReceiver {
 
         Consumer consumer = new DefaultConsumer(channel) {
             @Override
-            public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws java.io.UnsupportedEncodingException {
+            public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws UnsupportedEncodingException {
                 String message = new String(body, "UTF-8");
 
-                JSONObject tmpNot = new JSONObject(message);
-                notificationsJSON.add(tmpNot);
+                //JSONObject tmpNot = new JSONObject(message);
+                //notificationsJSON.add(tmpNot);
 
-                System.out.println(" -+- Received: " + tmpNot.getString("topic"));
+                //System.out.println(" -+- Received: " + tmpNot.getString("topic"));
+
+                ObjectMapper mapper = new ObjectMapper();
+
+                try {
+                    Notification notification = mapper.readValue(message, Notification.class);
+                    notifications.add(notification);
+                    System.out.println(" -+- Received: " + notification.getTopic()  + " \'d\' for detail ");
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
 
             }
             @Override
