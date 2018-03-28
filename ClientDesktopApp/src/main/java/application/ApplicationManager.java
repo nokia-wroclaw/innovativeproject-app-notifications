@@ -1,6 +1,7 @@
 package application;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import Database.DatabaseConnection;
 import Factory.NotificationFactory;
@@ -72,7 +73,8 @@ public class ApplicationManager  extends Application {
 	}
     
     @Override
-    public void stop() {
+    public void stop() throws SQLException {
+		database.getConnection().close();
     	System.out.println("Application stopped");
     }
  
