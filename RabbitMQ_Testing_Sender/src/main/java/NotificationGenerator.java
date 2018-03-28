@@ -49,6 +49,7 @@ public class NotificationGenerator {
     public void connectToQueue() throws IOException, TimeoutException {
 
         ConnectionFactory factory = new ConnectionFactory();
+        factory.setPort(6782);
         factory.setHost("localhost");
 
         connection = factory.newConnection();
@@ -72,7 +73,7 @@ public class NotificationGenerator {
 
         channel.basicPublish("", QUEUE_NAME, null, stringJSON.getBytes());
 
-        System.out.println(" -+- Sent: " + notificationJSON.getString("topic"));
+        System.out.println(" -+- Send: " + notificationJSON.getString("topic"));
 
     }
 
