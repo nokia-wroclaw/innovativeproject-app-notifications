@@ -107,7 +107,7 @@ public final class TwitterStreamReader {
             String message = source.getScreenName() + " has followed " + followedUser.getScreenName() + "!";
             try {
                 generateNote(topic, message);
-            } catch (IOException e) {
+            } catch (IOException|TimeoutException e) {
                 e.printStackTrace();
             }
         }
@@ -127,7 +127,7 @@ public final class TwitterStreamReader {
             String message = directMessage.getSenderScreenName() + " has sent a message to " + directMessage.getRecipientScreenName() + "!";
             try {
                 generateNote(topic, message);
-            } catch (IOException e) {
+            } catch (IOException|TimeoutException e) {
                 e.printStackTrace();
             }
         }
@@ -292,7 +292,7 @@ public final class TwitterStreamReader {
         closeConnection();
     }
 
-    private static void generateNote(String topic, String message) throws IOException {
+    private static void generateNote(String topic, String message) throws IOException, TimeoutException {
         org.json.JSONObject notificationJSON;
         String stringJSON = readFile("./src/main/resources/message.json");
         notificationJSON = new org.json.JSONObject(stringJSON);
@@ -316,7 +316,9 @@ public final class TwitterStreamReader {
 
         queueJSON = notificationJSON;
         queueString = stringJSON;
+        connectToQueue();
         sendJSON();
+        closeConnection();
     }
 
 
