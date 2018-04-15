@@ -7,14 +7,13 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.Channel;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Scanner;
 import java.util.concurrent.TimeoutException;
@@ -254,7 +253,8 @@ public final class TwitterStreamReader {
 
     private static String getCurrentTimeStamp() {
         SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//dd/MM/yyyy
-        Date now = new Date();
+        Date now = Calendar.getInstance().getTime();
+
         return sdfDate.format(now);
     }
 
@@ -263,23 +263,22 @@ public final class TwitterStreamReader {
         notificationJSON = new org.json.JSONObject();
         notificationJSON.put("topic", topic);
         notificationJSON.put("message", status.getText());
-        notificationJSON.put("provider", "Twitter");
-        notificationJSON.put("timeStamp", getCurrentTimeStamp());
+        notificationJSON.put("sourceID", 15);
+        notificationJSON.put("time", getCurrentTimeStamp());
         notificationJSON.put("priority", 0);
 
         String stringJSON = notificationJSON.toString();
-        System.out.println(stringJSON);
+        //System.out.println(stringJSON);
 
-        PrintWriter writer = new PrintWriter("./src/main/resources/messagetest.json", "UTF-8");
+        /*PrintWriter writer = new PrintWriter("./src/main/resources/messagetest.json", "UTF-8");
         writer.println(stringJSON);
-        writer.close();
+        writer.close();*/
 
         queueJSON = notificationJSON;
         queueString = stringJSON;
         connectToQueue();
         sendJSON();
         closeConnection();
-        System.out.println("wiadomosc: " + notificationJSON.getString("message"));
     }
 
     private static void generateNote(String topic, String message) throws IOException, TimeoutException {
@@ -287,22 +286,22 @@ public final class TwitterStreamReader {
         notificationJSON = new org.json.JSONObject();
         notificationJSON.put("topic", topic);
         notificationJSON.put("message", message);
-        notificationJSON.put("provider", "Twitter");
+        notificationJSON.put("sourceID", 15);
+        notificationJSON.put("time", getCurrentTimeStamp());
         notificationJSON.put("priority", 0);
 
         String stringJSON = notificationJSON.toString();
-        System.out.println(stringJSON);
+        //System.out.println(stringJSON);
 
-        PrintWriter writer = new PrintWriter("./src/main/resources/messagetest.json", "UTF-8");
+        /*PrintWriter writer = new PrintWriter("./src/main/resources/messagetest.json", "UTF-8");
         writer.println(stringJSON);
-        writer.close();
+        writer.close();*/
 
         queueJSON = notificationJSON;
         queueString = stringJSON;
         connectToQueue();
         sendJSON();
         closeConnection();
-        System.out.println("wiadomosc: " + notificationJSON.getString("message"));
     }
 
 
@@ -337,19 +336,15 @@ public final class TwitterStreamReader {
         channel = connection.createChannel();
 
         channel.queueDeclare(QUEUE_NAME, false, false, false, null);
-
-        System.out.println("Connected to queue!");
     }
 
     private static void closeConnection() throws IOException, TimeoutException {
         channel.close();
         connection.close();
-        System.out.println("Disconnected from queue!");
     }
 
     private static void sendJSON() throws IOException {
         channel.basicPublish("", QUEUE_NAME, null, queueString.getBytes());
-        System.out.println(" -+- Send: \"" + queueJSON.getString("topic") + "\" JSON object");
     }
 
     public static void main(String[] args) throws TwitterException {
