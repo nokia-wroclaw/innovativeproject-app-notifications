@@ -10,6 +10,7 @@ import com.rabbitmq.client.Channel;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -18,12 +19,11 @@ import java.util.Date;
 import java.util.Scanner;
 import java.util.concurrent.TimeoutException;
 
-
 public final class TwitterStreamReader {
 
     private static Connection connection;
     private static Channel channel;
-    private final static String QUEUE_NAME = "JSON_canal";
+    private final static String QUEUE_NAME = "DEMO_QUEUE";
     private static org.json.JSONObject queueJSON;
     private static String queueString;
 
@@ -82,8 +82,9 @@ public final class TwitterStreamReader {
                     + favoritedStatus.getUser().getScreenName() + " - "
                     + favoritedStatus.getText()
                     + "   |Tweet's URL: https://twitter.com/statuses/" + favoritedStatus.getId());*/
+            String message = favoritedStatus.getUser().getScreenName() + " has liked your tweet!";
             try {
-                generateNote(favoritedStatus, topic);
+                generateNote(topic, message);
             } catch (IOException|TimeoutException e) {
                 e.printStackTrace();
             }
@@ -225,8 +226,6 @@ public final class TwitterStreamReader {
             } catch (IOException|TimeoutException e) {
                 e.printStackTrace();
             }
-
-
         }
 
         @Override
@@ -252,10 +251,6 @@ public final class TwitterStreamReader {
         }
     };
 
-    private static String readFile(String path) throws IOException {
-        byte[] encoded = Files.readAllBytes(Paths.get(path));
-        return new String(encoded, Charset.defaultCharset());
-    }
 
     private static String getCurrentTimeStamp() {
         SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//dd/MM/yyyy
@@ -265,60 +260,49 @@ public final class TwitterStreamReader {
 
     private static void generateNote(Status status, String topic) throws IOException, TimeoutException {
         org.json.JSONObject notificationJSON;
-        String stringJSON = readFile("./src/main/resources/message.json");
-        notificationJSON = new org.json.JSONObject(stringJSON);
+        notificationJSON = new org.json.JSONObject();
         notificationJSON.put("topic", topic);
         notificationJSON.put("message", status.getText());
         notificationJSON.put("provider", "Twitter");
         notificationJSON.put("timeStamp", getCurrentTimeStamp());
+        notificationJSON.put("priority", 0);
 
-        stringJSON = notificationJSON.toString();
+        String stringJSON = notificationJSON.toString();
         System.out.println(stringJSON);
 
-        ObjectOutputStream outputStream;
-        try {
-            outputStream = new ObjectOutputStream(new FileOutputStream("./src/main/resources/messagetest.json"));
-            outputStream.writeObject(stringJSON);
-            outputStream.flush();
-            outputStream.close();
-        } catch (Exception e) {
-            System.err.println("Error: " + e);
-        }
+        PrintWriter writer = new PrintWriter("./src/main/resources/messagetest.json", "UTF-8");
+        writer.println(stringJSON);
+        writer.close();
 
         queueJSON = notificationJSON;
         queueString = stringJSON;
         connectToQueue();
         sendJSON();
         closeConnection();
+        System.out.println("wiadomosc: " + notificationJSON.getString("message"));
     }
 
     private static void generateNote(String topic, String message) throws IOException, TimeoutException {
         org.json.JSONObject notificationJSON;
-        String stringJSON = readFile("./src/main/resources/message.json");
-        notificationJSON = new org.json.JSONObject(stringJSON);
+        notificationJSON = new org.json.JSONObject();
         notificationJSON.put("topic", topic);
         notificationJSON.put("message", message);
         notificationJSON.put("provider", "Twitter");
-        notificationJSON.put("timeStamp", getCurrentTimeStamp());
+        notificationJSON.put("priority", 0);
 
-        stringJSON = notificationJSON.toString();
+        String stringJSON = notificationJSON.toString();
         System.out.println(stringJSON);
 
-        ObjectOutputStream outputStream;
-        try {
-            outputStream = new ObjectOutputStream(new FileOutputStream("./src/main/resources/messagetest.json"));
-            outputStream.writeObject(stringJSON);
-            outputStream.flush();
-            outputStream.close();
-        } catch (Exception e) {
-            System.err.println("Error: " + e);
-        }
+        PrintWriter writer = new PrintWriter("./src/main/resources/messagetest.json", "UTF-8");
+        writer.println(stringJSON);
+        writer.close();
 
         queueJSON = notificationJSON;
         queueString = stringJSON;
         connectToQueue();
         sendJSON();
         closeConnection();
+        System.out.println("wiadomosc: " + notificationJSON.getString("message"));
     }
 
 
@@ -345,33 +329,30 @@ public final class TwitterStreamReader {
 
 
     private static void connectToQueue() throws IOException, TimeoutException {
-
         ConnectionFactory factory = new ConnectionFactory();
-        factory.setPort(6782);
-        factory.setHost("localhost");
+        factory.setPort(5672);
+        factory.setHost("");
 
         connection = factory.newConnection();
         channel = connection.createChannel();
 
         channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+
+        System.out.println("Connected to queue!");
     }
 
     private static void closeConnection() throws IOException, TimeoutException {
-
         channel.close();
         connection.close();
+        System.out.println("Disconnected from queue!");
     }
 
     private static void sendJSON() throws IOException {
-
         channel.basicPublish("", QUEUE_NAME, null, queueString.getBytes());
-
-        System.out.println(" -+- Send: " + queueJSON.getString("topic"));
-
+        System.out.println(" -+- Send: \"" + queueJSON.getString("topic") + "\" JSON object");
     }
 
     public static void main(String[] args) throws TwitterException {
-
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.setDebugEnabled(true)
                 .setJSONStoreEnabled(true)
@@ -381,7 +362,6 @@ public final class TwitterStreamReader {
                 .setOAuthAccessTokenSecret("");
 
         TwitterStream twitterStream = new TwitterStreamFactory(cb.build()).getInstance();
-
 
         if (!twitterStream.getAuthorization().isEnabled()) {
             authenticate(twitterStream);
