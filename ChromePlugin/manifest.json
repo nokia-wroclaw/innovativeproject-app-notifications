@@ -1,0 +1,20 @@
+{
+  "manifest_version"  : 2,
+  "name"              : "Notify Me",
+  "description"       : "Notification aggregation browser plugin",
+  "short_name"        : "NM",
+  "version"           : "0.1",
+
+  "browser_action"    : {
+    "default_popup" : "application/HTML/index.html",
+    "default_icon"  : "images/logo.png"
+  },
+
+  "permissions": [
+    "debugger",
+    "storage",
+    "cookies"
+  ],
+
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
+}

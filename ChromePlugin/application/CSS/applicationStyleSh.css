@@ -1,0 +1,92 @@
+.notification-div{
+    border-radius: 2px;
+    margin-top : 2px;
+    margin-bottom : 2px;
+    padding: 4px;
+    background-color: var(--color-back2);
+    -webkit-text-fill-color:  var(--color-text);
+}
+
+.HBox{
+    margin-left: auto;
+    margin-right: auto;
+}
+
+hr{
+    border-bottom-color: var(--color-text);
+    background-color:  var(--color-text);
+}
+
+.bar-upper{
+    align-content: center;
+    border-radius: 8px;
+    margin-top : 8px;
+    margin-bottom : 8px;
+    background-color: var(--color-back1);
+    -webkit-text-fill-color:  var(--color-text);
+}
+
+.label-bar{
+    font-size: 14px;
+    width: 50px;
+    height: 50px;
+}
+
+#darkula{
+    -webkit-text-fill-color: rgb(45,45,45);
+}
+#light{
+    -webkit-text-fill-color: rgb(220,220,220);
+}
+
+#stylebox{
+    position: absolute;
+    opacity: 0;
+}
+
+.div-background{
+    border-radius: 8px;
+    padding: 36px;
+    background-color: var(--color-back1);
+    -webkit-text-fill-color:  var(--color-text);
+}
+
+
+.login-input{
+    font-size: 16px;
+    border-radius: 2px;
+    border-width: 0;
+}
+
+.login-button{
+    padding: 8px;
+    width: 100%;
+    background-color: var(--subtleBlue) ;
+    -webkit-text-fill-color:  var(--color-text2);
+}
+.login-button:hover, .login-button:focus{
+    background-color: var(--lightBlue) ;
+}
+.login-button:active{
+}
+
+.login-text {
+    padding: 8px;
+    background-color:  rgb(250, 250, 250);
+    -webkit-text-fill-color: rgb(25, 25, 25);
+}
+
+.wrong{
+    outline-style: outset;
+    outline-width: 2px;
+    outline-color: var(--subtleRed);
+}
+
+.login-text:focus{
+    outline-style: outset;
+    outline-width: 2px;
+    outline-color: var(--subtleBlue);
+}
+.login-text::placeholder{
+    -webkit-text-fill-color: rgba(25, 25, 25, 0.25);
+}

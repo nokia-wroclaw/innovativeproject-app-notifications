@@ -1,0 +1,24 @@
+*{
+    --subtleBlue : rgb(50, 150, 225);
+    --lightBlue :  rgb(50, 175, 225);
+
+    --subtleRed : rgb(225, 100, 100);
+
+    --color-text : rgb(220, 220 ,220);
+    --color-text2 : rgb(50, 50 ,50);
+    --color-back1: rgb(45, 45, 45);
+    --color-back2: rgb(80, 80, 80);
+
+}
+
+.img-logo{
+    content : url("../../images/logoLight.png");;
+    width : 100px;
+    height : 100px;
+}
+
+.check-switch {
+    width: 50px;
+    height: 50px;
+    content: url("../../images/switchOFF.png");
+}

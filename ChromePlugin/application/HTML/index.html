@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html ng-app="clientApplication" ng-controller="mainController" >
+<head>
+
+    <title> Notifications aggregator </title>
+    <meta charset="UTF-8">
+
+    <script src="../../lib/angular.js"></script>
+    <script src="../../lib/angular-cookies.js"></script>
+    <script type="text/javascript" src="../JS/applicationController.js" ></script>
+
+    <link rel="stylesheet" type="text/css" href="{{applicationSyle}}">
+    <link rel="stylesheet" type="text/css" href="../CSS/applicationStyleSh.css">
+
+</head>
+<body>
+
+<upper-bar></upper-bar>
+<login-window ng-hide="isCliendLoged"></login-window>
+<notifications-list ng-hide="!isCliendLoged"></notifications-list>
+
+</body>
+</html>
