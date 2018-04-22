@@ -17,6 +17,8 @@ class RabbitToDB{
 
     private String rabbitName = "RabbitMQ";
 
+    private String SQLpassword;
+
     private Connection connection;
     private Channel channel;
 
@@ -44,7 +46,7 @@ class RabbitToDB{
     }
 
     public void connectToDatabase(){
-        database = new DatabaseConnection("mysecretpassword","postgres");
+        database = new DatabaseConnection(SQLpassword,"postgres");
         if(database.getConnection()!=null){
             notificationFactory = new NotificationFactory();
             System.out.println("Connected to data base");
@@ -69,7 +71,9 @@ class RabbitToDB{
     }
 
 
-    RabbitToDB() {
+    RabbitToDB(String password) {
+
+        SQLpassword = password;
 
         while (true) {
 
@@ -105,7 +109,13 @@ class RabbitToDB{
     }
 
     public static void main(String[] argv) {
-        new RabbitToDB();
+        if(argv.length==0 || argv[0]==null){
+
+            System.out.println("not enough arguments");
+            return;
+        }
+
+        new RabbitToDB(argv[0]);
     }
 
 

@@ -17,37 +17,19 @@ public class DatabaseConnection {
     private static Connection connection = null;
     private String DBName = "PostgreSQL";// "35.204.202.104";
 
+    private static String user;
+    private static String password;
+
+
     /**
      * Constructor creates and keeps alive database connection
      * Connection is later stored in instance of this class
      */
-    public DatabaseConnection(){
-
-        try {
-            Class.forName("org.postgresql.Driver");
-
-            connection = DriverManager.getConnection(
-                    "jdbc:postgresql://"+DBName+":5432/AppNotifications",
-                    "postgres",
-                    "mysecretpassword");
-
-            System.out.println("Successfully connected to database!");
-
-
-        } catch (ClassNotFoundException e) {
-
-            //e.printStackTrace();
-            System.out.append("No PostgreSQL library found, include library in project directory.");
-
-        } catch (SQLException e) {
-
-            //e.printStackTrace();
-            System.out.append("Database login failed! Check Your username and/or password.");
-
-        }
-    }
 
     public DatabaseConnection(String password, String username) {
+
+        DatabaseConnection.user=username;
+        DatabaseConnection.password=password;
 
         try {
             Class.forName("org.postgresql.Driver");
@@ -82,7 +64,7 @@ public class DatabaseConnection {
         if (INSTANCE == null) {
             synchronized (DatabaseConnection.class) {
                 if (INSTANCE == null) {
-                    INSTANCE = new DatabaseConnection();
+                    INSTANCE = new DatabaseConnection(password,user);
                     System.out.println("Database connection instance not found, created new one.");
                 }
             }
