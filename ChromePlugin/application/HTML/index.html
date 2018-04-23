@@ -16,8 +16,9 @@
 <body>
 
 <upper-bar></upper-bar>
-<login-window ng-hide="isCliendLoged"></login-window>
-<notifications-list ng-hide="!isCliendLoged"></notifications-list>
+
+<login-window ng-if="!isCliendLoged"></login-window>
+<notifications-list ng-if="isCliendLoged"></notifications-list>
 
 </body>
 </html>

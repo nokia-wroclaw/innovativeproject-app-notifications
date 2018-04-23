@@ -1,8 +1,19 @@
-<div class="div-background">
+<div class="div-background" id="notification-list">
 
-    <h1> Notifications </h1>
+    <h1 style="cursor: default"> Notifications </h1>
     <hr>
+    <br/>
 
+    <div id="notificationArray" ng-repeat="notification in notificationsJSON.notifications">
+        <notification-element
+                add-self = addThis
+                my-notification = notification
+                request-focus = elementRequestFocus
+                remove-my = removeElement
+        ></notification-element>
+    </div>
+
+    <br/>
     <hr>
     <form ng-submit="logout()">
         <p><input class="login-input login-button" type="submit" value="Logout"></p>

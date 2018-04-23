@@ -1,10 +1,55 @@
+.hidden{
+    display: none;
+}
+
 .notification-div{
+    cursor: pointer;
+    border: none;
+    width: 100%;
+    height: 25px;
+    overflow: hidden;
+    text-align: center;
     border-radius: 2px;
-    margin-top : 2px;
-    margin-bottom : 2px;
-    padding: 4px;
+    margin-top : 4px;
+    margin-bottom : 4px;
+    padding: 5px;
     background-color: var(--color-back2);
     -webkit-text-fill-color:  var(--color-text);
+}
+.div-selected{
+    cursor: default;
+    height: auto;
+    outline-color: var(--subtleBlue);
+}
+
+
+
+.notification-manipulation-button{
+    padding: 6px;
+    cursor: pointer;
+    position: page;
+    background-color: var(--lightRed);
+}
+
+.notification-manipulation-button:hover {
+    background-color: var(--subtleRed);
+}
+
+.notification-topic{
+    font-size: 15px;
+    height: 25px;
+    padding: 2px;
+    margin: 0;
+}
+
+.notification-message{
+    padding: 0;
+    margin: 0;
+}
+
+#notification-list{
+    text-align: center;
+    width: 300px;
 }
 
 .HBox{
@@ -36,7 +81,7 @@ hr{
     -webkit-text-fill-color: rgb(45,45,45);
 }
 #light{
-    -webkit-text-fill-color: rgb(220,220,220);
+    -webkit-text-fill-color: rgb(230,230,230);
 }
 
 #stylebox{
@@ -59,6 +104,7 @@ hr{
 }
 
 .login-button{
+    cursor: pointer;
     padding: 8px;
     width: 100%;
     background-color: var(--subtleBlue) ;
@@ -90,3 +136,4 @@ hr{
 .login-text::placeholder{
     -webkit-text-fill-color: rgba(25, 25, 25, 0.25);
 }
+

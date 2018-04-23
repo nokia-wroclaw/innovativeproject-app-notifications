@@ -3,8 +3,15 @@ var applicationController = angular.module('clientApplication',['ngCookies']);
 
 
 // Components
-applicationController.component("notificationInfo" ,{
-    templateUrl : '../HTML/notification.html'
+applicationController.component("notificationElement" ,{
+    templateUrl : '../HTML/notification.html',
+    controller : 'notificationController',
+    bindings: {
+        removeMy: '=',
+        myNotification: '=',
+        requestFocus: '=',
+        addSelf: '='
+    }
 });
 
 applicationController.component("notificationsList" ,{
@@ -30,10 +37,14 @@ applicationController.value("changeWindow");
 
 applicationController.value("setApplicationStyle");
 
+applicationController.value("notificationsJSON");
+
 
 //Controllers
-applicationController.controller("mainController" , function($cookies,$scope) {
+applicationController.controller("mainController" , function($http,$cookies,$scope) {
 
+    applicationController.Token = $cookies.get("Token");
+    $scope.isCliendLoged =( applicationController.Token != null );
 
     // functions
     applicationController.changeWindow = function () {
@@ -46,12 +57,7 @@ applicationController.controller("mainController" , function($cookies,$scope) {
         $scope.applicationSyle = appStyle;
     }
 
-
     // defaults
-    //$scope.applicationSyle = '../CSS/applicationDarkula.css';
-    applicationController.changeWindow();
-
-
 });
 
 applicationController.controller("upperBarrController" , function($cookies,$scope) {
@@ -108,12 +114,68 @@ applicationController.controller("loginController" , function($cookies,$scope) {
 
 });
 
-applicationController.controller("notificationListController" , function($cookies,$scope) {
+applicationController.controller("notificationListController" , function($http,$cookies,$scope) {
 
-    // functions
+    var elements = [];
+
+    $scope.addThis = function (element) {
+        elements.push(element);
+    };
+
+    $scope.elementRequestFocus = function(element){
+        if (element.focused==false) {
+            angular.forEach(elements, function (value) {
+                value.loseFocus();
+            });
+
+            element.getFocus();
+        }
+    };
+
+    $scope.removeElement = function(element){
+        element.hideElement();
+
+        elements.splice(elements.indexOf(element),1);
+    };
+
     $scope.logout = function () {
         $cookies.remove("Token");
         applicationController.changeWindow();
+    };
+
+    $http.get('../JSON/notifications.json')
+        .then(function(res){
+            $scope.notificationsJSON = res.data;
+        });
+
+});
+
+applicationController.controller("notificationController" , function ($scope) {
+
+    this.focused = false;
+
+    //functions
+    $scope.remove = function () {
+        delete this;
+        $scope.delet = "deleted !!";
+    };
+
+    this.hideElement = function () {
+        $scope.notificationFocus="hidden";
     }
+
+    this.loseFocus = function () {
+        $scope.notificationFocus="notification-div";
+        this.focused = false;
+    };
+
+    this.getFocus = function () {
+        $scope.notificationFocus=$scope.notificationFocus+" div-selected";
+        this.focused = true;
+    };
+
+    //defaults
+    $scope.notificationFocus="notification-div";
+    $scope.delet = "delete";
 
 });

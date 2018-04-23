@@ -1,0 +1,52 @@
+{
+  "notifications":
+  [
+    {
+      "sourceID":5,
+      "topic":"Test01",
+      "time":"2018-04-15 20:14:23",
+      "message":"Test number 1",
+      "priority":0
+    },
+
+    {
+      "sourceID":5,
+      "topic":"Test02",
+      "time":"2018-04-15 20:14:23",
+      "message":"Test number 2",
+      "priority":0
+    },
+
+    {
+      "sourceID":5,
+      "topic":"Test03",
+      "time":"2018-04-15 20:14:23",
+      "message":"Test number 3",
+      "priority":0
+    },
+
+    {
+      "sourceID":5,
+      "topic":"Test04",
+      "time":"2018-04-15 20:14:23",
+      "message":"Test number 4",
+      "priority":0
+    },
+
+    {
+      "sourceID":5,
+      "topic":"Test05",
+      "time":"2018-04-15 20:14:23",
+      "message":"Test number 5",
+      "priority":0
+    },
+
+    {
+      "sourceID":5,
+      "topic":"Test06",
+      "time":"2018-04-15 20:14:23",
+      "message":"Test number 6",
+      "priority":0
+    }
+  ]
+}
