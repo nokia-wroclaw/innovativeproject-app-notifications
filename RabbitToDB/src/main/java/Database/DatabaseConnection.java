@@ -15,7 +15,7 @@ public class DatabaseConnection {
 
     private static DatabaseConnection INSTANCE;
     private static Connection connection = null;
-    private String DBName = "PostgreSQL";// "35.204.202.104";
+    private String DBName = "PostgreSQL";
 
     private static String user;
     private static String password;

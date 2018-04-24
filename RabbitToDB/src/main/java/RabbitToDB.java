@@ -30,10 +30,6 @@ class RabbitToDB{
         factory.setPort(5672);
         factory.setHost(rabbitName);
 
-        //factory.setHost("35.204.202.104");
-
-        //factory.setHost("localhost");
-
         try {
             connection = factory.newConnection();
             System.out.println("Connected to Rabbit");
@@ -136,6 +132,7 @@ class RabbitToDB{
             JSONObject JSON = new JSONObject(message);
 
             Notification receivedNotification = new Notification(
+                    JSON.getInt("userID"),
                     JSON.getInt("sourceID"),
                     JSON.getString("topic"),
                     JSON.getString("message"),

@@ -23,6 +23,16 @@ public class Notification {
 		this.priority = priority;
 	}
 
+	public Notification(int userID, int sourceID, String topic, String message, Timestamp time, int priority) {
+		this.userID = userID;
+		this.sourceID = sourceID;
+		this.flag = false;
+		this.topic = topic;
+		this.message = message;
+		this.time = time;
+		this.priority = priority;
+	}
+
 	public Notification(int nID, int uID, int sID, boolean flag, String topic, String message, Timestamp time, int prio) {
 		this.notificationID = nID;
 		this.userID = uID;
