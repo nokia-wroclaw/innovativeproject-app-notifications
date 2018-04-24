@@ -1,3 +1,5 @@
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import twitter4j.*;
 import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
@@ -14,20 +16,32 @@ import java.util.Date;
 import java.util.Scanner;
 import java.util.concurrent.TimeoutException;
 
+import java.util.List;
+
+import dao.*;
+
 public final class TwitterStreamReader {
+
+    private static ApplicationContext context = new ClassPathXmlApplicationContext("file:Beans.xml");
+    private static AccountJDBCTemplate accountJDBCTemplate = (AccountJDBCTemplate) context.getBean("AccountJDBCTemplate");
 
     private static Connection connection;
     private static Channel channel;
     private final static String QUEUE_NAME = "DEMO_QUEUE";
     private static org.json.JSONObject queueJSON;
     private static String queueString;
+    private static String accessToken;
+    private static String accessTokenSecret;
+
+    private static List<Account> userList = accountJDBCTemplate.getAccountBySourceId(15);
+
 
     private static final UserStreamListener listener = new UserStreamListener() {
 
         @Override
         public void onStatus(Status status) {
-            if (status.getText().contains("@Enfaude")) {
-                String topic = "New mention of you made by " + status.getUser().getScreenName() + "!";
+            if (status.getText().contains("@")) {
+                String topic = "New mention made by " + status.getUser().getScreenName() + "!";
                 try {
                     generateNote(status, topic);
                 } catch (IOException | TimeoutException e) {
@@ -261,10 +275,26 @@ public final class TwitterStreamReader {
 
 
 
-    private static void authenticate(TwitterStream twitterStream)throws TwitterException{
-        Scanner input = new Scanner(System.in);
+    private static void authenticate()throws TwitterException{
 
-        // First, we ask Twitter for a request token.
+        for (Account user : userList) {
+            ConfigurationBuilder cb = new ConfigurationBuilder();
+            accessToken = accountJDBCTemplate.getAccount(user.getAccountID()).getAccessToken();
+            accessTokenSecret = accountJDBCTemplate.getAccount(user.getAccountID()).getAccessTokenSecret();
+
+            cb.setDebugEnabled(true)
+                    .setJSONStoreEnabled(true)
+                    .setOAuthConsumerKey("")
+                    .setOAuthConsumerSecret("")
+                    .setOAuthAccessToken(accessToken)
+                    .setOAuthAccessTokenSecret(accessTokenSecret);
+
+            TwitterStream twitterStream = new TwitterStreamFactory(cb.build()).getInstance();
+            twitterStream.addListener(listener);
+            twitterStream.user();
+        }
+        /*// First, we ask Twitter for a request token.
+        Scanner input = new Scanner(System.in);
         RequestToken reqToken = twitterStream.getOAuthRequestToken();
         System.out.println("\nRequest token: " + reqToken.getToken()
                 + "\nRequest token secret: " + reqToken.getTokenSecret());
@@ -278,14 +308,14 @@ public final class TwitterStreamReader {
         }
         System.out.println("\nAccess token: " + accessToken.getToken()
                 + "\nAccess token secret: " + accessToken.getTokenSecret()
-                + "\nSuccess!");
+                + "\nSuccess!");*/
     }
 
 
     private static void connectToQueue() throws IOException, TimeoutException {
         ConnectionFactory factory = new ConnectionFactory();
         factory.setPort(5672);
-        factory.setHost("");
+        factory.setHost("35.204.202.104");
 
         connection = factory.newConnection();
         channel = connection.createChannel();
@@ -303,22 +333,15 @@ public final class TwitterStreamReader {
     }
 
     public static void main(String[] args) throws TwitterException {
-        ConfigurationBuilder cb = new ConfigurationBuilder();
-        cb.setDebugEnabled(true)
-                .setJSONStoreEnabled(true)
-                .setOAuthConsumerKey("")
-                .setOAuthConsumerSecret("")
-                .setOAuthAccessToken("")
-                .setOAuthAccessTokenSecret("");
 
+        authenticate();
+        /*ConfigurationBuilder cb = new ConfigurationBuilder();
+        authenticate(cb);
         TwitterStream twitterStream = new TwitterStreamFactory(cb.build()).getInstance();
 
-        if (!twitterStream.getAuthorization().isEnabled()) {
-            authenticate(twitterStream);
-        }
-
         twitterStream.addListener(listener);
+        twitterStream.user();*/
         // user() method internally creates a thread which manipulates TwitterStream and calls these adequate listener methods continuously.
-        twitterStream.user();
+
     }
 }
