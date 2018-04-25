@@ -3,6 +3,8 @@
     <h1 style="cursor: default"> Notifications </h1>
     <hr>
     <br/>
+    <input type="button" ng-click="refreshList()" class="login-input refresh-button" value="Refresh"/>
+    <br/>
 
     <div id="notificationArray" ng-repeat="notification in notificationsJSON.notifications">
         <notification-element

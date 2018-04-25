@@ -51,7 +51,7 @@ applicationController.controller("mainController" , function($http,$cookies,$sco
 
         applicationController.Token = $cookies.get("Token");
         $scope.isCliendLoged =( applicationController.Token != null );
-    }
+    };
 
     applicationController.setApplicationStyle = function(appStyle) {
         $scope.applicationSyle = appStyle;
@@ -65,7 +65,7 @@ applicationController.controller("upperBarrController" , function($cookies,$scop
     // functions
     $scope.setStyle = function () {
 
-        if ($scope.styleBox == "T"){
+        if ($scope.styleBox === "T"){
 
             $cookies.put("style","T");
             applicationController.setApplicationStyle('../CSS/applicationLight.css');
@@ -75,7 +75,7 @@ applicationController.controller("upperBarrController" , function($cookies,$scop
             $cookies.put("style","F");
             applicationController.setApplicationStyle('../CSS/applicationDarkula.css');
         }
-    }
+    };
 
 
     // defaults
@@ -88,25 +88,24 @@ applicationController.controller("upperBarrController" , function($cookies,$scop
 
 });
 
-applicationController.controller("loginController" , function($cookies,$scope) {
+applicationController.controller("loginController" , function($http,$cookies,$scope) {
 
 
     // functions
     $scope.inputReset = function () {
         $scope.loginInputStyle = "login-input login-text";
-    }
+    };
 
     $scope.validate = function () {
 
-        if( $scope.username == "user" && $scope.password == "paslo" ){
-            var Token = "AA11";
-            $cookies.put("Token",Token);
-            applicationController.changeWindow();
-
-        }else{
-            $scope.loginInputStyle = "login-input login-text wrong";
-        }
-    }
+       $http.get('http://35.204.202.104:8080/api/v1.0/login/',{
+            params: {username:$scope.username,password:$scope.password }})
+            .then(function(response){
+                this.Token = response.data;
+                $cookies.put("Token",Token);
+                applicationController.changeWindow();
+            });
+    };
 
 
     // defaults
@@ -114,16 +113,17 @@ applicationController.controller("loginController" , function($cookies,$scope) {
 
 });
 
-applicationController.controller("notificationListController" , function($http,$cookies,$scope) {
+applicationController.controller("notificationListController" , function($interval,$http,$cookies,$scope) {
 
     var elements = [];
+    $scope.notificationsJSON = [];
 
     $scope.addThis = function (element) {
         elements.push(element);
     };
 
     $scope.elementRequestFocus = function(element){
-        if (element.focused==false) {
+        if (element.focused===false) {
             angular.forEach(elements, function (value) {
                 value.loseFocus();
             });
@@ -133,9 +133,10 @@ applicationController.controller("notificationListController" , function($http,$
     };
 
     $scope.removeElement = function(element){
-        element.hideElement();
-
+        //element.hideElement();
+        $scope.notificationsJSON.notifications.splice( $scope.notificationsJSON.notifications.indexOf(element.myNotification), 1 );
         elements.splice(elements.indexOf(element),1);
+        $scope.$apply();
     };
 
     $scope.logout = function () {
@@ -143,10 +144,24 @@ applicationController.controller("notificationListController" , function($http,$
         applicationController.changeWindow();
     };
 
-    $http.get('../JSON/notifications.json')
-        .then(function(res){
-            $scope.notificationsJSON = res.data;
-        });
+
+    $scope.refreshList = function(){
+        //$http.get('../JSON/notifications.json')
+        $http.get('http://35.204.202.104:8080/api/v1.0/notf/' ,{
+           params: {token:$cookies.get("Token")}})
+            .then(function(response){
+                elements = [];
+                $scope.notificationsJSON = [];
+                $scope.notificationsJSON = response.data;
+            });
+    };
+
+    $scope.refreshList();
+
+/*    $scope.myTimer = 0;
+    stop = $interval(function() {
+        $scope.myTimer = $scope.myTimer+1;
+    }, 1000);*/
 
 });
 
@@ -162,7 +177,7 @@ applicationController.controller("notificationController" , function ($scope) {
 
     this.hideElement = function () {
         $scope.notificationFocus="hidden";
-    }
+    };
 
     this.loseFocus = function () {
         $scope.notificationFocus="notification-div";

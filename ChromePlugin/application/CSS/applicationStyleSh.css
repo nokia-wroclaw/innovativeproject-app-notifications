@@ -103,6 +103,18 @@ hr{
     border-width: 0;
 }
 
+.refresh-button{
+    cursor: pointer;
+    padding: 8px;
+    margin: 4px;
+    width: 50%;
+    background-color: var(--subtleBlue) ;
+    -webkit-text-fill-color:  var(--color-text2);
+}
+.refresh-button:hover, .refresh-button:focus{
+    background-color: var(--lightBlue) ;
+}
+
 .login-button{
     cursor: pointer;
     padding: 8px;

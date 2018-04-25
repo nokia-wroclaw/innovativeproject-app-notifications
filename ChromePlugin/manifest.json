@@ -3,7 +3,7 @@
   "name"              : "Notify Me",
   "description"       : "Notification aggregation browser plugin",
   "short_name"        : "NM",
-  "version"           : "0.1",
+  "version"           : "1.0",
 
   "browser_action"    : {
     "default_popup" : "application/HTML/index.html",
@@ -13,7 +13,8 @@
   "permissions": [
     "debugger",
     "storage",
-    "cookies"
+    "cookies",
+    "http://35.204.202.104:8080/"
   ],
 
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
