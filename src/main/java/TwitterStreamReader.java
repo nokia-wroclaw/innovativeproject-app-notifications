@@ -28,26 +28,20 @@ public final class TwitterStreamReader {
     private static Connection connection;
     private static Channel channel;
     private final static String QUEUE_NAME = "DEMO_QUEUE";
-    private static org.json.JSONObject queueJSON;
     private static String queueString;
     private static String accessToken;
     private static String accessTokenSecret;
-
     private static List<Account> userList = accountJDBCTemplate.getAccountBySourceId(15);
-
-
     private static final UserStreamListener listener = new UserStreamListener() {
 
         @Override
         public void onStatus(Status status) {
-            if (status.getText().contains("@")) {
-                String topic = "New mention made by " + status.getUser().getScreenName() + "!";
+                String topic = "New status by " + status.getUser().getScreenName() + "!";
                 try {
                     generateNote(status, topic);
                 } catch (IOException | TimeoutException e) {
                     e.printStackTrace();
                 }
-            }
         }
 
         @Override
@@ -62,12 +56,12 @@ public final class TwitterStreamReader {
 
         @Override
         public void onTrackLimitationNotice(int numberOfLimitedStatuses) {
-//
+
         }
 
         @Override
         public void onScrubGeo(long userId, long upToStatusId) {
-//
+
         }
 
         @Override
@@ -77,17 +71,13 @@ public final class TwitterStreamReader {
 
         @Override
         public void onFriendList(long[] friendIds) {
-           /* System.out.print("onFriendList");
-            for (long friendId : friendIds) {
-                System.out.print(" " + friendId);
-            }
-            System.out.println();*/
+
         }
 
         @Override
         public void onFavorite(User source, User target, Status favoritedStatus) {
             String topic = "Tweet liked!";
-            String message = favoritedStatus.getUser().getScreenName() + " has liked your tweet!";
+            String message = source.getScreenName() + " has liked your tweet!";
             try {
                 generateNote(topic, message);
             } catch (IOException|TimeoutException e) {
@@ -103,7 +93,7 @@ public final class TwitterStreamReader {
         @Override
         public void onFollow(User source, User followedUser) {
             String topic = "New follower!";
-            String message = source.getScreenName() + " has followed " + followedUser.getScreenName() + "!";
+            String message = source.getScreenName() + " is now following " + followedUser.getScreenName() + "!";
             try {
                 generateNote(topic, message);
             } catch (IOException|TimeoutException e) {
@@ -164,17 +154,17 @@ public final class TwitterStreamReader {
 
         @Override
         public void onUserProfileUpdate(User updatedUser) {
-//
+
         }
 
         @Override
         public void onUserDeletion(long deletedUser) {
-//
+
         }
 
         @Override
         public void onUserSuspension(long suspendedUser) {
-//
+
         }
 
         @Override
@@ -193,7 +183,6 @@ public final class TwitterStreamReader {
                     + " target:@" + target.getScreenName()
                     + retweetedStatus.getUser().getScreenName()
                     + " - " + retweetedStatus.getText());
-
             String topic = "Retweeted status!";
             try {
                 generateNote(retweetedStatus, topic);
@@ -204,15 +193,12 @@ public final class TwitterStreamReader {
 
         @Override
         public void onFavoritedRetweet(User source, User target, Status favoritedRetweet) {
-            /*System.out.println("onFavroitedRetweet source:@" + source.getScreenName()
-                    + " target:@" + target.getScreenName()
-                    + favoritedRetweet.getUser().getScreenName()
-                    + " - " + favoritedRetweet.getText());*/
+
         }
 
         @Override
         public void onQuotedTweet(User source, User target, Status quotingTweet) {
-            String topic = quotingTweet.getUser().getName() + " has quoted your status!";
+            String topic = source.getName() + " has quoted your status!";
             try {
                 generateNote(quotingTweet, topic);
             } catch (IOException|TimeoutException e) {
@@ -231,7 +217,6 @@ public final class TwitterStreamReader {
     private static String getCurrentTimeStamp() {
         SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//dd/MM/yyyy
         Date now = Calendar.getInstance().getTime();
-
         return sdfDate.format(now);
     }
 
@@ -243,11 +228,9 @@ public final class TwitterStreamReader {
         notificationJSON.put("sourceID", 15);
         notificationJSON.put("time", getCurrentTimeStamp());
         notificationJSON.put("priority", 0);
-        notificationJSON.put("userID", 4);
+        notificationJSON.put("userID", 1);
 
         String stringJSON = notificationJSON.toString();
-
-        queueJSON = notificationJSON;
         queueString = stringJSON;
         connectToQueue();
         sendJSON();
@@ -262,11 +245,9 @@ public final class TwitterStreamReader {
         notificationJSON.put("sourceID", 15);
         notificationJSON.put("time", getCurrentTimeStamp());
         notificationJSON.put("priority", 0);
-        notificationJSON.put("userID", 4);
+        notificationJSON.put("userID", 1);
 
         String stringJSON = notificationJSON.toString();
-
-        queueJSON = notificationJSON;
         queueString = stringJSON;
         connectToQueue();
         sendJSON();
@@ -274,31 +255,11 @@ public final class TwitterStreamReader {
     }
 
 
-
-    private static void authenticate()throws TwitterException{
-
-        for (Account user : userList) {
-            ConfigurationBuilder cb = new ConfigurationBuilder();
-            accessToken = accountJDBCTemplate.getAccount(user.getAccountID()).getAccessToken();
-            accessTokenSecret = accountJDBCTemplate.getAccount(user.getAccountID()).getAccessTokenSecret();
-
-            cb.setDebugEnabled(true)
-                    .setJSONStoreEnabled(true)
-                    .setOAuthConsumerKey("")
-                    .setOAuthConsumerSecret("")
-                    .setOAuthAccessToken(accessToken)
-                    .setOAuthAccessTokenSecret(accessTokenSecret);
-
-            TwitterStream twitterStream = new TwitterStreamFactory(cb.build()).getInstance();
-            twitterStream.addListener(listener);
-            twitterStream.user();
-        }
-        /*// First, we ask Twitter for a request token.
+    private static void authenticate(TwitterStream twitterStream) throws TwitterException {
         Scanner input = new Scanner(System.in);
         RequestToken reqToken = twitterStream.getOAuthRequestToken();
-        System.out.println("\nRequest token: " + reqToken.getToken()
-                + "\nRequest token secret: " + reqToken.getTokenSecret());
         AccessToken accessToken = null;
+
         while (accessToken == null) {
             System.out.print("\nOpen this URL in a browser: "
                     + "\n    " + reqToken.getAuthorizationURL() + "\n"
@@ -306,16 +267,14 @@ public final class TwitterStreamReader {
             String pin = input.nextLine();
             accessToken = twitterStream.getOAuthAccessToken(reqToken, pin);
         }
-        System.out.println("\nAccess token: " + accessToken.getToken()
-                + "\nAccess token secret: " + accessToken.getTokenSecret()
-                + "\nSuccess!");*/
+        System.out.println("Success!");
     }
 
 
     private static void connectToQueue() throws IOException, TimeoutException {
         ConnectionFactory factory = new ConnectionFactory();
         factory.setPort(5672);
-        factory.setHost("35.204.202.104");
+        factory.setHost("RabbitMQ");
 
         connection = factory.newConnection();
         channel = connection.createChannel();
@@ -333,15 +292,25 @@ public final class TwitterStreamReader {
     }
 
     public static void main(String[] args) throws TwitterException {
+        if(userList.isEmpty())
+            System.out.println("User list is empty!");
+        else {
+            for (Account user : userList) {
+                ConfigurationBuilder cb = new ConfigurationBuilder();
+                accessToken = accountJDBCTemplate.getAccount(user.getAccountID()).getAccessToken();
+                accessTokenSecret = accountJDBCTemplate.getAccount(user.getAccountID()).getAccessTokenSecret();
 
-        authenticate();
-        /*ConfigurationBuilder cb = new ConfigurationBuilder();
-        authenticate(cb);
-        TwitterStream twitterStream = new TwitterStreamFactory(cb.build()).getInstance();
+                cb.setDebugEnabled(true)
+                        .setJSONStoreEnabled(true)
+                        .setOAuthConsumerKey("")
+                        .setOAuthConsumerSecret("")
+                        .setOAuthAccessToken(accessToken)
+                        .setOAuthAccessTokenSecret(accessTokenSecret);
 
-        twitterStream.addListener(listener);
-        twitterStream.user();*/
-        // user() method internally creates a thread which manipulates TwitterStream and calls these adequate listener methods continuously.
-
+                TwitterStream twitterStream = new TwitterStreamFactory(cb.build()).getInstance();
+                twitterStream.addListener(listener);
+                twitterStream.user();
+            }
+        }
     }
 }
