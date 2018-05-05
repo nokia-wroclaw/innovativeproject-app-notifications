@@ -3,12 +3,13 @@
     <custom-logo></custom-logo>
     <hr>
     <span class="error_info">{{info}}</span>
-    <form ng-submit="validate()">
+    <form ng-submit="signUp()">
         <p><input ng-class="loginInputStyle" ng-focus="inputReset()" type="text" placeholder="username" ng-model="username"> </p>
         <p><input ng-class="loginInputStyle" ng-focus="inputReset()" type="password" placeholder="password" ng-model="password"> </p>
-        <p><input class="login-input login-button" type="submit" value="Login"></p>
+        <p><input ng-class="loginInputStyle" ng-focus="inputReset()" type="password" placeholder="retype password" ng-model="rePassword"> </p>
+        <p><input class="login-input login-button" type="submit" value="Sign up"></p>
     </form>
     <hr>
-    <p><input class="login-input login-button" ng-click="registerNewUser()" type="button" value="Sign up"></p>
+    <p><input class="login-input login-button" ng-click="backToLogin()" type="button" value="Back"></p>
 
 </div>

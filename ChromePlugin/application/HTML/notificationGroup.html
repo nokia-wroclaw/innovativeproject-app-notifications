@@ -1,0 +1,13 @@
+<div  ng-class="notificationFocus" ng-init=$ctrl.addSelf($ctrl)>
+
+    <h4 ng-click=$ctrl.requestFocus($ctrl) class="notification-group">
+        From: <span class="info-data">{{$ctrl.group.name}}</span>,
+        <br/> <span class="info-data">{{$ctrl.group.quantity}}</span> notifications
+    </h4>
+
+    <hr>
+
+    <notifications-list ng-if=$ctrl.focused type=$ctrl.group.type from=$ctrl.group.name ></notifications-list>
+
+
+</div>

@@ -1,5 +1,32 @@
+@keyframes slowResize {
+    0% {max-height: 25px;}
+    100% {max-height: 30px;}
+}
+
+.popup{
+    display: flow;
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    top: 50%;
+    text-align: center;
+    width: 200px;
+    height: 120px;
+    -webkit-text-fill-color:  var(--color-text);
+    background-color: var(--color-back1);
+}
+
 .hidden{
     display: none;
+}
+
+.info-data{
+    -webkit-text-fill-color:  var(--lightGrean);
+}
+
+#user-pane{
+    text-align: center;
+    height: max-content;
 }
 
 .notification-div{
@@ -16,13 +43,43 @@
     background-color: var(--color-back2);
     -webkit-text-fill-color:  var(--color-text);
 }
-.div-selected{
-    cursor: default;
-    height: auto;
-    outline-color: var(--subtleBlue);
+.notification-div:hover{
+    border-style: solid;
+    border-width: 1px;
+    border-color: var(--color-text);
+    padding : 4px;
 }
 
+.notificationGroup-div{
+    cursor: pointer;
+    border: none;
+    width: 100%;
+    height: 50px;
+    overflow: hidden;
+    text-align: center;
+    border-radius: 2px;
+    margin-top : 6px;
+    margin-bottom : 6px;
+    padding: 5px;
+    background-color: var(--color-back3);
+    -webkit-text-fill-color:  var(--color-text);
+}
+.notificationGroup-div:hover{
+    outline-style: solid;
+    outline-width: 1px;
+    outline-color: var(--lightGrean);
+}
 
+.div-selected{
+    height: auto;
+    cursor: auto;
+    outline-color: var(--subtleBlue);
+}
+.div-selected:hover{
+}
+.div-selected > h4{
+    cursor: pointer;
+}
 
 .notification-manipulation-button{
     padding: 6px;
@@ -42,14 +99,41 @@
     margin: 0;
 }
 
+.notification-group{
+    font-size: 20px;
+    height: 50px;
+    padding: 2px;
+    margin: 0;
+}
+
 .notification-message{
     padding: 0;
     margin: 0;
 }
 
-#notification-list{
+.notification-list{
+    margin: 10px;
     text-align: center;
-    width: 300px;
+    height: max-content;
+}
+
+#notification-array{
+    padding: 10px;
+    width: 500px;
+    max-height: 300px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+::-webkit-scrollbar{
+    width: 10px;
+}
+::-webkit-scrollbar-track{
+    background: transparent;
+    margin: 5px;
+}
+::-webkit-scrollbar-thumb{
+    background: var(--color-text);
+    border-radius: 2px;
 }
 
 .HBox{
@@ -91,7 +175,7 @@ hr{
 
 .div-background{
     border-radius: 8px;
-    padding: 36px;
+    padding: 24px;
     background-color: var(--color-back1);
     -webkit-text-fill-color:  var(--color-text);
 }
@@ -149,3 +233,6 @@ hr{
     -webkit-text-fill-color: rgba(25, 25, 25, 0.25);
 }
 
+.error_info{
+    -webkit-text-fill-color: var(--subtleRed);
+}

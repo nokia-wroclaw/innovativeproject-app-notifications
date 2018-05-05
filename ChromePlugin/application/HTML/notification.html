@@ -1,10 +1,10 @@
-<div ng-click=$ctrl.requestFocus($ctrl) ng-class="notificationFocus" ng-init=$ctrl.addSelf($ctrl)>
+<div  ng-class="notificationFocus" ng-init=$ctrl.addSelf($ctrl)>
 
-   <h4 class="notification-topic"> {{$ctrl.myNotification.topic}} </h4>
+   <h4 ng-click=$ctrl.requestFocus($ctrl) class="notification-topic"> {{$ctrl.myNotification.topic}} </h4>
     <div class="notification-message"> {{$ctrl.myNotification.time}} </div>
     <br/>
     <div class="notification-message"> {{$ctrl.myNotification.message}} </div>
     <hr>
-    <div ng-click=$ctrl.removeMy($ctrl) class="notification-manipulation-button">{{delet}}</div>
+    <div ng-click=$ctrl.removeMy($ctrl) class="notification-manipulation-button">remove</div>
 
 </div>

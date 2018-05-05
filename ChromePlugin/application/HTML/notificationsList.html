@@ -1,24 +1,17 @@
-<div class="div-background" id="notification-list">
+<div class="notification-list" ng-switch=$ctrl.type ng-init="loadData($ctrl.from, $ctrl.type)">
 
-    <h1 style="cursor: default"> Notifications </h1>
-    <hr>
-    <br/>
-    <input type="button" ng-click="refreshList()" class="login-input refresh-button" value="Refresh"/>
-    <br/>
 
-    <div id="notificationArray" ng-repeat="notification in notificationsJSON.notifications">
-        <notification-element
+    <notification-element ng-switch-when="notifications" ng-repeat="notification in storedData.notifications"
                 add-self = addThis
                 my-notification = notification
                 request-focus = elementRequestFocus
                 remove-my = removeElement
-        ></notification-element>
-    </div>
+    ></notification-element>
 
-    <br/>
-    <hr>
-    <form ng-submit="logout()">
-        <p><input class="login-input login-button" type="submit" value="Logout"></p>
-    </form>
+    <notifications-group ng-switch-when="groups" ng-repeat="notification in storedData.groups"
+                          add-self = addThis
+                          group = notification
+                          request-focus = elementRequestFocus
+    ></notifications-group>
 
 </div>

@@ -1,0 +1,26 @@
+{
+  "groups":
+  [
+    {
+      "name":"group1",
+      "type":"notifications",
+      "quantity":4
+    },
+    {
+      "name":"group2",
+      "type":"notifications",
+      "quantity":2
+    },
+    {
+      "name":"group3",
+      "type":"notifications",
+      "quantity":10
+    },
+    {
+      "name":"group4",
+      "type":"groups",
+      "quantity":1
+    }
+
+  ]
+}

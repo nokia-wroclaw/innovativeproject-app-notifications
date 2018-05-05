@@ -1,0 +1,23 @@
+{
+  "notifications":
+  [
+    {
+      "notificationID":9,
+      "userID":1,
+      "sourceID":1,
+      "flag":false,
+      "topic":"ServerTestingNotification in g41 1",
+      "message":"This is server testing notification number 1",
+      "timestamp":"2018-04-15 18:13:14.246654","priority":0
+    },
+    {
+      "notificationID":9,
+      "userID":1,
+      "sourceID":1,
+      "flag":false,
+      "topic":"ServerTestingNotification in g41 2",
+      "message":"This is server testing notification number 2",
+      "timestamp":"2018-04-15 18:13:14.246654","priority":0
+    }
+  ]
+}

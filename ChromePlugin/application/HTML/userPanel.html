@@ -1,0 +1,18 @@
+<div class="div-background" id="user-pane">
+
+    <h1 style="cursor: default"> Notifications </h1>
+    <hr>
+
+    <div  id="notification-array" >
+        <notifications-list type="listType" from="'groups'"></notifications-list>
+    </div>
+
+    <hr>
+    <form ng-submit="logout()">
+        <p><input class="login-input login-button" type="submit" value="Logout"></p>
+    </form>
+
+</div>
+
+<dialog-popup ng-if="showPopup" myCallback="confFunction" context="context"></dialog-popup>
+

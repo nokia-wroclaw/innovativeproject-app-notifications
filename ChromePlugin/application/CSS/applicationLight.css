@@ -5,10 +5,13 @@
     --subtleRed : rgb(230, 100, 100);
     --lightRed : rgb(200, 100, 100);
 
+    --lightGrean :  rgb(75, 225, 175);
+
     --color-text : rgb(40, 40 ,40);
     --color-text2 : rgb(30, 30 ,30);
     --color-back1: rgb(230, 230, 230);
-    --color-back2: rgb(180, 180, 180);
+    --color-back3: rgb(150, 150, 150);
+    --color-back2: rgb(200, 200, 200);
 
 }
 
