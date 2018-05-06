@@ -1,3 +1,4 @@
+import org.json.JSONObject;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import twitter4j.*;
@@ -11,12 +12,8 @@ import com.rabbitmq.client.Channel;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Scanner;
+import java.util.*;
 import java.util.concurrent.TimeoutException;
-
-import java.util.List;
 
 import dao.*;
 
@@ -24,24 +21,23 @@ public final class TwitterStreamReader {
 
     private static ApplicationContext context = new ClassPathXmlApplicationContext("file:Beans.xml");
     private static AccountJDBCTemplate accountJDBCTemplate = (AccountJDBCTemplate) context.getBean("AccountJDBCTemplate");
-
     private static Connection connection;
     private static Channel channel;
     private final static String QUEUE_NAME = "DEMO_QUEUE";
     private static String queueString;
-    private static String accessToken;
-    private static String accessTokenSecret;
+    private static JSONObject lastQueueJSON;
     private static List<Account> userList = accountJDBCTemplate.getAccountBySourceId(15);
+    private static Map<Long, Integer> userIDs = new HashMap<>();
     private static final UserStreamListener listener = new UserStreamListener() {
 
         @Override
         public void onStatus(Status status) {
-                String topic = "New status by " + status.getUser().getScreenName() + "!";
-                try {
-                    generateNote(status, topic);
-                } catch (IOException | TimeoutException e) {
-                    e.printStackTrace();
-                }
+            String topic = "New status by " + status.getUser().getScreenName() + "!";
+            try {
+                generateNote(status, topic, status.getUser().getId());
+            } catch (IOException | TimeoutException e) {
+                e.printStackTrace();
+            }
         }
 
         @Override
@@ -79,7 +75,7 @@ public final class TwitterStreamReader {
             String topic = "Tweet liked!";
             String message = source.getScreenName() + " has liked your tweet!";
             try {
-                generateNote(topic, message);
+                generateNote(topic, message, target.getId());
             } catch (IOException|TimeoutException e) {
                 e.printStackTrace();
             }
@@ -95,7 +91,7 @@ public final class TwitterStreamReader {
             String topic = "New follower!";
             String message = source.getScreenName() + " is now following " + followedUser.getScreenName() + "!";
             try {
-                generateNote(topic, message);
+                generateNote(topic, message, followedUser.getId());
             } catch (IOException|TimeoutException e) {
                 e.printStackTrace();
             }
@@ -111,7 +107,7 @@ public final class TwitterStreamReader {
             String topic = "New direct message!";
             String message = directMessage.getSenderScreenName() + " has sent a message to " + directMessage.getRecipientScreenName() + "!";
             try {
-                generateNote(topic, message);
+                generateNote(topic, message, directMessage.getRecipientId());
             } catch (IOException|TimeoutException e) {
                 e.printStackTrace();
             }
@@ -179,13 +175,9 @@ public final class TwitterStreamReader {
 
         @Override
         public void onRetweetedRetweet(User source, User target, Status retweetedStatus) {
-            System.out.println("onRetweetedRetweet source:@" + source.getScreenName()
-                    + " target:@" + target.getScreenName()
-                    + retweetedStatus.getUser().getScreenName()
-                    + " - " + retweetedStatus.getText());
             String topic = "Retweeted status!";
             try {
-                generateNote(retweetedStatus, topic);
+                generateNote(retweetedStatus, topic, target.getId());
             } catch (IOException|TimeoutException e) {
                 e.printStackTrace();
             }
@@ -200,7 +192,7 @@ public final class TwitterStreamReader {
         public void onQuotedTweet(User source, User target, Status quotingTweet) {
             String topic = source.getName() + " has quoted your status!";
             try {
-                generateNote(quotingTweet, topic);
+                generateNote(quotingTweet, topic, target.getId());
             } catch (IOException|TimeoutException e) {
                 e.printStackTrace();
             }
@@ -214,13 +206,25 @@ public final class TwitterStreamReader {
     };
 
 
+    private static boolean doubleCheck(JSONObject lastQueueJSON, JSONObject notificationJSON){
+        if (lastQueueJSON.getString("message").equals(notificationJSON.getString("message"))&&
+                lastQueueJSON.getString("topic").equals(notificationJSON.getString("topic"))&&
+                lastQueueJSON.getString("time").substring(0, 17).equals(notificationJSON.getString("time").substring(0,17))&&
+                lastQueueJSON.get("userID").equals(notificationJSON.get("userID")))
+        {
+            System.out.println("Clone message denied!");
+            return false;
+        }
+        else return true;
+    }
+
     private static String getCurrentTimeStamp() {
         SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//dd/MM/yyyy
         Date now = Calendar.getInstance().getTime();
         return sdfDate.format(now);
     }
 
-    private static void generateNote(Status status, String topic) throws IOException, TimeoutException {
+    private static void generateNote(Status status, String topic, Long twitterID) throws IOException, TimeoutException {
         org.json.JSONObject notificationJSON;
         notificationJSON = new org.json.JSONObject();
         notificationJSON.put("topic", topic);
@@ -228,16 +232,18 @@ public final class TwitterStreamReader {
         notificationJSON.put("sourceID", 15);
         notificationJSON.put("time", getCurrentTimeStamp());
         notificationJSON.put("priority", 0);
-        notificationJSON.put("userID", 1);
+        notificationJSON.put("userID", userIDs.get(twitterID));
 
-        String stringJSON = notificationJSON.toString();
-        queueString = stringJSON;
-        connectToQueue();
-        sendJSON();
-        closeConnection();
+        queueString = notificationJSON.toString();
+        if(doubleCheck(lastQueueJSON, notificationJSON)) {
+            connectToQueue();
+            sendJSON();
+            closeConnection();
+            lastQueueJSON = notificationJSON;
+        }
     }
 
-    private static void generateNote(String topic, String message) throws IOException, TimeoutException {
+    private static void generateNote(String topic, String message, Long twitterID) throws IOException, TimeoutException {
         org.json.JSONObject notificationJSON;
         notificationJSON = new org.json.JSONObject();
         notificationJSON.put("topic", topic);
@@ -245,13 +251,15 @@ public final class TwitterStreamReader {
         notificationJSON.put("sourceID", 15);
         notificationJSON.put("time", getCurrentTimeStamp());
         notificationJSON.put("priority", 0);
-        notificationJSON.put("userID", 1);
+        notificationJSON.put("userID", userIDs.get(twitterID));
 
-        String stringJSON = notificationJSON.toString();
-        queueString = stringJSON;
-        connectToQueue();
-        sendJSON();
-        closeConnection();
+        queueString = notificationJSON.toString();
+        if(doubleCheck(lastQueueJSON, notificationJSON)) {
+            connectToQueue();
+            sendJSON();
+            closeConnection();
+            lastQueueJSON = notificationJSON;
+        }
     }
 
 
@@ -274,7 +282,7 @@ public final class TwitterStreamReader {
     private static void connectToQueue() throws IOException, TimeoutException {
         ConnectionFactory factory = new ConnectionFactory();
         factory.setPort(5672);
-        factory.setHost("RabbitMQ");
+        factory.setHost("");
 
         connection = factory.newConnection();
         channel = connection.createChannel();
@@ -292,6 +300,15 @@ public final class TwitterStreamReader {
     }
 
     public static void main(String[] args) throws TwitterException {
+        lastQueueJSON = new JSONObject();
+        lastQueueJSON.put("topic", "topic");
+        lastQueueJSON.put("message", "message");
+        lastQueueJSON.put("sourceID", 0);
+        lastQueueJSON.put("time", getCurrentTimeStamp());
+        lastQueueJSON.put("priority", 0);
+        lastQueueJSON.put("userID", 0);
+        String accessToken;
+        String accessTokenSecret;
         if(userList.isEmpty())
             System.out.println("User list is empty!");
         else {
@@ -309,6 +326,7 @@ public final class TwitterStreamReader {
 
                 TwitterStream twitterStream = new TwitterStreamFactory(cb.build()).getInstance();
                 twitterStream.addListener(listener);
+                userIDs.put(twitterStream.getId(), user.getUserID());
                 twitterStream.user();
             }
         }
