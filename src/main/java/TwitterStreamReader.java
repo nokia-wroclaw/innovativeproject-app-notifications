@@ -28,15 +28,21 @@ public final class TwitterStreamReader {
     private static JSONObject lastQueueJSON;
     private static List<Account> userList = accountJDBCTemplate.getAccountBySourceId(15);
     private static Map<Long, Integer> userIDs = new HashMap<>();
+    private static Map<Long, String> userHandles = new HashMap<>();
     private static final UserStreamListener listener = new UserStreamListener() {
 
         @Override
         public void onStatus(Status status) {
-            String topic = "New status by " + status.getUser().getScreenName() + "!";
-            try {
-                generateNote(status, topic, status.getUser().getId());
-            } catch (IOException | TimeoutException e) {
-                e.printStackTrace();
+            for (Map.Entry<Long, String> handle : userHandles.entrySet()) {
+                if (status.getText().toLowerCase().contains("@"+handle.getValue().toLowerCase())) {
+                    String topic = status.getUser().getScreenName() + " has mentioned you in a tweet!";
+                    System.out.println(topic);
+                    try {
+                        generateNote(status, topic, handle.getKey());
+                    } catch (IOException | TimeoutException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
 
@@ -212,7 +218,6 @@ public final class TwitterStreamReader {
                 lastQueueJSON.getString("time").substring(0, 17).equals(notificationJSON.getString("time").substring(0,17))&&
                 lastQueueJSON.get("userID").equals(notificationJSON.get("userID")))
         {
-            System.out.println("Clone message denied!");
             return false;
         }
         else return true;
@@ -327,6 +332,7 @@ public final class TwitterStreamReader {
                 TwitterStream twitterStream = new TwitterStreamFactory(cb.build()).getInstance();
                 twitterStream.addListener(listener);
                 userIDs.put(twitterStream.getId(), user.getUserID());
+                userHandles.put(twitterStream.getId(), twitterStream.getScreenName());
                 twitterStream.user();
             }
         }
