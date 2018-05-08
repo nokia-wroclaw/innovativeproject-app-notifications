@@ -1,18 +1,29 @@
-<div class="div-background" id="user-pane">
+<table>
+    <tr>
+        <td>
+            <account-options moveToExtensions="moveToExtension"></account-options>
+        </td>
+        <td ng-switch="curUserPanel">
 
-    <h1 style="cursor: default"> Notifications </h1>
-    <hr>
+            <div ng-switch-when="0" class="div-background" id="user-pane" style="display: block">
 
-    <div  id="notification-array" >
-        <notifications-list type="listType" from="'groups'"></notifications-list>
-    </div>
+                <h1 style="cursor: default"> Notifications </h1>
+                <hr>
 
-    <hr>
-    <form ng-submit="logout()">
-        <p><input class="login-input login-button" type="submit" value="Logout"></p>
-    </form>
+                <div  id="notification-array" >
+                    <notifications-list from="listType" type="'notifications'"></notifications-list>
+                </div>
 
-</div>
+                <hr>
+                <form ng-submit="logout()">
+                    <p><input class="login-input login-button" type="submit" value="Logout"></p>
+                </form>
+
+            </div>
+
+        </td>
+    </tr>
+</table>
 
 <dialog-popup ng-if="showPopup" myCallback="confFunction" context="context"></dialog-popup>
 

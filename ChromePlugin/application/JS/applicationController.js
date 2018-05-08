@@ -1,8 +1,23 @@
-// Module
+//  Stand by
+
+//  Const
+const ServerAddress = "http://35.204.202.104:8080/api/v1.0";
+
+
+//  Module
 const app = angular.module('clientApplication',['ngCookies']);
 
 
-// Components
+//  Components
+
+app.component("accountOptions", {
+    templateUrl : '../HTML/accountOptions.html',
+    controller : 'accountOptionsController',
+    bindings: {
+        moveToExtensions: '=', // data about the group represented by this element
+    }
+
+});
 
 app.component("notificationsGroup" ,{
     templateUrl : '../HTML/notificationGroup.html',
@@ -67,11 +82,17 @@ app.component("dialogPopup", {
     }
 });
 
+app.component("externalServices" ,{
+    templateUrl : '../HTML/externalServices.html',
+    controller : 'externalServicesController'
+});
 
 //  Values
 
 // Define in mainController
 app.value("Token");     // Token that allows application to connect with RestAPI
+
+app.value("Offset");     // Token that allows application to connect with RestAPI
 
 app.value("viewEnum");  // enumeration of possible view options
 
@@ -84,8 +105,18 @@ app.value("showPopup");
 
 app.value("hidePopup");
 
-
 //  Controllers
+
+app.controller("accountOptionsController", function ($scope) {
+
+
+    //  Functions
+
+    $scope.moveToExternalServices = function () {
+        
+    }
+
+});
 
 app.controller("mainController" , function($http,$cookies,$scope) {
 
@@ -111,6 +142,7 @@ app.controller("mainController" , function($http,$cookies,$scope) {
 
 
     //  Initialize
+
 
     app.Token = $cookies.get("Token"); //   Check if token is stored in cookies
     if (app.Token == null){
@@ -171,23 +203,24 @@ app.controller("loginController" , function($http,$cookies,$scope) {
 
     $scope.validate = function () { // Validate login data
 
-        app.setView(app.viewEnum.LIST);
+        //app.setView(app.viewEnum.LIST);
 
-/*       $http.get('http://35.204.202.104:8080/api/v1.0/login/',{
-            params: {username:$scope.username,password:$scope.password }})
-            .then(
+        $http.post(ServerAddress+'/login/',{
+            login:$scope.username,
+            password:$scope.password
+        }).then(
                 //Success
                 function(response){
-                this.Token = response.data;
-                $cookies.put("Token",Token);
-                app.setView(app.viewEnum.LIST);
+                    app.Token = response.data.status;
+                    $cookies.put("Token", app.Token);
+                    app.setView(app.viewEnum.LIST);
                 },
                 //Failure
                 function (response) {
                     $scope.loginInputStyle = $scope.loginInputStyle + " wrong";
                     $scope.info = response.data;
                 }
-            );*/
+                );
     };
 
 
@@ -221,57 +254,62 @@ app.controller("notificationListController" , function($interval,$http,$cookies,
     };
 
     $scope.removeElement = function(element){   // This function removes element from list
-        $scope.storedData.notifications.splice($scope.storedData.notifications.indexOf(element.myNotification), 1);
-        elements.splice(elements.indexOf(element), 1);
-        $scope.$apply();
+
+        const myID = element.myNotification.notificationID;
+        $http.post(ServerAddress+'/notf/remove/',{
+            notfid:myID.toString(),
+            token:app.Token
+        }).then(
+            //Success
+            function(response){
+                $scope.info = response.data;
+                $scope.storedData.splice($scope.storedData.indexOf(element.myNotification), 1);
+                elements.splice(elements.indexOf(element), 1);
+            },
+            //Failure
+            function (response){
+                $scope.info = response.data;
+            }
+        );
     };
 
     $scope.loadData = function(from,type){ // This function loads data from specified location in to storedData array
         $scope.type = type;
-        $http.get('../JSON/'+from+'.json')
+        $http.get(ServerAddress+'/not/part/' ,{
+            params: {offset:app.Offset, token:app.Token}
+        })
             .then(function(response){
-                elements = [];
-                $scope.storedData = [];
-                $scope.storedData = response.data;
-            });
-    };
+                let newContent = response.data.notifications;
+                let oldContent = $scope.storedData;
 
-    $scope.refreshList = function(){ // This function reloads data from specified location in to storedData array
-        //$http.get('../JSON/notifications.json')
-        //$http.get('http://35.204.202.104:8080/api/v1.0/notf/' ,{
-         //  params: {token:$cookies.get("Token")}})
-        $http.get('../JSON/'+$scope.$ctrl.from+'.json')
-            .then(function(response){
-                elements = [];
-                $scope.storedData = [];
-                $scope.storedData = response.data;
+                $scope.storedData = [].concat(oldContent, newContent);
             });
-    };
 
+        app.Offset = app.Offset + 10;
+        $scope.info=elements.length;
+    };
 
 
     //  Initialize
-
-    $scope.listType;
-    var elements = []; // Array of visual elements that represent storedData
-    $scope.storedData = []; // Array of data stored on the list, can by groups or notifications
-
-    //$scope.refreshList();
-
-/*    revreshInterval = $interval(function() {
-        $scope.refreshList
-    }, 60000);*/
-
+    app.Offset = 0;
+    let elements = [];
+    $scope.storedData = [];
 });
 
 app.controller("userPanelController" , function($interval,$http,$cookies,$scope) {
 
     //  Functions
 
+    $scope.moveToExtension = function (){
+        $scope.curUserPanel = 1;
+    };
+
     $scope.logout = function () { // This function is logging out user
         $cookies.remove("Token");   //  Removing token from cookies
+        $cookies.remove("Offset");   //  Removing token from cookies
         app.setView(app.viewEnum.LOGIN);    //  Changing view mode to Login mode
     };
+
 
     app.showPopup = function(element,elementFunction){  //  Experimental function
 
@@ -287,13 +325,13 @@ app.controller("userPanelController" , function($interval,$http,$cookies,$scope)
 
     //  Initialize
 
+    $scope.curUserPanel = 0;
     $scope.showPopup = false;
     $scope.listType = "groups"; //  For testing purposes the first list is of 'groups' type by default
 
 });
 
-app.controller("notificationController" , function ($scope) {
-
+app.controller("notificationController" , function ($http,$scope) {
 
     //  Functions
 
@@ -303,8 +341,30 @@ app.controller("notificationController" , function ($scope) {
     };
 
     this.getFocus = function () {   // This function set focus on this elements
-        $scope.notificationFocus=$scope.notificationFocus+" div-selected";
+
+        $scope.notificationFocus+=" div-selected";
         this.focused = true;
+
+
+        const myID = this.myNotification.notificationID;
+        //$scope.info = myID;
+        $http.post(ServerAddress+'/setFlag/',{
+            notfid:myID.toString(),
+            token:app.Token
+        }).then(
+            //Success
+            function(response){
+               // $scope.info = response.data;
+            },
+            //Failure
+            function (response){
+               // $scope.info = response.data;
+            }
+        );
+
+        if(this.myNotification.flag === false){
+            this.myNotification.flag = true;
+        }
     };
 
 
@@ -354,13 +414,16 @@ app.controller("registerController", function ($http,$scope) {
         const hashRePass = $scope.rePassword; // Encrypted rePassword in the future
 
         if(hashRePass===hashPass){  // Are two inserted passwords the same
-            $http.post('http://35.204.202.104:8080/api/v1.0/register/',{
-                params: { username:$scope.username,password:hashPass }})
-                .then(
+            $http.post(ServerAddress+'/register2/',{
+                name:$scope.username,
+                surname:$scope.surname,
+                login:$scope.login,
+                password:hashPass
+            }).then(
                     //Success
                     function(response){
-                        this.Token = response.data;
-                        $cookies.put("Token",Token);
+                        this.Token = response.data.toString();
+                        $window.localStorage['Token'] = Token;
                         app.setView(app.viewEnum.LIST);
                     },
                     //Failure
@@ -369,12 +432,10 @@ app.controller("registerController", function ($http,$scope) {
                         $scope.loginInputStyle = $scope.loginInputStyle + " wrong";
                     }
                 );
-
         } else{
             $scope.info = "password and repeat password are not the same";
             $scope.loginInputStyle = $scope.loginInputStyle + " wrong";
         }
-
 
     };
 
@@ -386,8 +447,12 @@ app.controller("registerController", function ($http,$scope) {
     //  Initialize
 
     $scope.loginInputStyle = "login-input login-text"; // Setting default inputs sytle
+
 });
 
 app.controller("popupController", function () {
+});
+
+app.controller("externalServicesController", function () {
 
 });

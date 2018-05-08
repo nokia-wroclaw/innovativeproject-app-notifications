@@ -1,6 +1,27 @@
+*{
+
+    --subtleBlue : rgb(50, 150, 225);
+    --lightBlue :  rgb(50, 175, 225);
+
+    --subtleRed : rgb(230, 100, 100);
+    --lightRed : rgb(200, 100, 100);
+
+    --lightGrean :  rgb(50, 225, 150);
+    --subtleGrean :  rgb(125, 240, 175);
+
+    --lightYellow :  rgb(220, 220, 25);
+
+}
+
 @keyframes slowResize {
     0% {max-height: 25px;}
     100% {max-height: 30px;}
+}
+
+.info-text{
+    margin-left: 4px;
+    float: left;
+    text-align: center;
 }
 
 .popup{
@@ -26,7 +47,7 @@
 
 #user-pane{
     text-align: center;
-    height: max-content;
+    height: 450px;
 }
 
 .notification-div{
@@ -48,6 +69,10 @@
     border-width: 1px;
     border-color: var(--color-text);
     padding : 4px;
+}
+.info-text + .notification-topic{
+    border: var(--lightYellow);
+    border-style: hidden hidden hidden solid;
 }
 
 .notificationGroup-div{
@@ -82,17 +107,38 @@
 }
 
 .notification-manipulation-button{
-    padding: 6px;
     cursor: pointer;
-    position: page;
-    background-color: var(--lightRed);
+    border: none;
+    width: 100%;
+    height: 25px;
+    overflow: hidden;
+    text-align: center;
+    border-radius: 2px;
+    margin-top : 4px;
+    margin-bottom : 4px;
+    padding: 5px;
+    background-color: var(--lightGrean);
+    -webkit-text-fill-color:  var(--color-text2);
 }
 
 .notification-manipulation-button:hover {
+    background-color: var(--subtleGrean);
+}
+
+.notification-remove-button{
+    padding: 6px;
+    cursor: pointer;
+    position: page;
+    -webkit-text-fill-color:  var(--color-text);
+    background-color: var(--lightRed);
+}
+
+.notification-remove-button:hover {
     background-color: var(--subtleRed);
 }
 
 .notification-topic{
+    text-align: center;
     font-size: 15px;
     height: 25px;
     padding: 2px;
@@ -180,29 +226,59 @@ hr{
     -webkit-text-fill-color:  var(--color-text);
 }
 
+.menu-side{
+    width: 150px;
+    height: 450px;
+}
+
+.div-login{
+    height: 360px;
+    width: 225px;
+}
+
+.div-register{
+    height: 460px;
+    width: 225px;
+}
+
+.menu-button{
+    white-space: normal;
+    padding: 8px;
+    margin: auto;
+    width: 100%;
+    height: 60px;
+    text-align: -webkit-center;
+    font-size: 16px;
+    border-radius: 2px;
+    border-width: 0;
+    cursor: pointer;
+    background-color: transparent ;
+    -webkit-text-fill-color:  var(--color-text1);
+}
+.menu-button:hover, .login-button:focus{
+    background-color: var(--color-back2) ;
+}
+.menu-button:active{
+}
 
 .login-input{
+    padding: 5px 0 5px 0;
+    margin: auto;
+    width: 100%;
+    height: 20px;
+    text-align: -webkit-center;
     font-size: 16px;
     border-radius: 2px;
     border-width: 0;
 }
-
-.refresh-button{
-    cursor: pointer;
-    padding: 8px;
-    margin: 4px;
-    width: 50%;
-    background-color: var(--subtleBlue) ;
-    -webkit-text-fill-color:  var(--color-text2);
-}
-.refresh-button:hover, .refresh-button:focus{
-    background-color: var(--lightBlue) ;
+.login-input::content{
+    margin: 5px;
 }
 
 .login-button{
-    cursor: pointer;
     padding: 8px;
-    width: 100%;
+    height: 30px;
+    cursor: pointer;
     background-color: var(--subtleBlue) ;
     -webkit-text-fill-color:  var(--color-text2);
 }
@@ -213,7 +289,6 @@ hr{
 }
 
 .login-text {
-    padding: 8px;
     background-color:  rgb(250, 250, 250);
     -webkit-text-fill-color: rgb(25, 25, 25);
 }
@@ -234,5 +309,6 @@ hr{
 }
 
 .error_info{
+    position: absolute;
     -webkit-text-fill-color: var(--subtleRed);
 }

@@ -1,14 +1,17 @@
-<div class="div-background" >
+<div class="div-background div-login" >
 
     <custom-logo></custom-logo>
+    <span class="error_info"> {{info}} </span>
+    <br>
     <hr>
-    <span class="error_info">{{info}}</span>
     <form ng-submit="validate()">
-        <p><input ng-class="loginInputStyle" ng-focus="inputReset()" type="text" placeholder="username" ng-model="username"> </p>
-        <p><input ng-class="loginInputStyle" ng-focus="inputReset()" type="password" placeholder="password" ng-model="password"> </p>
+        <p><input ng-class="loginInputStyle" ng-focus="inputReset()" type="text" placeholder="username" ng-model="username"></pclass>
+        <p><input ng-class="loginInputStyle" ng-focus="inputReset()" type="password" placeholder="password" ng-model="password"></p>
         <p><input class="login-input login-button" type="submit" value="Login"></p>
     </form>
     <hr>
+    <br/>
+    <br/>
     <p><input class="login-input login-button" ng-click="registerNewUser()" type="button" value="Sign up"></p>
 
 </div>

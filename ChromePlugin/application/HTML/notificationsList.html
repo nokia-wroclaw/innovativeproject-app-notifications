@@ -1,17 +1,22 @@
 <div class="notification-list" ng-switch=$ctrl.type ng-init="loadData($ctrl.from, $ctrl.type)">
 
 
-    <notification-element ng-switch-when="notifications" ng-repeat="notification in storedData.notifications"
+    {{info}}
+    <notification-element ng-switch-when="notifications" ng-repeat="notification in storedData"
                 add-self = addThis
                 my-notification = notification
                 request-focus = elementRequestFocus
                 remove-my = removeElement
     ></notification-element>
 
-    <notifications-group ng-switch-when="groups" ng-repeat="notification in storedData.groups"
+    <notifications-group ng-switch-when="groups" ng-repeat="notification in storedData"
                           add-self = addThis
                           group = notification
                           request-focus = elementRequestFocus
     ></notifications-group>
+
+    <div ng-click="loadData($ctrl.from, $ctrl.type)" class="notification-manipulation-button">
+       <h4  class="notification-topic" >load more notifications</h4>
+    </div>
 
 </div>
