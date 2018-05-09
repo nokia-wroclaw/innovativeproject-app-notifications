@@ -163,6 +163,17 @@
     height: max-content;
 }
 
+.external_services{
+    text-align: center;
+    align-items: center;
+    align-content: center;
+    padding: 0;
+    width: 500px;
+    height: 450px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
 #notification-array{
     padding: 10px;
     width: 500px;
@@ -249,7 +260,6 @@ hr{
     height: 60px;
     text-align: -webkit-center;
     font-size: 16px;
-    border-radius: 2px;
     border-width: 0;
     cursor: pointer;
     background-color: transparent ;
@@ -259,6 +269,11 @@ hr{
     background-color: var(--color-back2) ;
 }
 .menu-button:active{
+}
+
+.menu-button + .menu-button{
+    border-style dotted;
+    border-width: 2px;
 }
 
 .login-input{

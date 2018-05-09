@@ -1,11 +1,11 @@
 <table>
     <tr>
         <td>
-            <account-options moveToExtensions="moveToExtension"></account-options>
+            <account-options move-to-extensions="moveToExtension" move-to-list="moveToList"></account-options>
         </td>
         <td ng-switch="curUserPanel">
 
-            <div ng-switch-when="0" class="div-background" id="user-pane" style="display: block">
+            <div ng-switch-when=0 class="div-background" id="user-pane" style="display: block">
 
                 <h1 style="cursor: default"> Notifications </h1>
                 <hr>
@@ -20,6 +20,8 @@
                 </form>
 
             </div>
+
+            <external-services class="div-background" style="display: block" ng-switch-when=1></external-services>
 
         </td>
     </tr>

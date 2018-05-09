@@ -1,10 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<div class="external_services">
+    <h1> TWITTER </h1>
+    <br>
+    <span ng-class="infoType"> {{info}} </span>
+    <form ng-submit="TwitMe()">
+        <p><input ng-class="loginInputStyle" type="text" placeholder="access token" ng-model="accesstoke"></pclass>
+        <p><input ng-class="loginInputStyle" type="text" placeholder="secret token" ng-model="secrettoken"></p>
+        <p><input class="login-input login-button" type="submit" value="add Twitter account"></p>
+    </form>
 
-</body>
-</html>
+</div>

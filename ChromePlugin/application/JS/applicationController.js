@@ -15,6 +15,7 @@ app.component("accountOptions", {
     controller : 'accountOptionsController',
     bindings: {
         moveToExtensions: '=', // data about the group represented by this element
+        moveToList: '='
     }
 
 });
@@ -280,13 +281,14 @@ app.controller("notificationListController" , function($interval,$http,$cookies,
         })
             .then(function(response){
                 let newContent = response.data.notifications;
+                let offset = newContent.length;
                 let oldContent = $scope.storedData;
 
                 $scope.storedData = [].concat(oldContent, newContent);
+                app.Offset = app.Offset + offset;
+                $scope.info=offset;
             });
 
-        app.Offset = app.Offset + 10;
-        $scope.info=elements.length;
     };
 
 
@@ -302,6 +304,10 @@ app.controller("userPanelController" , function($interval,$http,$cookies,$scope)
 
     $scope.moveToExtension = function (){
         $scope.curUserPanel = 1;
+    };
+
+    $scope.moveToList = function () {
+        $scope.curUserPanel = 0;
     };
 
     $scope.logout = function () { // This function is logging out user
@@ -450,9 +456,32 @@ app.controller("registerController", function ($http,$scope) {
 
 });
 
-app.controller("popupController", function () {
+app.controller("popupController", function ($scope) {
 });
 
-app.controller("externalServicesController", function () {
+app.controller("externalServicesController", function ($scope) {
+
+    $scope.loginInputStyle = "login-input login-text";
+
+    $scope.TwitMe = function () {       //  Sending twitter tokens to data base
+
+        $http.post(ServerAddress+'/new/twitter/',{
+            token:app.Token,
+            accessToke:$scope.accesstoke,
+            secretToken:$scope.secrettoken
+        }).then(
+            //Success
+            function(response){
+                $scope.infoType = "";
+                $scope.info = "Twitter successfully added"
+            },
+            //Failure
+            function (response) {
+                $scope.infoType = "error-info";
+                $scope.info = "Failure while adding twitter account";
+            }
+        );
+
+    }
 
 });
