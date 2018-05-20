@@ -1,10 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<div class="external_services">
+    <h1> Services </h1>
+    <hr>
+    <br>
+    <span ng-class="infoType"> {{info}} </span>
+    <div ng-if="!inExternalWindow" class="service-list">
 
-</body>
-</html>
+        <button name="twitterButton" class="service-button twitter-button" ng-click="ToTwitter()">
+            <img>
+        </button>
+
+        <button name="pwrButton" class="service-button pwr-button" ng-click="ToPWR()">
+            <img>
+        </button>
+
+    </div>
+
+    <twitter-window ng-if="isTwitter" ></twitter-window>
+
+    <div ng-if="inExternalWindow">
+        <br>
+        <hr>
+        <br>
+        <button  name="backButton" class="back-button"  ng-click="backToList()" > back to list </button>
+    </div>
+
+</div>

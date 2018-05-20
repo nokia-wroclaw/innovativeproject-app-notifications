@@ -1,11 +1,32 @@
 <table>
     <tr>
         <td>
-            <account-options moveToExtensions="moveToExtension"></account-options>
+            <div name="optionsList" class="div-background menu-side" >
+
+                <span class="error_info"> {{info}} </span>
+                <br/>
+                <h2 style="text-align: center"> account options </h2>
+                <hr>
+                <br/>
+                <div ng-switch="curUserPanel">
+
+                    <p><input ng-switch-when=0 name="externalServices" class="menu-button" type="button" ng-click="moveToExtension()" value="external services"></p>
+
+                    <p><input ng-switch-when=1 name="notfList" class="menu-button" type="button" ng-click="moveToList()" value="notifications list"></p>
+
+                </div>
+                <br/>
+                <hr>
+
+                <form ng-submit="logout()">
+                    <p><input  name="logoutButton" class="login-input login-button" type="submit" value="Logout"></p>
+                </form>
+
+            </div>
         </td>
         <td ng-switch="curUserPanel">
 
-            <div ng-switch-when="0" class="div-background" id="user-pane" style="display: block">
+            <div ng-switch-when=0 class="div-background" id="user-pane" style="display: block">
 
                 <h1 style="cursor: default"> Notifications </h1>
                 <hr>
@@ -15,11 +36,9 @@
                 </div>
 
                 <hr>
-                <form ng-submit="logout()">
-                    <p><input class="login-input login-button" type="submit" value="Logout"></p>
-                </form>
-
             </div>
+
+            <external-services class="div-background" style="display: block" ng-switch-when=1 ></external-services>
 
         </td>
     </tr>

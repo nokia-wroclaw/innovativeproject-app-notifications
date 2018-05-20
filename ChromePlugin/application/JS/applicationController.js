@@ -10,15 +10,6 @@ const app = angular.module('clientApplication',['ngCookies']);
 
 //  Components
 
-app.component("accountOptions", {
-    templateUrl : '../HTML/accountOptions.html',
-    controller : 'accountOptionsController',
-    bindings: {
-        moveToExtensions: '=', // data about the group represented by this element
-    }
-
-});
-
 app.component("notificationsGroup" ,{
     templateUrl : '../HTML/notificationGroup.html',
     controller : 'notificationGroupController',
@@ -87,6 +78,12 @@ app.component("externalServices" ,{
     controller : 'externalServicesController'
 });
 
+app.component("twitterWindow" ,{
+    templateUrl : '../HTML/TwitterWindow.html',
+    controller : 'twitterServiceController'
+});
+
+
 //  Values
 
 // Define in mainController
@@ -96,28 +93,20 @@ app.value("Offset");     // Token that allows application to connect with RestAP
 
 app.value("viewEnum");  // enumeration of possible view options
 
+app.value("userViewEnum");  // enumeration of possible user view options
+
 app.value("setView");   // function that allows to change vie mode
 
 app.value("setApplicationStyle");    // function that allows to set style of application (light - dark)
+
 
 //  Testing values
 app.value("showPopup");
 
 app.value("hidePopup");
 
+
 //  Controllers
-
-app.controller("accountOptionsController", function ($scope) {
-
-
-    //  Functions
-
-    $scope.moveToExternalServices = function () {
-        
-    }
-
-});
-
 app.controller("mainController" , function($http,$cookies,$scope) {
 
 
@@ -138,6 +127,11 @@ app.controller("mainController" , function($http,$cookies,$scope) {
         LOGIN : 1,
         LIST : 2,
         REGISTER : 3
+    };
+
+    app.userViewEnum = {
+        LIST : 1,
+        SERVICES : 2
     };
 
 
@@ -280,13 +274,14 @@ app.controller("notificationListController" , function($interval,$http,$cookies,
         })
             .then(function(response){
                 let newContent = response.data.notifications;
+                let offset = newContent.length;
                 let oldContent = $scope.storedData;
 
                 $scope.storedData = [].concat(oldContent, newContent);
+                app.Offset = app.Offset + offset;
+                $scope.info=offset;
             });
 
-        app.Offset = app.Offset + 10;
-        $scope.info=elements.length;
     };
 
 
@@ -302,6 +297,10 @@ app.controller("userPanelController" , function($interval,$http,$cookies,$scope)
 
     $scope.moveToExtension = function (){
         $scope.curUserPanel = 1;
+    };
+
+    $scope.moveToList = function () {
+        $scope.curUserPanel = 0;
     };
 
     $scope.logout = function () { // This function is logging out user
@@ -450,9 +449,71 @@ app.controller("registerController", function ($http,$scope) {
 
 });
 
-app.controller("popupController", function () {
+app.controller("popupController", function ($scope) {
 });
 
-app.controller("externalServicesController", function () {
+app.controller("externalServicesController", function ($scope,$window) {
+
+
+    //  Functions
+
+    $scope.ToTwitter = function () { // Function setting twitter window as current
+
+        //alert("moving to Twitter site");
+        //$window.open('https://www.twitter.com');
+
+        $scope.isTwitter = true;
+        $scope.inExternalWindow = true;
+    };
+
+    $scope.ToPWR= function () { // Function setting pwr side window as current
+
+
+    };
+
+    $scope.backToList = function () { // Function setting list of services window as current
+        $scope.isTwitter = false;
+        $scope.inExternalWindow = false;
+    };
+
+
+    //  Initialize
+
+    $scope.isTwitter = false;
+    $scope.inExternalWindow = false;
+
+});
+
+app.controller("twitterServiceController", function ($scope,$http) {
+
+
+    //  Functions
+
+    $scope.TwitMe = function () {       //  Sending twitter tokens to data base
+
+        $http.post(ServerAddress+'/new/twitter/',{
+            token:app.Token,
+            accessToke:$scope.accesstoke,
+            secretToken:$scope.secrettoken
+        }).then(
+            //Success
+            function(response){
+                $scope.infoType = "";
+                $scope.info = "Twitter successfully added"
+            },
+            //Failure
+            function (response) {
+                $scope.infoType = "error-info";
+                $scope.info = "Failure while adding twitter account";
+            }
+        );
+
+    };
+
+
+    //  Initialize
+
+    $scope.loginInputStyle = "login-input login-text";
+
 
 });

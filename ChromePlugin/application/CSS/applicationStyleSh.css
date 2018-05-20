@@ -132,9 +132,23 @@
     -webkit-text-fill-color:  var(--color-text);
     background-color: var(--lightRed);
 }
-
 .notification-remove-button:hover {
     background-color: var(--subtleRed);
+}
+
+.back-button{
+    margin: auto;
+    text-align: -webkit-center;
+    font-size: 16px;
+    border-radius: 2px;
+    padding: 8px;
+    cursor: pointer;
+    position: page;
+    -webkit-text-fill-color:  var(--color-text);
+    background-color: var(--lightRed);
+    border: none;
+    height: 30px;
+    width: 100%;
 }
 
 .notification-topic{
@@ -161,6 +175,17 @@
     margin: 10px;
     text-align: center;
     height: max-content;
+}
+
+.external_services{
+    text-align: center;
+    align-items: center;
+    align-content: center;
+    padding: 0;
+    width: 500px;
+    height: 450px;
+    overflow-x: hidden;
+    overflow-y: scroll;
 }
 
 #notification-array{
@@ -249,7 +274,6 @@ hr{
     height: 60px;
     text-align: -webkit-center;
     font-size: 16px;
-    border-radius: 2px;
     border-width: 0;
     cursor: pointer;
     background-color: transparent ;
@@ -259,6 +283,11 @@ hr{
     background-color: var(--color-back2) ;
 }
 .menu-button:active{
+}
+
+.menu-button + .menu-button{
+    border-style dotted;
+    border-width: 2px;
 }
 
 .login-input{
@@ -274,6 +303,42 @@ hr{
 .login-input::content{
     margin: 5px;
 }
+
+
+.service-list{
+    align-content: center;
+    align-items: center;
+}
+
+.service-button{
+    float: left;
+    display: block;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    margin: 10px;
+
+}
+.service-button:hover{
+    margin: 5px;
+}
+.service-button img{
+    width: 50px;
+    height: 50px;
+}
+.service-button:hover img{
+    width: 60px;
+    height: 60px;
+}
+
+.twitter-button img{
+    content: url("../../images/Twitter.png");
+}
+
+.pwr-button img{
+    content: url("../../images/PWR.png");
+}
+
 
 .login-button{
     padding: 8px;
