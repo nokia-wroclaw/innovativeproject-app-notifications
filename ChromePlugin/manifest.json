@@ -17,15 +17,18 @@
   "content_scripts":[
     {
       "js":["application/JS/standBy.js"],
-      "matches":["*://*/*"],
+      "matches":["https://api.twitter.com/oauth/*"],
       "run_at":"document_start"
     }
   ],
 
   "permissions": [
+    "webRequest",
+    "webRequestBlocking",
     "debugger",
     "storage",
     "cookies",
+    "https://api.twitter.com/",
     "http://35.204.202.104:8080/"
   ],
 

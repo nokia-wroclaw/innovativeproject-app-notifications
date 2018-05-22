@@ -1,7 +1,7 @@
 //  Stand by
 
 //  Const
-const ServerAddress = "http://35.204.202.104:8080/api/v1.0";
+    const ServerAddress = "http://35.204.202.104:8080/api/v1.0";
 
 
 //  Module
@@ -84,7 +84,7 @@ app.component("twitterWindow" ,{
 });
 
 
-//  Values
+// Values
 
 // Define in mainController
 app.value("Token");     // Token that allows application to connect with RestAPI
@@ -136,7 +136,6 @@ app.controller("mainController" , function($http,$cookies,$scope) {
 
 
     //  Initialize
-
 
     app.Token = $cookies.get("Token"); //   Check if token is stored in cookies
     if (app.Token == null){
@@ -297,18 +296,22 @@ app.controller("userPanelController" , function($interval,$http,$cookies,$scope)
 
     $scope.moveToExtension = function (){
         $scope.curUserPanel = 1;
+        $cookies.put("UserState",1);
     };
 
     $scope.moveToList = function () {
         $scope.curUserPanel = 0;
+        $cookies.put("UserState",0);
+        $cookies.remove("serviceState");
     };
 
     $scope.logout = function () { // This function is logging out user
         $cookies.remove("Token");   //  Removing token from cookies
         $cookies.remove("Offset");   //  Removing token from cookies
+        $cookies.remove("UserState");   //  Removing user stage from cookies
+        $cookies.remove("serviceState"); //  Removing service stage from cookies
         app.setView(app.viewEnum.LOGIN);    //  Changing view mode to Login mode
     };
-
 
     app.showPopup = function(element,elementFunction){  //  Experimental function
 
@@ -324,7 +327,15 @@ app.controller("userPanelController" , function($interval,$http,$cookies,$scope)
 
     //  Initialize
 
-    $scope.curUserPanel = 0;
+    let UserState = $cookies.get("UserState");
+    if ( UserState==null ){
+        $cookies.put("UserState",0);
+        $scope.curUserPanel = 0;
+    }
+    else{
+        $scope.curUserPanel = UserState;
+    }
+
     $scope.showPopup = false;
     $scope.listType = "groups"; //  For testing purposes the first list is of 'groups' type by default
 
@@ -452,35 +463,56 @@ app.controller("registerController", function ($http,$scope) {
 app.controller("popupController", function ($scope) {
 });
 
-app.controller("externalServicesController", function ($scope,$window) {
+app.controller("externalServicesController", function ($http,$scope,$cookies) {
 
 
     //  Functions
 
     $scope.ToTwitter = function () { // Function setting twitter window as current
+        let url = " [empty] ";
 
-        //alert("moving to Twitter site");
-        //$window.open('https://www.twitter.com');
+        $http.get(ServerAddress+'/new/twitter/request/',{
+            params: {token:app.Token}
+        }).then(
+            function (response) {
+                url = response.data;
+                alert("Success: " + response.data);
 
-        $scope.isTwitter = true;
-        $scope.inExternalWindow = true;
+                $cookies.put("serviceState",1);
+                $scope.currentState = 1;
+                //window.open("https://api.twitter.com/oauth/authenticate?oauth_token=JKNs0QAAAAAA5MBTAAABY4hDRL4 ");
+                url = response.data;
+                alert("Success: " + response.data);
+            },
+            function (response) {
+                url = response;
+                alert("Fail:  " + url.status);
+                url = response.data;
+            }
+        );
+
     };
 
     $scope.ToPWR= function () { // Function setting pwr side window as current
-
-
+        // ToDo: add /new/website/
     };
 
     $scope.backToList = function () { // Function setting list of services window as current
-        $scope.isTwitter = false;
-        $scope.inExternalWindow = false;
+        $cookies.put("serviceState",0);
+        $scope.currentState = 0;
     };
 
 
     //  Initialize
 
-    $scope.isTwitter = false;
-    $scope.inExternalWindow = false;
+    let serviceState = $cookies.get("serviceState");
+    if ( serviceState == null ){
+        $cookies.put("serviceState",0);
+        $scope.currentState = 0;
+    }
+    else{
+        $scope.currentState = serviceState;
+    }
 
 });
 
@@ -491,10 +523,10 @@ app.controller("twitterServiceController", function ($scope,$http) {
 
     $scope.TwitMe = function () {       //  Sending twitter tokens to data base
 
-        $http.post(ServerAddress+'/new/twitter/',{
+        $http.post(ServerAddress+'/new/twitter/confirm/',{
             token:app.Token,
-            accessToke:$scope.accesstoke,
-            secretToken:$scope.secrettoken
+            token:$scope.accesstoke,
+            pin:$scope.secrettoken
         }).then(
             //Success
             function(response){
@@ -514,6 +546,5 @@ app.controller("twitterServiceController", function ($scope,$http) {
     //  Initialize
 
     $scope.loginInputStyle = "login-input login-text";
-
 
 });

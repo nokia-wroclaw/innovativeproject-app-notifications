@@ -1,9 +1,9 @@
-<div class="external_services">
+<div class="external_services" ng-switch="currentState">
     <h1> Services </h1>
     <hr>
     <br>
     <span ng-class="infoType"> {{info}} </span>
-    <div ng-if="!inExternalWindow" class="service-list">
+    <div ng-switch-when=0 class="service-list">
 
         <button name="twitterButton" class="service-button twitter-button" ng-click="ToTwitter()">
             <img>
@@ -15,9 +15,9 @@
 
     </div>
 
-    <twitter-window ng-if="isTwitter" ></twitter-window>
+    <twitter-window ng-switch-when=1 ></twitter-window>
 
-    <div ng-if="inExternalWindow">
+    <div ng-switch-when=1>
         <br>
         <hr>
         <br>
