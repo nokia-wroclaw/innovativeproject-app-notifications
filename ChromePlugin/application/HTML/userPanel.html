@@ -8,11 +8,13 @@
                 <h2 style="text-align: center"> account options </h2>
                 <hr>
                 <br/>
-                <div ng-switch="curUserPanel">
+                <div>
 
-                    <p><input ng-switch-when=0 name="externalServices" class="menu-button" type="button" ng-click="moveToExtension()" value="external services"></p>
+                    <p><input ng-if="curUserPanel!=1" name="externalServices" class="menu-button" type="button" ng-click="moveToAddExtension()" value="add external service"></p>
 
-                    <p><input ng-switch-when=1 name="notfList" class="menu-button" type="button" ng-click="moveToList()" value="notifications list"></p>
+                    <p><input ng-if="curUserPanel!=2" name="servicesList" class="menu-button" type="button" ng-click="moveToExtensionsList()" value="services list"></p>
+
+                    <p><input ng-if="curUserPanel!=0" name="notfList" class="menu-button" type="button" ng-click="moveToList()" value="notifications list"></p>
 
                 </div>
                 <br/>
@@ -26,7 +28,7 @@
         </td>
         <td ng-switch="curUserPanel">
 
-            <div ng-switch-when=0 class="div-background" id="user-pane" style="display: block">
+            <div ng-switch-when=0 class="div-background user-pane-list" style="display: block">
 
                 <h1 style="cursor: default"> Notifications </h1>
                 <hr>
@@ -38,7 +40,30 @@
                 <hr>
             </div>
 
-            <external-services class="div-background" style="display: block" ng-switch-when=1 ></external-services>
+            <div ng-switch-when=1 class="div-background user-pane-list" style="display: block">
+
+                <h1 style="cursor: default"> Available services </h1>
+                <hr>
+
+                <div  id="services-array" >
+                    <external-services class="div-background user-pane-list" style="display: block"></external-services>
+                </div>
+
+                <hr>
+            </div>
+
+            <div ng-switch-when=2 class="div-background user-pane-list" style="display: block">
+
+                <h1 style="cursor: default"> Your Services </h1>
+                <hr>
+
+                <div  id="websites-array" >
+                    <external-services-list></external-services-list>
+                </div>
+
+                <hr>
+            </div>
+
 
         </td>
     </tr>

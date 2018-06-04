@@ -60,7 +60,7 @@
       "userID":1,
       "sourceID":1,
       "flag":false,
-      "topic":"ServerTestingNotification in g2 1",
+      "topic":"ServerTestingNotification with very long topic to test text wrapping and stuff",
       "message":"This is server testing notification number 1",
       "timestamp":"2018-04-15 18:13:14.246654","priority":0
     },
@@ -69,8 +69,8 @@
       "userID":1,
       "sourceID":1,
       "flag":false,
-      "topic":"ServerTestingNotification in g2 2",
-      "message":"This is server testing notification number 2",
+      "topic":"ServerTestingNotification with very long message ",
+      "message":"Lorem ipsum dolor sit amet, te pri lorem viderer deterruisset, quo cu erroribus rationibus, ad nam autem legendos. Verear persequeris cum an. Per an altera percipit liberavisse, vix vivendo adipiscing ea. Te duo vocibus laboramus, quis dicit tritani vis ex, eos ea odio vocent conclusionemque. Eam ut rebum civibus definitiones, ad sed summo expetenda, expetendis temporibus in quo. Ea unum theophrastus quo, dignissim complectitur ut mei, sententiae reformidans mei ex. Ea nam vide illum graece.Ad qui everti iracundia adipiscing. Alii error dictas ne eos. Est solet accusata id. No veri graeci causae sed, id odio quas forensibus his, ei est modo dico. Ea mea oblique quaestio moderatius, ea ius quodsi principes dissentias.",
       "timestamp":"2018-04-15 18:13:14.246654","priority":0
     },
     {

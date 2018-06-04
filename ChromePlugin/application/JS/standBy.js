@@ -1,2 +1,3 @@
 
-alert("if you moved to this side from 'Notify Me' extension plece copy tokens from this side to extension window");
+alert("if you moved to this side from 'Notify Me' extension please log in with your twitter account" +
+    " ( if you'r not logged yet ) and copy pin from this side to extension window");

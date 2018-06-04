@@ -1,10 +1,13 @@
+
 <div  ng-class="notificationFocus" ng-init=$ctrl.addSelf($ctrl)>
+    <div ng-if=!($ctrl.myNotification.flag) class="marker">not read yet</div>
 
 {{info}}
- <div ng-if=!($ctrl.myNotification.flag) class="info-text">not read yet</div>
- <h4 ng-click=$ctrl.requestFocus($ctrl) class="notification-topic">{{$ctrl.myNotification.topic}} </h4>
+    <h4 ng-click=$ctrl.requestFocus($ctrl) class="notification-topic" >{{ $ctrl.myNotification.topic.substr(0,40) }} <span style="font-size: 18px" ng-if="$ctrl.myNotification.topic.length > 40">...</span></h4>
+    <h4 ng-click=$ctrl.requestFocus($ctrl) class="notification-fulltopic" >{{ $ctrl.myNotification.topic }}</h4>
 
-    <div class="notification-message"> {{$ctrl.myNotification.time}} {{$ctrl.myNotification.count}}</div>
+    <h4>Count: {{$ctrl.myNotification.count}}</h4>
+    <div class="notification-message"> {{$ctrl.myNotification.timestamp}} </div>
     <br/>
     <div class="notification-message"> {{$ctrl.myNotification.message}} </div>
     <hr>

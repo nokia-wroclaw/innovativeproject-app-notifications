@@ -45,7 +45,12 @@
     -webkit-text-fill-color:  var(--lightGrean);
 }
 
-#user-pane{
+.user-pane-list{
+    text-align: center;
+    height: 450px;
+}
+
+#user-pane-nlist{
     text-align: center;
     height: 450px;
 }
@@ -70,7 +75,25 @@
     border-color: var(--color-text);
     padding : 4px;
 }
-.info-text + .notification-topic{
+.notification-div .notification-topic{
+    display: inline-block;
+}
+.notification-div .notification-fulltopic{
+     display: none;
+ }
+
+.div-selected .notification-topic{
+    display: none;
+}
+.div-selected .notification-fulltopic{
+    display: inline;
+}
+
+.marker{
+    position: inherit;
+    float: left;
+    height: 40px;
+    width: 70px;
     border: var(--lightYellow);
     border-style: hidden hidden hidden solid;
 }
@@ -96,6 +119,7 @@
 }
 
 .div-selected{
+    overflow: visible;
     height: auto;
     cursor: auto;
     outline-color: var(--subtleBlue);
@@ -151,7 +175,21 @@
     width: 100%;
 }
 
+.service-topic{
+    text-align: center;
+    font-size: 15px;
+    height: 25px;
+    padding: 2px;
+    margin: 0;
+}
 .notification-topic{
+    text-align: center;
+    font-size: 15px;
+    height: 25px;
+    padding: 2px;
+    margin: 0;
+}
+.notification-fulltopic{
     text-align: center;
     font-size: 15px;
     height: 25px;
@@ -181,13 +219,24 @@
     text-align: center;
     align-items: center;
     align-content: center;
-    padding: 0;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+#services-array{
+    padding: 10px;
     width: 500px;
-    height: 450px;
+    max-height: 300px;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+#websites-array{
+    padding: 10px;
+    width: 500px;
+    max-height: 300px;
     overflow-x: hidden;
     overflow-y: scroll;
 }
-
 #notification-array{
     padding: 10px;
     width: 500px;
@@ -285,6 +334,25 @@ hr{
 .menu-button:active{
 }
 
+.dropmenu-button{
+    white-space: normal;
+    padding: 0px;
+    margin: auto;
+    width: 100%;
+    height: 20px;
+    text-align: -webkit-center;
+    font-size: 12px;
+    border-width: 0;
+    cursor: pointer;
+    background-color: transparent ;
+    -webkit-text-fill-color:  var(--color-text1);
+}
+.dropmenu-button:hover, .login-button:focus{
+    background-color: var(--color-back2) ;
+}
+.dropmenu-button:active{
+}
+
 .menu-button + .menu-button{
     border-style dotted;
     border-width: 2px;
@@ -376,4 +444,37 @@ hr{
 .error_info{
     position: absolute;
     -webkit-text-fill-color: var(--subtleRed);
+}
+
+.dropdown {
+    background-color: var(--color-back3);
+    cursor: pointer;
+    position: relative;
+    display: inline-block;
+    width: 150px;
+}
+
+.dropdown-content, .dropdown-content-hide {
+    display: none;
+    position: absolute;
+    background-color: var(--color-back1);
+    width: 140px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    padding: 8px 5px;
+    z-index: 10;
+}
+
+button:active + .dropdown-content{
+    display: none;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.menu-horizontal{
+    align-content: center;
+    padding: 5px 10px 5px 10px;
+    margin-left: fill;
+    margin-right: auto;
 }

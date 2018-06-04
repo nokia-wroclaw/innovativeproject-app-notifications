@@ -78,11 +78,31 @@ app.component("externalServices" ,{
     controller : 'externalServicesController'
 });
 
+app.component("externalServicesList" ,{
+    templateUrl : '../HTML/externalServicesList.html',
+    controller : 'externalServicesListController'
+});
+
+app.component("externalServiceElement" ,{
+    templateUrl : '../HTML/externalServiceElement.html',
+    controller : 'externalServiceElementController',
+    bindings: {
+        removeMy: '=',  // callback function for removing this element
+        myWebsite: '=',    // data about notification represented by this element
+        requestFocus: '=', // callback function for requesting focus
+        addSelf: '=' // callback function for adding this element to elements table
+    }
+});
+
 app.component("twitterWindow" ,{
     templateUrl : '../HTML/TwitterWindow.html',
     controller : 'twitterServiceController'
 });
 
+app.component("websiteWindow" ,{
+    templateUrl : '../HTML/WebsiteWindow.html',
+    controller : 'websiteServiceController'
+});
 
 // Values
 
@@ -98,6 +118,8 @@ app.value("userViewEnum");  // enumeration of possible user view options
 app.value("setView");   // function that allows to change vie mode
 
 app.value("setApplicationStyle");    // function that allows to set style of application (light - dark)
+
+app.value("reqid");    // tmp
 
 
 //  Testing values
@@ -255,7 +277,6 @@ app.controller("notificationListController" , function($interval,$http,$cookies,
         }).then(
             //Success
             function(response){
-                $scope.info = response.data;
                 $scope.storedData.splice($scope.storedData.indexOf(element.myNotification), 1);
                 elements.splice(elements.indexOf(element), 1);
             },
@@ -266,9 +287,11 @@ app.controller("notificationListController" , function($interval,$http,$cookies,
         );
     };
 
+    //"../JSON/group3.json" //
     $scope.loadData = function(from,type){ // This function loads data from specified location in to storedData array
         $scope.type = type;
-        $http.get(ServerAddress+'/not/part/' ,{
+        $http.get(ServerAddress+'/not/part/'
+            ,{
             params: {offset:app.Offset, token:app.Token}
         })
             .then(function(response){
@@ -278,7 +301,6 @@ app.controller("notificationListController" , function($interval,$http,$cookies,
 
                 $scope.storedData = [].concat(oldContent, newContent);
                 app.Offset = app.Offset + offset;
-                $scope.info=offset;
             });
 
     };
@@ -294,9 +316,14 @@ app.controller("userPanelController" , function($interval,$http,$cookies,$scope)
 
     //  Functions
 
-    $scope.moveToExtension = function (){
+    $scope.moveToAddExtension = function (){
         $scope.curUserPanel = 1;
         $cookies.put("UserState",1);
+    };
+
+    $scope.moveToExtensionsList = function (){
+        $scope.curUserPanel = 2;
+        $cookies.put("UserState",2);
     };
 
     $scope.moveToList = function () {
@@ -471,18 +498,17 @@ app.controller("externalServicesController", function ($http,$scope,$cookies) {
     $scope.ToTwitter = function () { // Function setting twitter window as current
         let url = " [empty] ";
 
-        $http.get(ServerAddress+'/new/twitter/request/',{
-            params: {token:app.Token}
+        $http.post(ServerAddress+'/new/twitter/request/',{
+           token:app.Token
         }).then(
             function (response) {
-                url = response.data;
-                alert("Success: " + response.data);
+                url = response.data.status;
 
                 $cookies.put("serviceState",1);
                 $scope.currentState = 1;
-                //window.open("https://api.twitter.com/oauth/authenticate?oauth_token=JKNs0QAAAAAA5MBTAAABY4hDRL4 ");
-                url = response.data;
-                alert("Success: " + response.data);
+                window.open(url);
+
+                alert("Success: " + response.status);
             },
             function (response) {
                 url = response;
@@ -494,7 +520,9 @@ app.controller("externalServicesController", function ($http,$scope,$cookies) {
     };
 
     $scope.ToPWR= function () { // Function setting pwr side window as current
-        // ToDo: add /new/website/
+
+        $cookies.put("serviceState",2);
+        $scope.currentState = 2;
     };
 
     $scope.backToList = function () { // Function setting list of services window as current
@@ -525,8 +553,7 @@ app.controller("twitterServiceController", function ($scope,$http) {
 
         $http.post(ServerAddress+'/new/twitter/confirm/',{
             token:app.Token,
-            token:$scope.accesstoke,
-            pin:$scope.secrettoken
+            pin:$scope.pinKey,
         }).then(
             //Success
             function(response){
@@ -546,5 +573,174 @@ app.controller("twitterServiceController", function ($scope,$http) {
     //  Initialize
 
     $scope.loginInputStyle = "login-input login-text";
+
+});
+
+app.controller("websiteServiceController", function ($scope,$http) {
+
+
+    //  Functions
+
+    $scope.WebMe = function () {       //  Sending twitter tokens to data base
+
+        $http.post(ServerAddress+'/new/website/',{
+            token:app.Token,
+            website:$scope.websiteURL
+        }).then(
+            //Success
+            function(response){
+                $scope.infoType = "";
+                $scope.info = "Website successfully added";
+                refreshList();
+            },
+            //Failure
+            function (response) {
+                $scope.infoType = "error-info";
+                $scope.info = "Failure while adding website";
+            }
+        );
+
+    };
+
+    //  Initialize
+
+    $scope.loginInputStyle = "login-input login-text";
+
+});
+
+app.controller("externalServicesListController", function ($scope,$http) {
+
+    //  Functions
+
+    var refreshList = function () {
+        $scope.webservices = null;
+
+        $http.post(ServerAddress+'/accounts/',{
+            token:app.Token
+        }).then(
+            //Success
+            function(response){
+                //$scope.info = response.data;
+                $scope.webservices = response.data.accounts
+            },
+            //Failure
+            function (response) {
+                $scope.infoType = "error-info";
+                $scope.info = "Failure to load services";
+            }
+        );
+    };
+
+    $scope.removeWebsite = function (sourceID, accessToken) {
+
+        $http.post(ServerAddress+'/remove/account/',{
+            token:app.Token,
+            source:sourceID,
+            accesstoken:accessToken
+        }).then(
+            //Success
+            function(response){
+                refreshList();
+            },
+            //Failure
+            function (response) {
+                $scope.infoType = "error-info";
+                $scope.info = "Failure to remove website";
+            }
+        );
+    };
+
+    $scope.addThis = function (element) { // This function is adding elements that represents list data to elements list
+        elements.push(element);
+    };
+
+    $scope.elementRequestFocus = function(element){ // This function is called when one of the elements is requesting focus
+        if (element.focused===false) {
+
+            angular.forEach(elements, function (value) {
+                    value.loseFocus();
+                });
+
+            element.getFocus();
+        }else {                     //  If element is already focused, it loses the focus
+            element.loseFocus();
+        }
+    };
+
+    //  Initialize
+    let elements = [];
+    $scope.webservices = [];
+    refreshList();
+
+});
+
+app.controller("externalServiceElementController" , function ($timeout,$http,$scope) {
+
+    //  Functions
+
+    this.loseFocus = function () {  // This function removes focus from this elements
+        $scope.notificationFocus="notification-div";
+        this.focused = false;
+    };
+
+    this.getFocus = function () {   // This function set focus on this elements
+
+        $scope.notificationFocus+=" div-selected";
+        this.focused = true;
+    };
+
+    $scope.setAggregation = function (type,source) {
+
+        //$scope.info = source;
+
+        switch (type) {
+            case 0:
+            default:
+                $scope.curAggregaton= "None";
+                break;
+            case 1:
+                $scope.curAggregaton= "First";
+                break;
+            case 2:
+                $scope.curAggregaton= "Last";
+                break;
+            case 3:
+                $scope.curAggregaton= "Count";
+                break;
+        }
+
+
+        $http.post(ServerAddress+'/accounts/aggregation/',{
+            token: app.Token,
+            account: source,
+            aggregation: type
+        }).then(
+            //Success
+            function(response){},
+            //Failure
+            function (response) {
+                $scope.infoType = "error-info";
+                $scope.info = "Failure to set aggregation: " + response.code;
+            }
+        );
+
+
+        $scope.dropmenu_class = "dropdown-content-hide";
+        $timeout(function () {
+            $scope.dropmenu_class = "dropdown-content";
+        },100);
+
+
+    };
+
+
+    //  Initialize
+
+    let aggregation = 0;
+    $scope.curAggregaton= "None";
+
+    $scope.dropmenu_class = "dropdown-content";
+    this.focused = false;   // By default the element don't have focus
+    $scope.notificationFocus="notification-div";
 
 });

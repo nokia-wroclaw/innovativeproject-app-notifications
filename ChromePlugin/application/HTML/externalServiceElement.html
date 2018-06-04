@@ -1,0 +1,31 @@
+<div  ng-class="notificationFocus" ng-init=$ctrl.addSelf($ctrl)>
+
+    {{info}}
+ <h4 ng-click=$ctrl.requestFocus($ctrl) class="service-topic">
+     <span ng-if="$ctrl.myWebsite.sourceID==15">Twitter</span>
+     <span ng-if="$ctrl.myWebsite.sourceID==10">Custom Website</span>
+ </h4>
+
+    <div class="menu-horizontal">
+        <div style="display: inline-block;"> Aggregation type :</div>
+
+        <div class="dropdown" style="float: none">
+            <span>{{curAggregaton}}</span>
+            <div ng-class="dropmenu_class">
+                <button ng-click="setAggregation(0,$ctrl.myWebsite.accountID)" class="dropmenu-button">None</button><br>
+                <button ng-click="setAggregation(1,$ctrl.myWebsite.accountID)" class="dropmenu-button">First</button><br>
+                <button ng-click="setAggregation(2,$ctrl.myWebsite.accountID)" class="dropmenu-button">Last</button><br>
+                <button ng-click="setAggregation(3,$ctrl.myWebsite.accountID)" class="dropmenu-button">Count</button><br>
+            </div>
+        </div>
+
+    </div>
+
+    <br>
+    <div class="notification-message" ng-if="$ctrl.myWebsite.sourceID==10" class="notification-message">
+        {{$ctrl.myWebsite.accessToken}}
+    </div>
+    <hr>
+    <div ng-click=$ctrl.removeMy($ctrl.myWebsite.sourceID,$ctrl.myWebsite.accessToken) class="notification-remove-button">remove</div>
+
+</div>

@@ -1,0 +1,12 @@
+<div name="websiteList" class="notification-list">
+
+
+    {{info}}
+    <external-service-element ng-repeat="website in webservices"
+                                add-self = addThis
+                                my-website = website
+                                request-focus = elementRequestFocus
+                                remove-my = removeWebsite
+    ></external-service-element>
+
+</div>

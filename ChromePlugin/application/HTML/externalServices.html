@@ -1,8 +1,6 @@
 <div class="external_services" ng-switch="currentState">
-    <h1> Services </h1>
-    <hr>
-    <br>
-    <span ng-class="infoType"> {{info}} </span>
+
+    {{info}}
     <div ng-switch-when=0 class="service-list">
 
         <button name="twitterButton" class="service-button twitter-button" ng-click="ToTwitter()">
@@ -16,12 +14,12 @@
     </div>
 
     <twitter-window ng-switch-when=1 ></twitter-window>
+    <website-window ng-switch-when=2 ></website-window>
 
-    <div ng-switch-when=1>
+    <div ng-if=" currentState!=0 ">
         <br>
         <hr>
         <br>
         <button  name="backButton" class="back-button"  ng-click="backToList()" > back to list </button>
     </div>
-
 </div>
