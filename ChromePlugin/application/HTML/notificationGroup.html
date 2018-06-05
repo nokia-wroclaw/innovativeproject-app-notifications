@@ -1,13 +1,16 @@
 <div  ng-class="notificationFocus" ng-init=$ctrl.addSelf($ctrl)>
 
     <h4 ng-click=$ctrl.requestFocus($ctrl) class="notification-group">
-        From: <span class="info-data">{{$ctrl.group.name}}</span>,
-        <br/> <span class="info-data">{{$ctrl.group.quantity}}</span> notifications
+        From: <span class="info-data" ng-if="$ctrl.group.sourceID==15">Twitter</span><span class="info-data" ng-if="$ctrl.group.sourceID==10">Websites</span>,
+        <br/> <span class="info-data">{{$ctrl.group.count}}</span> notifications
     </h4>
 
     <hr>
 
-    <notifications-list ng-if=$ctrl.focused type=$ctrl.group.type from=$ctrl.group.name ></notifications-list>
+    <div>
+        <notifications-list ng-if="$ctrl.focused" type="'notifications'" from="$ctrl.group.sourceID" >
 
+        </notifications-list>
+    </div>
 
 </div>

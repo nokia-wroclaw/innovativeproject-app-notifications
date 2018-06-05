@@ -1,15 +1,16 @@
 <div  ng-class="notificationFocus" ng-init=$ctrl.addSelf($ctrl)>
 
-    {{info}}
+    <span ng-class="infoType">{{info}}</span>
  <h4 ng-click=$ctrl.requestFocus($ctrl) class="service-topic">
      <span ng-if="$ctrl.myWebsite.sourceID==15">Twitter</span>
      <span ng-if="$ctrl.myWebsite.sourceID==10">Custom Website</span>
  </h4>
+    <hr/>
+    <div class="menu-horizontal" ng-init="serviceInitTYP($ctrl.myWebsite.aggregationdate);serviceInitAGR($ctrl.myWebsite.aggregation)">
 
-    <div class="menu-horizontal">
         <div style="display: inline-block;"> Aggregation type :</div>
 
-        <div class="dropdown" style="float: none">
+        <div class="dropdown" style="float: none" >
             <span>{{curAggregaton}}</span>
             <div ng-class="dropmenu_class">
                 <button ng-click="setAggregation(0,$ctrl.myWebsite.accountID)" class="dropmenu-button">None</button><br>
@@ -19,13 +20,36 @@
             </div>
         </div>
 
-    </div>
+        <br/>
+        <br/>
 
-    <br>
-    <div class="notification-message" ng-if="$ctrl.myWebsite.sourceID==10" class="notification-message">
-        {{$ctrl.myWebsite.accessToken}}
+        <div style="display: inline-block;">
+            <span style="float: left">Aggregate every : </span>
+            <input type="text" class="inline-field" name="input" placeholder="how much" ng-model="aggrDuration"/>
+            <div class="dropdown" style="float: left" ng-init="serviceInit( $ctrl.myWebsite.aggregation )">
+                <span>{{durType}}</span>
+                <div ng-class="dropmenu_class">
+                    <button ng-click="setAggregationDuration(0)" class="dropmenu-button">Hoers</button><br>
+                    <button ng-click="setAggregationDuration(1)" class="dropmenu-button">Days</button><br>
+                    <button ng-click="setAggregationDuration(2)" class="dropmenu-button">Weeks</button><br>
+                    <button ng-click="setAggregationDuration(3)" class="dropmenu-button">Months</button><br>
+                    <button ng-click="setAggregationDuration(4)" class="dropmenu-button">Years</button><br>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <button class="aggregation-button" ng-click="confirmDuration(aggrDuration,$ctrl.myWebsite.accountID)">Confirm</button>
+
+    <br/>
+    <hr/>
+    <br/>
+
+    <div class="notification-message"  ng-if="$ctrl.myWebsite.sourceID==10" class="notification-message">
+        <button ng-click="moveToSide($ctrl.myWebsite.accessToken)" class="link-button">{{$ctrl.myWebsite.accessToken}}</button>
     </div>
     <hr>
     <div ng-click=$ctrl.removeMy($ctrl.myWebsite.sourceID,$ctrl.myWebsite.accessToken) class="notification-remove-button">remove</div>
+
 
 </div>

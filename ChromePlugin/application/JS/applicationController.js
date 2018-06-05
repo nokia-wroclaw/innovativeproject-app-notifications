@@ -227,6 +227,8 @@ app.controller("loginController" , function($http,$cookies,$scope) {
                 //Success
                 function(response){
                     app.Token = response.data.status;
+                    chrome.storage.local.set({'token': app.Token });
+
                     $cookies.put("Token", app.Token);
                     app.setView(app.viewEnum.LIST);
                 },
@@ -287,12 +289,13 @@ app.controller("notificationListController" , function($interval,$http,$cookies,
         );
     };
 
-    //"../JSON/group3.json" //
+    "../JSON/groups.json" //
     $scope.loadData = function(from,type){ // This function loads data from specified location in to storedData array
         $scope.type = type;
-        $http.get(ServerAddress+'/not/part/'
-            ,{
-            params: {offset:app.Offset, token:app.Token}
+        $http.post(ServerAddress+'/notifications/source/',{
+            offset:app.Offset,
+            token:app.Token,
+            source:from
         })
             .then(function(response){
                 let newContent = response.data.notifications;
@@ -305,11 +308,32 @@ app.controller("notificationListController" , function($interval,$http,$cookies,
 
     };
 
+    $scope.loadGroups = function(rom,type){
+
+        $http.post(ServerAddress+'/notifications/',{
+            token:app.Token
+        }).then(
+            //Success
+            function(response){
+                let newContent = response.data.sources;
+                let oldContent = $scope.storedData;
+
+                $scope.storedGroups = [].concat(oldContent, newContent);
+            },
+            //Failure
+            function (response) {
+                $scope.infoType = "error-info";
+                $scope.info = "Failure to load services";
+            }
+        );
+
+    };
 
     //  Initialize
     app.Offset = 0;
     let elements = [];
     $scope.storedData = [];
+    $scope.storedGroups = [];
 });
 
 app.controller("userPanelController" , function($interval,$http,$cookies,$scope) {
@@ -333,6 +357,7 @@ app.controller("userPanelController" , function($interval,$http,$cookies,$scope)
     };
 
     $scope.logout = function () { // This function is logging out user
+        chrome.storage.local.set({'token': null });
         $cookies.remove("Token");   //  Removing token from cookies
         $cookies.remove("Offset");   //  Removing token from cookies
         $cookies.remove("UserState");   //  Removing user stage from cookies
@@ -559,6 +584,7 @@ app.controller("twitterServiceController", function ($scope,$http) {
             function(response){
                 $scope.infoType = "";
                 $scope.info = "Twitter successfully added"
+                $scope.pinKey = "";
             },
             //Failure
             function (response) {
@@ -591,6 +617,7 @@ app.controller("websiteServiceController", function ($scope,$http) {
             function(response){
                 $scope.infoType = "";
                 $scope.info = "Website successfully added";
+                $scope.websiteURL = "";
                 refreshList();
             },
             //Failure
@@ -676,9 +703,16 @@ app.controller("externalServicesListController", function ($scope,$http) {
 
 app.controller("externalServiceElementController" , function ($timeout,$http,$scope) {
 
+    console.warn("does that work");
+
+    let agrDurationType;
+    let agrType;
+
     //  Functions
 
+
     this.loseFocus = function () {  // This function removes focus from this elements
+        $scope.info ="";
         $scope.notificationFocus="notification-div";
         this.focused = false;
     };
@@ -691,8 +725,7 @@ app.controller("externalServiceElementController" , function ($timeout,$http,$sc
 
     $scope.setAggregation = function (type,source) {
 
-        //$scope.info = source;
-
+        agrType = type;
         switch (type) {
             case 0:
             default:
@@ -709,22 +742,6 @@ app.controller("externalServiceElementController" , function ($timeout,$http,$sc
                 break;
         }
 
-
-        $http.post(ServerAddress+'/accounts/aggregation/',{
-            token: app.Token,
-            account: source,
-            aggregation: type
-        }).then(
-            //Success
-            function(response){},
-            //Failure
-            function (response) {
-                $scope.infoType = "error-info";
-                $scope.info = "Failure to set aggregation: " + response.code;
-            }
-        );
-
-
         $scope.dropmenu_class = "dropdown-content-hide";
         $timeout(function () {
             $scope.dropmenu_class = "dropdown-content";
@@ -734,12 +751,137 @@ app.controller("externalServiceElementController" , function ($timeout,$http,$sc
     };
 
 
+    $scope.setAggregationDuration = function(type){
+
+        agrDurationType = type;
+        switch (type) {
+            case 0:
+            default:
+                $scope.durType= "Hoers";
+                break;
+            case 1:
+                $scope.durType= "Days";
+                break;
+            case 2:
+                $scope.durType= "Weeks";
+                break;
+            case 3:
+                $scope.durType= "Months";
+                break;
+            case 4:
+                $scope.durType= "Years";
+                break;
+        }
+
+        $scope.dropmenu_class = "dropdown-content-hide";
+        $timeout(function () {
+            $scope.dropmenu_class = "dropdown-content";
+        },100);
+    };
+
+    $scope.serviceInitTYP = function(duration) {
+
+        if(duration<24){
+            agrDurationType = 0;
+            $scope.aggrDuration = duration;
+        }else if(duration<24*7){
+            agrDurationType=1;
+            $scope.aggrDuration = duration/24;
+        }else if(duration<24*30){
+            agrDurationType=2;
+            $scope.aggrDuration = duration/(24*7);
+        }else if(duration<24*12*30){
+            agrDurationType=3;
+            $scope.aggrDuration = duration/(24*30);
+        }else {
+            agrDurationType=4;
+            $scope.aggrDuration = duration/(24*12*30);
+        }
+
+        switch (agrDurationType) {
+            case 0:
+            default:
+                $scope.durType= "Hoers";
+                break;
+            case 1:
+                $scope.durType= "Days";
+                break;
+            case 2:
+                $scope.durType= "Weeks";
+                break;
+            case 3:
+                $scope.durType= "Months";
+                break;
+            case 4:
+                $scope.durType= "Years";
+                break;
+        }
+
+    };
+
+    $scope.serviceInitAGR = function(aggregation){
+        agrType = aggregation;
+
+        switch (aggregation) {
+            case 0:
+            default:
+                $scope.curAggregaton= "None";
+                break;
+            case 1:
+                $scope.curAggregaton= "First";
+                break;
+            case 2:
+                $scope.curAggregaton= "Last";
+                break;
+            case 3:
+                $scope.curAggregaton= "Count";
+                break;
+        }
+    };
+
+
+    $scope.confirmDuration = function(aggrDuration, source){
+
+        if(aggrDuration == null || aggrDuration===""){
+            $scope.infoType = "error-info";
+            $scope.info = "duration field is empty ";
+            return;
+        }
+        if(false){
+            $scope.infoType = "error-info";
+            $scope.info = "duration field is not numeric ";
+            return;
+        }
+        $http.post(ServerAddress+'/account/aggregation/',{
+            token: app.Token,
+            account: source,
+            aggregation: agrType,
+            aggregationdate: aggrDuration,
+            aggregationtype: agrDurationType
+        }).then(
+            //Success
+            function(response){
+                $scope.info = "Aggregation set successfully: ";
+                },
+            //Failure
+            function (response) {
+                $scope.infoType = "error-info";
+                $scope.info = "Failure to set aggregation: ";
+            }
+        );
+
+    };
+
+
+    $scope.moveToSide = function(url){
+        window.open(url);
+    };
+
     //  Initialize
 
-    let aggregation = 0;
-    $scope.curAggregaton= "None";
 
     $scope.dropmenu_class = "dropdown-content";
+
     this.focused = false;   // By default the element don't have focus
     $scope.notificationFocus="notification-div";
 

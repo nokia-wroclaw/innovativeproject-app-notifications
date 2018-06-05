@@ -1,11 +1,19 @@
 {
+
+
+
   "manifest_version"  : 2,
   "name"              : "Notify Me",
   "description"       : "Notification aggregation browser plugin",
   "short_name"        : "NM",
-  "version"           : "1.0",
+  "version"           : "1",
   "icons"             :{
         "256":"images/logo.png"
+  },
+
+  "background": {
+    "scripts": ["application/JS/background.js"],
+    "persistent": true
   },
 
   "browser_action"    : {
@@ -16,7 +24,7 @@
 
   "content_scripts":[
     {
-      "js":["application/JS/standBy.js"],
+      "js":["application/JS/Twitter.js"],
       "matches":["https://api.twitter.com/oauth/*"],
       "run_at":"document_start"
     }
@@ -29,6 +37,7 @@
     "storage",
     "cookies",
     "https://api.twitter.com/",
+    "http://lukasz.culer.staff.iiar.pwr.wroc.pl/",
     "http://35.204.202.104:8080/"
   ],
 
