@@ -51,7 +51,7 @@ public class ApiAuthenticationClient
         return status;
     }
 
-    public JSONObject getLastResponseAsJsonObject()
+    public JSONObject getResponseAsJsonObject()
     {
         try
         {

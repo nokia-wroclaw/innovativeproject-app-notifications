@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.json.JSONException;
+
 public class MainActivity extends AppCompatActivity
 {
     private Button button_login_login;
@@ -18,6 +20,7 @@ public class MainActivity extends AppCompatActivity
     private String username;
     private String password;
     private String baseUrl;
+    private String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -93,6 +96,11 @@ public class MainActivity extends AppCompatActivity
 
             if (apiAuthenticationClient.getResponse().toString()!=null && apiAuthenticationClient.getStatus().equals("200"))
             {
+                try {
+                    token = apiAuthenticationClient.getResponseAsJsonObject().getString("status");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 goToSecondActivity();
             }
             else
@@ -108,7 +116,7 @@ public class MainActivity extends AppCompatActivity
         Bundle bundle = new Bundle();
         bundle.putString("username", username);
         bundle.putString("password", password);
-        bundle.putString("baseUrl", baseUrl);
+        bundle.putString("token", token);
 
         Intent intent = new Intent(this, SecondActivity.class);
         intent.putExtras(bundle);
