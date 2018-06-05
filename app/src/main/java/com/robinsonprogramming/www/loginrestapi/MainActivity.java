@@ -87,14 +87,18 @@ public class MainActivity extends AppCompatActivity
         @Override
         protected void onPostExecute(String result)
         {
+            super.onPostExecute(result);
 
-            if (apiAuthenticationClient.getResponse().toString()!=null)
+            findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+
+            if (apiAuthenticationClient.getResponse().toString()!=null && apiAuthenticationClient.getStatus().equals("200"))
             {
                 goToSecondActivity();
             }
             else
                 {
                 Toast.makeText(getApplicationContext(), "Login Failed", Toast.LENGTH_LONG).show();
+
             }
         }
     }

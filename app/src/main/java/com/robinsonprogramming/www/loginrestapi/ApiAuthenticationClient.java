@@ -14,7 +14,7 @@ public class ApiAuthenticationClient
     private String username;
     private String password;
     private String httpMethod;
-    private String lastResponse;
+    private String status;
     private StringBuffer response;
 
     public ApiAuthenticationClient(String username, String password)
@@ -23,6 +23,7 @@ public class ApiAuthenticationClient
         this.password = password;
         this.httpMethod = "POST";
         this.response =  new StringBuffer();
+        this.status = "";
         System.setProperty("jsse.enableSNIExtension", "false");
     }
 
@@ -36,13 +37,18 @@ public class ApiAuthenticationClient
         this.username = "";
         this.password = "";
         this.httpMethod = "";
-        lastResponse = "";
+        this.status = "";
         return this;
     }
 
     public StringBuffer getResponse()
     {
         return response;
+    }
+
+    public String getStatus()
+    {
+        return status;
     }
 
     public JSONObject getLastResponseAsJsonObject()
@@ -60,7 +66,6 @@ public class ApiAuthenticationClient
 
     public String execute()
     {
-
         try
         {
             URL url = new URL("http://35.204.202.104:8080/api/v1.0/login/");
@@ -77,6 +82,7 @@ public class ApiAuthenticationClient
             Log.i("STATUS", String.valueOf(connection.getResponseCode()));
             Log.i("response",connection.getResponseMessage());
             Log.i("MSG", connection.getInputStream().toString());
+            status = String.valueOf(connection.getResponseCode());
             BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             String inputLine;
             while ((inputLine = in.readLine()) != null)
@@ -85,6 +91,7 @@ public class ApiAuthenticationClient
             }
             in.close();
             System.out.println(response.toString());
+
             connection.disconnect();
         }
         catch (Exception e)
