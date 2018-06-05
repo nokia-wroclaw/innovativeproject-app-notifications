@@ -1,8 +1,12 @@
 package Model;
 
+import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigInteger;
 
-public class Notification
+@Entity
+@Table(name ="nokiaapp.notification")
+public class Notification implements Serializable
 {
     private BigInteger notificationID;
     private Integer userID;
@@ -12,17 +16,22 @@ public class Notification
     private String message;
     private String timestamp;
     private Integer priority;
+    private Integer count;
 
+    @Id
+    @Column(name ="notificationid")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public BigInteger getNotificationID()
     {
         return notificationID;
     }
 
-    public void setNotificationID(BigInteger notificationID)
+    public void setNotificationID(BigInteger bigInteger)
     {
-        this.notificationID = notificationID;
+        this.notificationID = bigInteger;
     }
 
+    @Column(name = "userid")
     public Integer getUserID()
     {
         return userID;
@@ -33,6 +42,7 @@ public class Notification
         this.userID = userID;
     }
 
+    @Column(name = "sourceid",nullable = false)
     public Integer getSourceID()
     {
         return sourceID;
@@ -43,6 +53,7 @@ public class Notification
         this.sourceID = sourceID;
     }
 
+    @Column(name = "flag",nullable = false)
     public boolean isFlag()
     {
         return flag;
@@ -53,6 +64,7 @@ public class Notification
         this.flag = flag;
     }
 
+    @Column(name = "topic",nullable = false)
     public String getTopic()
     {
         return topic;
@@ -63,6 +75,7 @@ public class Notification
         this.topic = topic;
     }
 
+    @Column(name = "message")
     public String getMessage()
     {
         return message;
@@ -73,6 +86,7 @@ public class Notification
         this.message = message;
     }
 
+    @Column(name = "time",nullable = false)
     public String getTimestamp()
     {
         return timestamp;
@@ -83,6 +97,7 @@ public class Notification
         this.timestamp = timestamp;
     }
 
+    @Column(name = "priority",nullable = false)
     public Integer getPriority()
     {
         return priority;
@@ -91,5 +106,16 @@ public class Notification
     public void setPriority(Integer priority)
     {
         this.priority = priority;
+    }
+    
+    @Column(name = "count",nullable = false)
+    public Integer getCount()
+    {
+        return count;
+    }
+
+    public void setCount(Integer count)
+    {
+        this.count = count;
     }
 }

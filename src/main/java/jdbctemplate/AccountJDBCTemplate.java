@@ -70,4 +70,17 @@ public class AccountJDBCTemplate implements AccountDAO
         String SQL = "INSERT INTO nokiaapp.account (userid, login, password, accesstoken, accesstokensecret, sourceid) VALUES (?,?,?,?,?,?)";
         jdbcTemplateObject.update(SQL, account.getUserID(),account.getLogin(), account.getPassword(), account.getAccessToken(), account.getAccessTokenSecret(), account.getSourceID());
     }
+
+	@Override
+	public void updateAgregation(Integer id, Integer aggregation) {
+		String SQL = "update nokiaapp.account set aggregation = ? where accountid = ?";
+        jdbcTemplateObject.update(SQL, aggregation, id);
+	}
+
+	@Override
+	public void updateAgregationDate(Integer id, Integer date) {
+		String SQL = "update nokiaapp.account set aggregationdate = ? where accountid = ?";
+		jdbcTemplateObject.update(SQL, date, id);
+		
+	}
 }

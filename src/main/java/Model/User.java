@@ -1,14 +1,34 @@
 package Model;
+import javax.persistence.*;
+import java.io.Serializable;
 
-public class User
+@Entity
+@Table(name ="nokiaapp.user")
+public class User implements Serializable
 {
     private Integer userId;
     private String name;
     private String surname;
-    private String Login;
+    private String login;
     private String password;
     private String token;
 
+    public  User()
+    {}
+
+    public User(Integer userId, String name, String surname, String login, String password, String token)
+    {
+        this.userId = userId;
+        this.name = name;
+        this.surname = surname;
+        this.login = login;
+        this.password = password;
+        this.token = token;
+    }
+
+    @Id
+    @Column(name ="userid")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public Integer getUserId()
     {
         return userId;
@@ -19,6 +39,7 @@ public class User
         this.userId = userId;
     }
 
+    @Column(name = "name",nullable = false)
     public String getName()
     {
         return name;
@@ -29,6 +50,7 @@ public class User
         this.name = name;
     }
 
+    @Column(name = "surname",nullable = false)
     public String getSurname()
     {
         return surname;
@@ -39,16 +61,18 @@ public class User
         this.surname = surname;
     }
 
+    @Column(name = "login",nullable = false)
     public String getLogin()
     {
-        return Login;
+        return login;
     }
 
     public void setLogin(String login)
     {
-        Login = login;
+        this.login = login;
     }
 
+    @Column(name = "password",nullable = false)
     public String getPassword()
     {
         return password;
@@ -59,6 +83,7 @@ public class User
         this.password = password;
     }
 
+    @Column(name = "token")
     public String getToken()
     {
         return token;

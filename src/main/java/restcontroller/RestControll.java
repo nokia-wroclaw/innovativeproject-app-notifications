@@ -1,6 +1,5 @@
 package restcontroller;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -27,45 +26,66 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import Model.User;
-import Model.Notification;
 import Model.Account;
+import Model.Notification;
 import Model.Subscription;
 import Model.Token;
 import Model.TwitterRequest;
+import Model.User;
+import collection.AccountCollection;
+import collection.NotificationCollection;
+import collection.SourceNotificationCollection;
+import collection.SourcesCollection;
 import jdbctemplate.AccountJDBCTemplate;
 import jdbctemplate.NotificationJDBCTemplate;
 import jdbctemplate.SubscriptionJDBCTemplate;
 import jdbctemplate.UserJDBCTemplate;
-import collection.NotificationCollection;
-
-import twitter4j.*;
 import twitter4j.auth.AccessToken;
-import twitter4j.auth.RequestToken;
 
 @RestController
 @Component
 @RequestMapping("/api/v1.0")
 public class RestControll {
 
+	//EntityManagerFactory entityManagerFactory;// = Persistence.createEntityManagerFactory("nokiaDatabase");
+    //EntityManager entityManager;// = entityManagerFactory.createEntityManager();
 	ApplicationContext context;// = new ClassPathXmlApplicationContext("file:Beans.xml");
-    UserJDBCTemplate userService;// = (UserJDBCTemplate)context.getBean("userJDBCTemplate");
+    //UserTemplate userService;// = (UserJDBCTemplate)context.getBean("userJDBCTemplate");
+	//SubscriptionTemplate subscriptionService;
+	//NotificationTemplate notificationService;
+	//AccountTemplate accountService;
+	UserJDBCTemplate userService;// = (UserJDBCTemplate)context.getBean("userJDBCTemplate");
 	SubscriptionJDBCTemplate subscriptionService;
 	NotificationJDBCTemplate notificationService;
 	AccountJDBCTemplate accountService;
 	List<TwitterRequest> twitterLogging;
 	
-	
 	private static final Logger log = LoggerFactory.getLogger(RestControll.class);
     
     public RestControll() {
+    	//entityManagerFactory = Persistence.createEntityManagerFactory("nokiaDatabase");
+        //entityManager = entityManagerFactory.createEntityManager();
+        
     	context = new ClassPathXmlApplicationContext("Beans.xml");
     	userService = (UserJDBCTemplate)context.getBean("UserJDBCTemplate");
     	subscriptionService = (SubscriptionJDBCTemplate)context.getBean("SubscriptionJDBCTemplate");
     	notificationService = (NotificationJDBCTemplate)context.getBean("NotificationJDBCTemplate");
     	accountService = (AccountJDBCTemplate) context.getBean("AccountJDBCTemplate");
-    	System.out.println("Setting up all JDBC services ended sucessfully");
-    	twitterLogging = new ArrayList<TwitterRequest>();
+    	
+        //userService = new UserTemplate();
+    	//subscriptionService = new SubscriptionTemplate();
+    	//notificationService = new NotificationTemplate();
+    	//accountService = new AccountTemplate();
+    	
+    	//userService.setEntityManagerFactory(entityManagerFactory);
+    	//subscriptionService.setEntityManagerFactory(entityManagerFactory);
+    	//notificationService.setEntityManagerFactory(entityManagerFactory);
+    	//accountService.setEntityManagerFactory(entityManagerFactory);
+    	
+        System.out.println("Setting up all JDBC services ended sucessfully");
+    	
+        twitterLogging = new ArrayList<TwitterRequest>();
+    	
     	log.info("Twitter logging structure ready to run");
     }
     
@@ -347,30 +367,7 @@ public class RestControll {
         	return new ResponseEntity<CustomErrorType>(new CustomErrorType("failure"), HttpStatus.NOT_FOUND);
         }
     }
-    
-    // -------------------Retrieve Accounts Of Specified User------------------------------------------
-    @ResponseBody
-    @RequestMapping(value = "/acc/user/", method = RequestMethod.GET)
-    public ResponseEntity<?> getUserAccounts(@RequestParam String token) {
-        List<Account> acco = null;
-    	int id = userService.getUserByToken(token).getUserId();
-        try {
-        	acco = accountService.AccountUserList(id);
-        	return new ResponseEntity<List<Account>>(acco, HttpStatus.OK);
-        } catch(EmptyResultDataAccessException e) {
-            log.error("Error while getting accounts of user {}. Empty result data access exception", id);
-            return new ResponseEntity<CustomErrorType>(new CustomErrorType("failure"), HttpStatus.NOT_FOUND);
-        } catch(IllegalStateException e) {
-            log.error("Error while getting accounts of user {}. IllegalStateException.", id);
-            return new ResponseEntity<CustomErrorType>(new CustomErrorType("failure"), HttpStatus.NOT_FOUND);
-        } catch(Exception e) {
-        	log.error("Error while getting accounts of user {}. Exception:\n" + e, id);
-            return new ResponseEntity<CustomErrorType>(new CustomErrorType("failure"), HttpStatus.NOT_FOUND);
-        }
-    }
-    
-    
-    
+
     
     
     //-----------------------------------------------------------------------------------
@@ -417,6 +414,83 @@ public class RestControll {
         	log.error("Request body:\n" + body);
             return new ResponseEntity<CustomErrorType>(new CustomErrorType("failure"), HttpStatus.NOT_FOUND);
         }
+    }
+    
+    //-------------------------Get notifiations by sources with count------------------
+    @ResponseBody
+    @RequestMapping(value = "/notifications/", method = RequestMethod.POST)
+    public ResponseEntity<?> getNotificationsBySources(@RequestBody String body) {
+    	String token = null;
+    	int userID = 0;
+    	List<Account> userAccounts = null;
+    	try {
+    		JSONParser parser = new JSONParser();
+    		JSONObject json = (JSONObject) parser.parse(body);
+    		token = json.get("token").toString();
+    		
+    		userID = userService.getUserByToken(token).getUserId();
+    		
+    		userAccounts = accountService.AccountUserList(userID);
+    		
+    		ArrayList<Integer> userSources = new ArrayList<Integer>();
+    		
+    		SourcesCollection userSourcesCollection = new SourcesCollection();
+    		
+    		for(int i = 0;i < userAccounts.size();i++) {
+    			if(!(userSources.contains(userAccounts.get(i).getSourceID()))) {
+    				userSources.add(userAccounts.get(i).getSourceID());
+    				SourceNotificationCollection newSource = new SourceNotificationCollection();
+    				newSource.setSourceID(userAccounts.get(i).getSourceID());
+    				List<Notification> sourceNotifications;
+    				try {
+    					//Napisac ze od user id sourceID
+    					sourceNotifications = notificationService.getCountUserNotificationFromSource(userID, newSource.getSourceID());
+    					newSource.setCount(sourceNotifications.size());
+    				} catch(Exception e) {
+    					log.error("Error while getting notification from source {}, of user {}.", userAccounts.get(i).getSourceID(), userID);
+    					log.equals("Exception:\n" + e.getMessage());
+    					newSource.setCount(0);
+    				}
+    				
+    				userSourcesCollection.getSources().add(newSource);
+    			}
+    		}
+    		
+    		log.info("Returning count of notification by sources of user {} finished with true.",userID);
+    		return new ResponseEntity<SourcesCollection>(userSourcesCollection, HttpStatus.OK);
+    	} catch(Exception e) {
+    		log.error("Error while getting count of notifications by sources of user {}, his token {}", userID, token);
+    		return new ResponseEntity<CustomErrorType>(new CustomErrorType("failure"),HttpStatus.CONFLICT);
+    	}
+    }
+    
+    //--------------------------------Get notification list of one source of user-----------------------
+    @ResponseBody
+    @RequestMapping(value = "/notifications/source/", method = RequestMethod.POST)
+    public ResponseEntity<?> getUserNotificationsFromSource(@RequestBody String body) {
+    	int sourceID = 0;
+    	int userID = 0;
+    	int offset = 0;
+    	String token  = null;
+    	NotificationCollection nColl;
+    	try {
+    		JSONParser parser = new JSONParser();
+    		JSONObject json = (JSONObject) parser.parse(body);
+    		token = json.get("token").toString();
+    		
+    		sourceID = Integer.valueOf(json.get("source").toString());
+    		userID = userService.getUserByToken(token).getUserId();
+    		offset = Integer.valueOf(json.get("offset").toString());
+    		
+    		nColl = new NotificationCollection();
+    		nColl.createNotificationCollection(notificationService.getCountUserNotificationFromSource(userID,10, offset, sourceID));
+    		
+    		log.info("Getting notifications of user {} from source {} returned with true.",userID, sourceID);
+    		return new ResponseEntity<NotificationCollection>(nColl, HttpStatus.OK);
+    	} catch (Exception e) {
+    		log.error("Error while getting notifiactions of user {} from specific source.",userID);
+    		return new ResponseEntity<CustomErrorType>(new CustomErrorType("failure"),HttpStatus.CONFLICT);
+    	}
     }
     
     //---------------------------------Add new user by parameters---------------------------------------
@@ -507,7 +581,6 @@ public class RestControll {
     @ResponseBody
     @RequestMapping(value = "/notf/remove/", method = RequestMethod.POST)
     public ResponseEntity<?> deleteNotification(@RequestBody String body) {
-    	Notification notification = null;
     	String token = null;
     	int notfID = 0;
     	try {
@@ -604,7 +677,7 @@ public class RestControll {
             }
     	} catch(Exception e) {
     		log.error("Getting url for twitter authorization finished with false. Exception: \n" + e.getMessage());
-    		return new ResponseEntity<CustomErrorType>(new CustomErrorType("failure"),HttpStatus.OK);
+    		return new ResponseEntity<CustomErrorType>(new CustomErrorType("failure"),HttpStatus.BAD_REQUEST);
     	}
     	
     }
@@ -651,7 +724,7 @@ public class RestControll {
             accessTokenU = accessToken.getToken();
             accessTokenSecret = accessToken.getTokenSecret();
             
-            log.info("User {} twitter accessToken: {}, and accessTokenSecret: {}.",accessTokenU,accessTokenSecret);
+            log.info("User {} twitter accessToken: {}, and accessTokenSecret: {}.",userID,accessTokenU,accessTokenSecret);
             
             //account.setAccountID(0);
             account.setLogin("unknownL");
@@ -660,6 +733,8 @@ public class RestControll {
             account.setAccessTokenSecret(accessTokenSecret);
             account.setSourceID(15);
             account.setUserID(userID);
+            account.setAggregation(0);
+            account.setAggregationdate(0);
             
             List<Account> userAcc = accountService.AccountUserList(userID);
             for(int i = 0 ;i <userAcc.size();i++) {
@@ -682,7 +757,7 @@ public class RestControll {
             return new ResponseEntity<CustomStatusResponse>(new CustomStatusResponse("success"),HttpStatus.OK);
     	} catch(Exception e) {
     		log.error("Getting url for twitter authorization finished with false. Exception: \n" + e.getMessage());
-    		return new ResponseEntity<CustomErrorType>(new CustomErrorType("failure"),HttpStatus.OK);
+    		return new ResponseEntity<CustomErrorType>(new CustomErrorType("failure"),HttpStatus.BAD_REQUEST);
     	}
     }
     
@@ -719,6 +794,8 @@ public class RestControll {
             account.setAccessTokenSecret("noToken");
             account.setSourceID(10);
             account.setUserID(userID);
+            account.setAggregation(0);
+            account.setAggregationdate(0);
             
             List<Account> userAcc = accountService.AccountUserList(userID);
             for(int i = 0 ;i <userAcc.size();i++) {
@@ -737,6 +814,192 @@ public class RestControll {
             return new ResponseEntity<CustomStatusResponse>(new CustomStatusResponse("success"),HttpStatus.OK);
     	} catch(Exception e) {
     		log.error("Getting url for twitter authorization finished with false. Exception: \n" + e.getMessage());
+    		return new ResponseEntity<CustomErrorType>(new CustomErrorType("failure"),HttpStatus.BAD_REQUEST);
+    	}
+    }
+    
+    //---------------------Getting all accounts of specified user-------------------------
+    @ResponseBody
+    @RequestMapping(value = "/accounts/", method = RequestMethod.POST)
+    public ResponseEntity<?> getUserAccounts(@RequestBody String body) {
+    	String token = null;
+    	AccountCollection accounts;
+    	int userID = 0;
+    	try {
+    		
+    		JSONParser parser = new JSONParser();
+    		JSONObject json = (JSONObject) parser.parse(body);
+    		token = json.get("token").toString();
+    		
+    		userID = userService.getUserByToken(token).getUserId();
+    		accounts = new AccountCollection();
+    		accounts.createList(accountService.AccountUserList(userID));
+    		
+    		log.info("Returning all accounts of user {} returned with true.",userID);
+    		
+    		return new ResponseEntity<AccountCollection>(accounts,HttpStatus.OK);
+    		
+        } catch(EmptyResultDataAccessException e) {
+            log.error("Error while returning all accounts of user {}. Empty Result Exception.", userID);
+            log.error("Request body:\n" + body);
+            return new ResponseEntity<CustomErrorType>(new CustomErrorType("failure"), HttpStatus.NOT_FOUND);
+        } catch(IllegalStateException e) {
+            log.error("Error while returning all accounts of user {}. IllegalStateException.", userID);
+            log.error("Request body:\n" + body);
+            return new ResponseEntity<CustomErrorType>(new CustomErrorType("failure"), HttpStatus.NOT_FOUND);
+        } catch(Exception e) {
+        	log.error("Error while returning all accounts of user {}. Java Exception.\n" + e, userID);
+        	log.error("Request body:\n" + body);
+            return new ResponseEntity<CustomErrorType>(new CustomErrorType("failure"), HttpStatus.NOT_FOUND);
+        }
+    }
+    
+    //---------------------Remove account of specified user-------------------------
+    @ResponseBody
+    @RequestMapping(value = "/remove/account/", method = RequestMethod.POST)
+    public ResponseEntity<?> removeUserAccount(@RequestBody String body) {
+    	String token = null;
+    	String sourceID = null;
+    	String accessToken = null;
+    	int userID = 0;
+    	int source = 0;
+    	try {
+    		
+    		JSONParser parser = new JSONParser();
+    		JSONObject json = (JSONObject) parser.parse(body);
+    		token = json.get("token").toString();
+    		sourceID = json.get("source").toString();
+    		accessToken = json.get("accesstoken").toString();
+    		
+    		source = Integer.valueOf(sourceID);
+    		userID = userService.getUserByToken(token).getUserId();
+    		
+    		List<Account> accs = accountService.AccountUserList(userID);
+    		for(int i = 0;i<accs.size();i++) {
+    			if(accs.get(i).getSourceID() == source && accs.get(i).getAccessToken().equals(accessToken)) {
+    				accountService.removeAccount(accs.get(i).getAccountID());
+    				log.info("Recognized account {} of user {}. Removing account.",source,userID);
+    	    		
+    	    		return new ResponseEntity<CustomStatusResponse>(new CustomStatusResponse("success"),HttpStatus.OK);
+    			}
+    		}
+    		
+    		log.info("There is no account {} of user {}. Account does not exist.",source,userID);
+    		token = null;
+    		sourceID = null;
+    		accessToken = null;
+    		return new ResponseEntity<CustomStatusResponse>(new CustomStatusResponse("success"),HttpStatus.OK);
+    		
+        } catch(EmptyResultDataAccessException e) {
+            log.error("Error while removing account of user {}. Empty Result Exception.", userID);
+            log.error("Request body:\n" + body);
+            return new ResponseEntity<CustomErrorType>(new CustomErrorType("failure"), HttpStatus.NOT_FOUND);
+        } catch(IllegalStateException e) {
+            log.error("Error while removing account of user {}. IllegalStateException.", userID);
+            log.error("Request body:\n" + body);
+            return new ResponseEntity<CustomErrorType>(new CustomErrorType("failure"), HttpStatus.NOT_FOUND);
+        } catch(Exception e) {
+        	log.error("Error while removing account of user {}. Java Exception.\n" + e, userID);
+        	log.error("Request body:\n" + body);
+            return new ResponseEntity<CustomErrorType>(new CustomErrorType("failure"), HttpStatus.NOT_FOUND);
+        }
+    }
+    
+    //--------------------Check status of the user account--------------------------
+    @ResponseBody
+    @RequestMapping(value = "/account/status/", method = RequestMethod.POST)
+    public ResponseEntity<?> accountStatus(@RequestBody String body) {
+    	int userID = 0;
+    	int accountID = 0;
+    	String token = null;
+    	try {
+    		JSONParser parser = new JSONParser();
+    		JSONObject json = (JSONObject) parser.parse(body);
+    		token = json.get("token").toString();
+    		accountID = Integer.valueOf(json.get("account").toString());
+    		
+    		userID = userService.getUserByToken(token).getUserId();
+    		//czy to ma sens?
+    		log.info("Checking account {} status of user {} finished with true.",accountID,userID);
+    		return new ResponseEntity<HttpStatus>(HttpStatus.OK);
+    	} catch(Exception e) {
+    		log.error("Error while checking account status of user {}. ", userID);
+    		return new ResponseEntity<CustomErrorType>(new CustomErrorType("failure"),HttpStatus.OK);
+    	}
+    }
+    
+    //--------------------Change status of the user account----------------------
+    @ResponseBody
+    @RequestMapping(value = "/account/change/", method = RequestMethod.POST)
+    public ResponseEntity<?> changeAccountStatus(@RequestBody String body) {
+    	int userID = 0;
+    	int accountID = 0;
+    	String token = null;
+    	try {
+    		JSONParser parser = new JSONParser();
+    		JSONObject json = (JSONObject) parser.parse(body);
+    		token = json.get("token").toString();
+    		accountID = Integer.valueOf(json.get("account").toString());
+    		
+    		userID = userService.getUserByToken(token).getUserId();
+    		
+    		//metoda zmieniajaca status i pyk
+    		
+    		log.info("Changing account {} status of user {} finished with true.",accountID,userID);
+    		return new ResponseEntity<HttpStatus>(HttpStatus.OK);
+    	} catch(Exception e) {
+    		log.error("Error while changing account status of user {}. ", userID);
+    		return new ResponseEntity<CustomErrorType>(new CustomErrorType("failure"),HttpStatus.OK);
+    	}
+    }
+    
+    //--------------------Change status of the user account----------------------
+    @ResponseBody
+    @RequestMapping(value = "/account/aggregation/", method = RequestMethod.POST)
+    public ResponseEntity<?> changeAccountAgregationType(@RequestBody String body) {
+    	int userID = 0;
+    	int accountID = 0;
+    	int aggregation = 0;
+    	int aggregationDate = 0;
+    	int aggregationType = 0;
+    	String token = null;
+    	try {
+    		JSONParser parser = new JSONParser();
+    		JSONObject json = (JSONObject) parser.parse(body);
+    		token = json.get("token").toString();
+    		accountID = Integer.valueOf(json.get("account").toString());
+    		aggregation = Integer.valueOf(json.get("aggregation").toString());
+    		aggregationDate = Integer.valueOf(json.get("aggregationdate").toString());
+    		aggregationType = Integer.valueOf(json.get("aggregationtype").toString());
+    		
+    		switch(aggregationType) {
+    		case 0://godzina
+    			//do nothing
+    			break;
+    		case 1://dzien
+    			aggregationDate = aggregationDate * 24;
+    			break;
+    		case 2://tydzien
+    			aggregationDate = aggregationDate * 24 * 7;
+    			break;
+    		case 3://miesiac
+    			aggregationDate = aggregationDate * 24 * 30;
+    			break;
+    		case 4://rok
+    			aggregationDate = aggregationDate * 24 * 30 * 12;
+    			break;
+    		}
+    			
+    		
+    		userID = userService.getUserByToken(token).getUserId();
+    		
+    		accountService.updateAgregation(accountID, aggregation);
+    		accountService.updateAgregationDate(accountID, aggregationDate);
+    		
+    		log.info("Changing account {} agregation of user {} finished with true. His new aggregation type - {}.",accountID,userID,aggregationDate);
+    		return new ResponseEntity<HttpStatus>(HttpStatus.OK);
+    	} catch(Exception e) {
+    		log.error("Error while changing account agregation of user {}. ", userID);
     		return new ResponseEntity<CustomErrorType>(new CustomErrorType("failure"),HttpStatus.OK);
     	}
     }

@@ -1,6 +1,11 @@
 package Model;
 
-public class Account
+import javax.persistence.*;
+import java.io.Serializable;
+
+@Entity
+@Table(name ="nokiaapp.account")
+public class Account implements Serializable
 {
     private Integer accountID;
     private Integer userID;
@@ -9,17 +14,18 @@ public class Account
     private String accessToken;
     private String accessTokenSecret;
     private Integer sourceID;
+    private Integer aggregation;
+    private Integer aggregationdate;
 
+    @Id
+    @Column(name ="accountid")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public Integer getAccountID()
     {
         return accountID;
     }
 
-    public void setAccountID(Integer accountID)
-    {
-        this.accountID = accountID;
-    }
-
+    @Column(name = "userid")
     public Integer getUserID()
     {
         return userID;
@@ -30,6 +36,12 @@ public class Account
         this.userID = userID;
     }
 
+    public void setAccountID(Integer accountID)
+    {
+        this.accountID = accountID;
+    }
+
+    @Column(name = "login")
     public String getLogin()
     {
         return login;
@@ -40,6 +52,7 @@ public class Account
         this.login = login;
     }
 
+    @Column(name = "password")
     public String getPassword()
     {
         return password;
@@ -50,6 +63,7 @@ public class Account
         this.password = password;
     }
 
+    @Column(name = "accesstoken")
     public String getAccessToken()
     {
         return accessToken;
@@ -60,9 +74,21 @@ public class Account
         this.accessToken = accessToken;
     }
 
+    @Column(name = "accesstokensecret")
     public String getAccessTokenSecret()
     {
         return accessTokenSecret;
+    }
+
+    @Column(name = "sourceid")
+    public Integer getSourceID()
+    {
+        return sourceID;
+    }
+
+    public void setSourceID(Integer sourceID)
+    {
+        this.sourceID = sourceID;
     }
 
     public void setAccessTokenSecret(String accessTokenSecret)
@@ -70,11 +96,23 @@ public class Account
         this.accessTokenSecret = accessTokenSecret;
     }
 
-	public Integer getSourceID() {
-		return sourceID;
+	@Column(name = "aggregation")
+    public Integer getAggregation()
+    {
+        return aggregation;
+    }
+
+    public void setAggregation(Integer aggregation)
+    {
+        this.aggregation = aggregation;
+    }
+
+    @Column(name = "aggregationdate")
+	public Integer getAggregationdate() {
+		return aggregationdate;
 	}
 
-	public void setSourceID(Integer sourceID) {
-		this.sourceID = sourceID;
+	public void setAggregationdate(Integer aggregationdate) {
+		this.aggregationdate = aggregationdate;
 	}
 }

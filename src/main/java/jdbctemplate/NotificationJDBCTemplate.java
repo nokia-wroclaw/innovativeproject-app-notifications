@@ -72,4 +72,19 @@ public class NotificationJDBCTemplate implements NotificationDAO
         String SQL = "delete from nokiaapp.notification where notificationid = ?";
         jdbcTemplateObject.update(SQL, notificationID);
     }
+
+    @Override
+	public List<Notification> getCountUserNotificationFromSource(Integer userID, Integer sourceID) {
+		String SQL = "select * from nokiaapp.noti_desc where userID = ? AND sourceID = ?";
+        List<Notification> notifications = jdbcTemplateObject.query(SQL, new Object[]{userID, sourceID}, new NotificationMapper());
+        return notifications;
+	}
+    
+	@Override
+	public List<Notification> getCountUserNotificationFromSource(Integer userID, Integer count, Integer offset,
+			Integer sourceID) {
+		String SQL = "select * from nokiaapp.noti_desc where userID = ? AND sourceID = ? LIMIT ? OFFSET ?";
+        List<Notification> notifications = jdbcTemplateObject.query(SQL, new Object[]{userID, sourceID, count, offset}, new NotificationMapper());
+        return notifications;
+	}
 }

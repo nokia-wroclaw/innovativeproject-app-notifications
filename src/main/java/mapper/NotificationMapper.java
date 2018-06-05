@@ -21,6 +21,7 @@ public class NotificationMapper implements RowMapper<Notification>
         notification.setMessage(resultSet.getString("message"));
         notification.setTimestamp(resultSet.getString("time"));
         notification.setPriority(resultSet.getInt("priority"));
+        notification.setCount(resultSet.getInt("count"));
         return notification;
     }
 }
