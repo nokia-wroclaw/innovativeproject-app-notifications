@@ -26,6 +26,9 @@ public class SecondActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+        Bundle bundle;
+        bundle = getIntent().getExtras();
+        String token = bundle.getString("token");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
         retrofit = new RestAdapter.Builder()
@@ -35,7 +38,8 @@ public class SecondActivity extends AppCompatActivity {
         myWebService = retrofit.create(MyWebService.class);
         try {
             /*to działa jak wpiszesz zapytanie, teraz tylko wydobyć bundle reszta twoja plus zapisywanie offsetu*/
-            myWebService.getData("not/part/?offset="+0+"&token="+getIntent().getBundleExtra("token"),new Callback<Notifications>() {
+
+            myWebService.getData(0,bundle.getString("token"),new Callback<Notifications>() {
                 @Override
                 public void success(Notifications myWebServiceResponse, Response response)
                 {
