@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -43,7 +44,7 @@ public class SecondActivity extends AppCompatActivity {
     int currentScrollState = 0;
     boolean loadingMore = false;
     Long startIndex = 0L;
-    int offset = 0;
+    //int offset = 0;
     View footerView;
     private int pageCount = 0;
 
@@ -54,7 +55,7 @@ public class SecondActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        Bundle bundle;
+        final Bundle bundle;
         bundle = getIntent().getExtras();
         String token = bundle.getString("token");
         super.onCreate(savedInstanceState);
@@ -63,11 +64,32 @@ public class SecondActivity extends AppCompatActivity {
                 .setEndpoint("http://35.204.202.104:8080/api/v1.0/")
                 .setLogLevel(RestAdapter.LogLevel.FULL)
                 .build();
-        getDataFromUrl(bundle);
+        getDataFromUrl(bundle,list.size());
         ListView myListView = (ListView)findViewById(R.id.myListView);
 
         aa=new FancyAdapter();
         myListView.setAdapter(aa);
+        // Creating a button - Load More
+        Button btnLoadMore = new Button(this);
+        btnLoadMore.setText("Load More");
+
+        btnLoadMore.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+                // Starting a new async task
+                getDataFromUrl(bundle,list.size());
+                aa.notifyDataSetChanged();
+
+            }
+
+        });
+        aa.notifyDataSetChanged();
+
+        myListView.deferNotifyDataSetChanged();
+        aa.notifyDataSetChanged();
+        // Adding button to listview at footer
+        myListView.addFooterView(btnLoadMore);
        // myListView.setOnScrollListener(onScrollListener(bundle));
 
         //     myListView.setOnScrollListener(onScrollListener());
@@ -100,7 +122,8 @@ public class SecondActivity extends AppCompatActivity {
         };
     }
 */
-    private void getDataFromUrl(Bundle bundle){
+
+    private void getDataFromUrl(Bundle bundle,int offset){
         myWebService = retrofit.create(MyWebService.class);
         try {
 
@@ -110,8 +133,9 @@ public class SecondActivity extends AppCompatActivity {
                 {
                     Log.d(CLASS_TAG, myWebServiceResponse.getNotifications().get(1).getTopic());
                     list.addAll(myWebServiceResponse.getNotifications());
-                    offset+=10;
                     //ArrayAdapter<String> adapter = new ArrayAdapter<String>( this, android.R.layout.simple_list_item_1, list);
+                    aa.notifyDataSetChanged();
+
                 }
 
                 @Override
@@ -130,7 +154,7 @@ public class SecondActivity extends AppCompatActivity {
     }*/
     class FancyAdapter extends ArrayAdapter<Notification>{
         FancyAdapter(){
-            super(SecondActivity.this,android.R.layout.simple_list_item_1,list);
+            super(SecondActivity.this,R.layout.row,list);
         }
 
         public View getView(int position, View convertView, ViewGroup parent)
@@ -141,10 +165,14 @@ public class SecondActivity extends AppCompatActivity {
                 convertView=inflater.inflate(R.layout.row,null);
                 holder = new ViewHolder(convertView);
                 convertView.setTag(holder);
+                aa.notifyDataSetChanged();
+
             }
             else
             {
                 holder =(ViewHolder)convertView.getTag();
+                aa.notifyDataSetChanged();
+
             }
             holder.populateFrom(list.get(position));
             return (convertView);
