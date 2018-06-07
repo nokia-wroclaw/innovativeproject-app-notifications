@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -81,15 +82,34 @@ public class SecondActivity extends AppCompatActivity {
             public void onClick(View arg0) {
                 // Starting a new async task
                 getDataFromUrl(bundle,list.size());
-                aa.notifyDataSetChanged();
+              //  aa.notifyDataSetChanged();
 
             }
 
         });
-        aa.notifyDataSetChanged();
+        myListView.setOnItemClickListener(new android.widget.AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> arq0, View arg1, int position, long arg3) {
 
-        myListView.deferNotifyDataSetChanged();
-        aa.notifyDataSetChanged();
+
+                TextView timestamp = (TextView) arg1.findViewById(R.id.timestamp);
+                if(timestamp.getVisibility()==View.INVISIBLE)
+                    timestamp.setVisibility(View.VISIBLE);
+                else
+                    timestamp.setVisibility(View.INVISIBLE);
+                TextView message = (TextView) arg1.findViewById(R.id.message);
+                if(message.getVisibility()==View.INVISIBLE)
+                    message.setVisibility(View.VISIBLE);
+                else
+                    message.setVisibility(View.INVISIBLE);
+
+
+            }
+
+        });
+      //  aa.notifyDataSetChanged();
+
+       // myListView.deferNotifyDataSetChanged();
+       // aa.notifyDataSetChanged();
         // Adding button to listview at footer
         myListView.addFooterView(btnLoadMore);
        // myListView.setOnScrollListener(onScrollListener(bundle));
@@ -167,13 +187,13 @@ public class SecondActivity extends AppCompatActivity {
                 convertView=inflater.inflate(R.layout.row,null);
                 holder = new ViewHolder(convertView);
                 convertView.setTag(holder);
-                aa.notifyDataSetChanged();
+              //  aa.notifyDataSetChanged();
 
             }
             else
             {
                 holder =(ViewHolder)convertView.getTag();
-                aa.notifyDataSetChanged();
+              //  aa.notifyDataSetChanged();
 
             }
             holder.populateFrom(list.get(position));
@@ -197,7 +217,9 @@ public class SecondActivity extends AppCompatActivity {
         {
             topic.setText(n.getTopic());
             message.setText(n.getMessage());
+            message.setVisibility(View.INVISIBLE);
             timestamp.setText(n.getTimestamp());
+            timestamp.setVisibility(View.INVISIBLE);
         }
     }
 
