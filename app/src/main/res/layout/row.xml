@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:layout_height="fill_parent"
+    android:background="#2d2d2d">
 
     <TextView
         android:id="@+id/topic"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:textColor="#EE0000"
+        android:textColor="#dcdcdc"
         />
 
     <TextView
@@ -18,10 +19,11 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:drawablePadding="10dp"
-        android:textColor="@android:color/holo_green_dark"
+        android:textColor="#dcdcdc"
         android:layout_alignParentLeft="true"
-        android:layout_below="@id/topic"
+        android:layout_below="@id/timestamp"
         android:textSize="15sp" />
+
 
 
 
@@ -37,8 +39,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
+        android:textColor="#dcdcdc"
         android:layout_alignParentLeft="true"
-        android:layout_below="@id/message"
+        android:layout_below="@id/topic"
         />
 
 </RelativeLayout>

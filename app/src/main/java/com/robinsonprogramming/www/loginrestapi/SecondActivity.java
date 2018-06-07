@@ -1,6 +1,7 @@
 package com.robinsonprogramming.www.loginrestapi;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -72,6 +73,7 @@ public class SecondActivity extends AppCompatActivity {
         // Creating a button - Load More
         Button btnLoadMore = new Button(this);
         btnLoadMore.setText("Load More");
+        btnLoadMore.setBackgroundColor(Color.parseColor("#32e196"));
 
         btnLoadMore.setOnClickListener(new View.OnClickListener() {
 
