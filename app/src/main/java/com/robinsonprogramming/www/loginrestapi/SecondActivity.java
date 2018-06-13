@@ -92,15 +92,15 @@ public class SecondActivity extends AppCompatActivity {
 
 
                 TextView timestamp = (TextView) arg1.findViewById(R.id.timestamp);
-                if(timestamp.getVisibility()==View.INVISIBLE)
+                if(timestamp.getVisibility()==View.GONE)
                     timestamp.setVisibility(View.VISIBLE);
                 else
-                    timestamp.setVisibility(View.INVISIBLE);
+                    timestamp.setVisibility(View.GONE);
                 TextView message = (TextView) arg1.findViewById(R.id.message);
-                if(message.getVisibility()==View.INVISIBLE)
+                if(message.getVisibility()==View.GONE)
                     message.setVisibility(View.VISIBLE);
                 else
-                    message.setVisibility(View.INVISIBLE);
+                    message.setVisibility(View.GONE);
 
 
             }
@@ -217,9 +217,9 @@ public class SecondActivity extends AppCompatActivity {
         {
             topic.setText(n.getTopic());
             message.setText(n.getMessage());
-            message.setVisibility(View.INVISIBLE);
+            message.setVisibility(View.GONE);
             timestamp.setText(n.getTimestamp());
-            timestamp.setVisibility(View.INVISIBLE);
+            timestamp.setVisibility(View.GONE);
         }
     }
 
