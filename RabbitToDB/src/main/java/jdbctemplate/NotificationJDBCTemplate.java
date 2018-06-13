@@ -21,7 +21,7 @@ public class NotificationJDBCTemplate implements NotificationDAO
     }
 
     @Override
-    public Notification getNotification(Integer notificationID)
+    public Notification getNotification(BigInteger notificationID)
     {
         String SQL = "select * from nokiaapp.notification where notificationid = ?";
         Notification notification = jdbcTemplateObject.queryForObject(SQL, new Object[]{notificationID}, new NotificationMapper());
@@ -63,31 +63,43 @@ public class NotificationJDBCTemplate implements NotificationDAO
 
     @Override
     public BigInteger findNotificationByTopic(String Topic, int user, int source) {
-        String SQL = "select * from nokiaapp.notification where topic = ? and userid=? and sourceid =? and flag=false";
-        List<Notification> notifications = jdbcTemplateObject.query(SQL, new Object[]{Topic,user,source}, new NotificationMapper());
-        if(notifications.size()==0){
-            return BigInteger.valueOf(-1);
-        }else {
-            return notifications.get(0).getNotificationID();
+    	String SQL = "select * from nokiaapp.noti_desc where topic = ? and userid=? and sourceid =? and flag=false";
+    	List<Notification> notifications;
+    	try {
+        	 notifications = jdbcTemplateObject.query(SQL, new Object[]{Topic,user,source}, new NotificationMapper());
+        	 if(notifications.size()==0){
+                 return BigInteger.valueOf(-1);
+             }else {
+                 return notifications.get(0).getNotificationID();
 
-        }
+             }
+    	} catch(Exception e) {
+        	return BigInteger.valueOf(-1);
+    	}
     }
 
     @Override
     public BigInteger findNotificationByMessage(String Message, int user, int source)
-    {String SQL = "select * from nokiaapp.notification where message = ? and userid=? and sourceid =? and flag=false";
-        List<Notification> notifications = jdbcTemplateObject.query(SQL, new Object[]{Message,user,source}, new NotificationMapper());
-        if(notifications.size()==0){
-            return BigInteger.valueOf(-1);
-        }else {
-            return notifications.get(0).getNotificationID();
-        }
+    {
+    	String SQL = "select * from nokiaapp.noti_desc where message = ? and userid=? and sourceid =? and flag=false";
+    	List<Notification> notifications;
+    	try {
+        	 notifications = jdbcTemplateObject.query(SQL, new Object[]{Message,user,source}, new NotificationMapper());
+        	 if(notifications.size()==0){
+                 return BigInteger.valueOf(-1);
+             }else {
+                 return notifications.get(0).getNotificationID();
+
+             }
+    	} catch(Exception e) {
+        	return BigInteger.valueOf(-1);
+    	}
     }
 
     @Override
     public void IncrementCount(int oldCount, BigInteger notificationID){
-        String SQL = "update nokiaapp.notification SET count=? where notificationid=?";
-        jdbcTemplateObject.update(SQL,new Object[]{oldCount+1});
+        String SQL = "update nokiaapp.notification set count = ? where notificationid = ?";
+        jdbcTemplateObject.update(SQL,new Object[]{(new Integer(oldCount+1)),notificationID});
     }
 
     @Override
@@ -117,4 +129,38 @@ public class NotificationJDBCTemplate implements NotificationDAO
         String SQL = "delete from nokiaapp.notification where notificationid = ?";
         jdbcTemplateObject.update(SQL, notificationID);
     }
+
+	@Override
+	public BigInteger findNotificationByTopicContains(String Topic, int user, int source) {
+		String SQL = "select * from nokiaapp.noti_desc where (topic LIKE '%?%') and userid=? and sourceid =? and flag=false";
+    	List<Notification> notifications;
+    	try {
+        	 notifications = jdbcTemplateObject.query(SQL, new Object[]{Topic,user,source}, new NotificationMapper());
+        	 if(notifications.size()==0){
+                 return BigInteger.valueOf(-1);
+             }else {
+                 return notifications.get(0).getNotificationID();
+
+             }
+    	} catch(Exception e) {
+        	return BigInteger.valueOf(-1);
+    	}
+	}
+
+	@Override
+	public BigInteger findNotificationByMessageContains(String Message, int user, int source) {
+		String SQL = "select * from nokiaapp.noti_desc where (message LIKE '%?%') and userid=? and sourceid =? and flag=false";
+    	List<Notification> notifications;
+    	try {
+        	 notifications = jdbcTemplateObject.query(SQL, new Object[]{Message,user,source}, new NotificationMapper());
+        	 if(notifications.size()==0){
+                 return BigInteger.valueOf(-1);
+             }else {
+                 return notifications.get(0).getNotificationID();
+
+             }
+    	} catch(Exception e) {
+        	return BigInteger.valueOf(-1);
+    	}
+	}
 }

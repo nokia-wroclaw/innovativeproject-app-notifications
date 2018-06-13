@@ -6,7 +6,7 @@ import Model.Notification;
 
 public interface NotificationDAO
 {
-    public Notification getNotification(Integer notificationID);
+    public Notification getNotification(BigInteger notificationID);
     public List<Notification> getUserNotification(Integer userID);
     public List<Notification> getNoReadNotification(Integer userID);
     public List<Notification> getCountNoReadUserNotification(Integer userID, Integer count, Integer offset);
@@ -14,6 +14,8 @@ public interface NotificationDAO
     public void updateNotification(Notification newNotification, BigInteger notificationID);
     public BigInteger findNotificationByTopic(String Topic, int user, int source);
     public BigInteger findNotificationByMessage(String Message, int user, int source);
+    public BigInteger findNotificationByTopicContains(String Topic, int user, int source);
+    public BigInteger findNotificationByMessageContains(String Message, int user, int source);
     public void addNotification(Notification notification);
     public void IncrementCount(int oldCount, BigInteger notificationID);
     public void setRead(Integer notificationID);

@@ -62,4 +62,18 @@ public class AccountJDBCTemplate implements AccountDAO
         String SQL = "INSERT INTO nokiaapp.account (userid, login, password, accesstoken, accesstokensecret, sourceid) VALUES (?,?,?,?,?,?)";
         jdbcTemplateObject.update(SQL, account.getUserID(),account.getLogin(), account.getPassword(), account.getAccessToken(), account.getAccessTokenSecret(), account.getSourceID());
     }
+
+	@Override
+	public List<Account> AccountUserSourceList(Integer userID, Integer sourceID) {
+		String SQL = "select * from nokiaapp.account where userID = ? and sourceID = ?";
+        List<Account> accounts = jdbcTemplateObject.query(SQL, new Object[]{userID, sourceID}, new AccountMapper());
+        return accounts;
+	}
+
+	@Override
+	public List<Account> getAccountUserSource(Integer userID, Integer sourceID, String website) {
+		String SQL = "select * from nokiaapp.account where userID = ? and sourceID = ? and accesstoken = ?";
+		List<Account> account = jdbcTemplateObject.query(SQL, new Object[]{userID, sourceID, website}, new AccountMapper());
+		return account;
+	}
 }

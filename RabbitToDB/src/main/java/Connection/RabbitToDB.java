@@ -1,5 +1,6 @@
 package Connection;
 
+import Model.Account;
 import Model.Notification;
 import com.rabbitmq.client.*;
 import jdbctemplate.AccountJDBCTemplate;
@@ -11,15 +12,18 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
 
 
-class RabbitToDB{
+public class RabbitToDB{
 
-    private ApplicationContext context;
-    private NotificationJDBCTemplate notificationService;
+    private static ApplicationContext context;
+    private static NotificationJDBCTemplate notificationService;
+    private static AccountJDBCTemplate accountService;
 
     private final static String QUEUE_NAME = "DEMO_QUEUE";
 
@@ -37,7 +41,7 @@ class RabbitToDB{
         factory.setPort(5672);
         //factory.setHost(rabbitName);
 
-        factory.setHost("localhost");
+        factory.setHost("35.204.202.104");
 
         try {
             connection = factory.newConnection();
@@ -68,12 +72,14 @@ class RabbitToDB{
     }
 
 
-    RabbitToDB() {
-
+    public RabbitToDB() {
         context = new ClassPathXmlApplicationContext("Beans.xml");
         notificationService = (NotificationJDBCTemplate)context.getBean("NotificationJDBCTemplate");
-
-        while (true) {
+        accountService = (AccountJDBCTemplate)context.getBean("AccountJDBCTemplate");
+    }
+    
+    public void monitoring() {
+    	while (true) {
 
             if(connection == null || !connection.isOpen()) {
                     connectToQueue();
@@ -103,15 +109,10 @@ class RabbitToDB{
         }
     }
 
-    public static void main(String[] argv) {
-/*        if(argv.length==0 || argv[0]==null){
-
-            System.out.println("not enough arguments");
-            return;
-        }*/
-
-        new RabbitToDB();
-    }
+    public static void main(String[] args) {
+		RabbitToDB app = new RabbitToDB();
+		app.monitoring();
+	}
 
 
 
@@ -145,66 +146,229 @@ class RabbitToDB{
         }
 
         private void WorkWithNotification(String message){
-            JSONObject JSON = new JSONObject(message);
-
-            System.out.println("Receiving notification");
-            Notification receivedNotification = new Notification();
-            receivedNotification.setUserID(JSON.getInt("userID"));
-            receivedNotification.setSourceID(JSON.getInt("sourceID"));
-            receivedNotification.setTopic(JSON.getString("topic"));
-            receivedNotification.setMessage(JSON.getString("message"));
-            receivedNotification.setPriority(JSON.getInt("priority"));
-
-
-            AggregationMethod method = AggregationMethod.Count;
+        	Notification receivedNotification = new Notification();
+        	JSONObject JSON = null;
+        	try {
+        		 JSON = new JSONObject(message);
+                
+                receivedNotification.setUserID(JSON.getInt("userID"));
+                receivedNotification.setSourceID(JSON.getInt("sourceID"));
+                receivedNotification.setTopic(JSON.getString("topic"));
+                receivedNotification.setMessage(JSON.getString("message"));
+                receivedNotification.setPriority(JSON.getInt("priority"));
+        	} catch(Exception e) {
+        		System.out.println("Error occured while reading JSONObject object. Exception:\n" + e.getMessage());
+        	}
+        	
+        	AggregationMethod method;
+        	String websiteUrl = null;
+        	//int aggregationMethod = -1;
+        	int aggregationDate = -1;
+        	List<Account> accounts = null;
+        	Account account = null;
+        	try {
+        		//jesli source ID to Twitter
+        		if(JSON.getInt("sourceID") == 15) {
+        			//pobieramy dla uzytkownika wszystkie konta twiterowskie, powinno to byc jedno konto
+        			accounts = accountService.AccountUserSourceList(JSON.getInt("userID"), JSON.getInt("sourceID"));
+        			//jesli jest wiecej niz jedno konto lub nie ma kont to typ jest NONE
+        			if(accounts.size() > 1 || accounts.size() == 0) {
+        				System.out.println("Wrong size of twitter account list.");
+        				method = AggregationMethod.None;
+        			} // jesli jest pobrane jedno konto pobieramy typ agregacji i date agregacji 
+        			else {
+        				method = getAggregationType(accounts.get(0).getAggregation());
+        				aggregationDate = accounts.get(0).getAggregationdate();
+        				account  = accounts.get(0);
+        			}
+        		}
+        		//jesli source ID to Website
+        		else if(JSON.getInt("sourceID") == 10) {
+        			//pobieramy strone, bo ona siedzi w accesstoken konta
+        			websiteUrl = JSON.getString("topic").split("Zmiana na stronie ")[1];
+        			System.out.println(websiteUrl);
+        			accounts = accountService.getAccountUserSource(JSON.getInt("userID"), JSON.getInt("sourceID"), websiteUrl);
+        			if(accounts.size() > 1 || accounts.size() == 0) {
+        				System.out.println("Wrong size of website account list.");
+        				method = AggregationMethod.None;
+        			} // jesli jest pobrane jedno konto pobieramy typ agregacji i date agregacji 
+        			else {
+        				method = getAggregationType(accounts.get(0).getAggregation());
+        				aggregationDate = accounts.get(0).getAggregationdate();
+        				account  = accounts.get(0);
+        			}
+        		}
+        		//jesli source ID inne
+        		else {
+        			method = AggregationMethod.None;
+        			account  = null;
+        			aggregationDate = -1;
+        		}
+        	} catch(Exception e) {
+        		method = AggregationMethod.None;
+        		account  = null;
+    			aggregationDate = -1;
+    			System.out.println("Error occured while getting aggregation type.");
+    			System.out.println("Exception:\n" + e.getLocalizedMessage() + "\n" + e.getMessage());
+        	}
+        	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             BigInteger ID;
-
+            
+            Date notiDate;
+            //System.out.println("Przed switchem.");
+            //tutaj dopisujemy kod ktory zajmie sie sprawdzeniem czy ostatnia notyfikacja o takim timestampie jest w bazie czy nie i jesli tak to dodajemy jesli nie to nie hehe
             switch (method){
                 case None:
-
-                    notificationService.addNotification(receivedNotification);
+                	try {
+                		notificationService.addNotification(receivedNotification);
+                	} catch(Exception e) {
+                		System.out.println("Problem occured while adding notification with agregation method: NONE");
+                	}
 
                     break;
 
                 case Count:
-                    ID = notificationService.findNotificationByTopic(
-                            receivedNotification.getTopic(), receivedNotification.getUserID(), receivedNotification.getSourceID()
-                    );
-
-                    if(ID.equals(BigInteger.valueOf(-1))){
-                        notificationService.addNotification(receivedNotification);
-                    }else {
-                        notificationService.IncrementCount(receivedNotification.getCount(), ID);
-                    }
+                	try {
+                		System.out.println("Agregation type - COUNT");
+                		//Po czym agregujemy
+                		if (account.getAggregationtype() == 1) {
+                			//czy sa zdefiniowane key words
+                			if(account.getAggregationkey().equals("-") || account.getAggregationkey().length() == 0) {
+                				System.out.println("Searching notification by topic: " + receivedNotification.getTopic() +" "+ receivedNotification.getUserID() +" "+ receivedNotification.getSourceID());
+                        		ID = notificationService.findNotificationByTopic(
+                                        receivedNotification.getTopic(), receivedNotification.getUserID(), receivedNotification.getSourceID()
+                                );
+                			} else {
+                				System.out.println("Searching notification by topic contains: " + account.getAggregationkey() +" "+ receivedNotification.getUserID() +" "+ receivedNotification.getSourceID());
+                        		ID = notificationService.findNotificationByTopicContains(
+                                        account.getAggregationkey(), receivedNotification.getUserID(), receivedNotification.getSourceID()
+                                );
+                			}
+                			
+                		} else if(account.getAggregationtype() == 2) {
+                			if(account.getAggregationkey().equals("-") || account.getAggregationkey().length() == 0) {
+                				System.out.println("Searching notification by message: " + receivedNotification.getMessage() +" "+ receivedNotification.getUserID() +" "+ receivedNotification.getSourceID());
+                        		ID = notificationService.findNotificationByMessage(
+                                        receivedNotification.getMessage(), receivedNotification.getUserID(), receivedNotification.getSourceID()
+                                );
+                			} else {
+                				System.out.println("Searching notification by message contains: " + account.getAggregationkey() +" "+ receivedNotification.getUserID() +" "+ receivedNotification.getSourceID());
+                        		ID = notificationService.findNotificationByMessageContains(
+                        				account.getAggregationkey(), receivedNotification.getUserID(), receivedNotification.getSourceID()
+                                );
+                			}
+                		} else {
+                    		//jezeli jest nieagregowane po niczym to z definicji topic
+                    		System.out.println("Searching notification by topic: " + receivedNotification.getTopic() +" "+ receivedNotification.getUserID() +" "+ receivedNotification.getSourceID());
+                    		ID = notificationService.findNotificationByTopic(
+                                  receivedNotification.getTopic(), receivedNotification.getUserID(), receivedNotification.getSourceID()
+                            );
+                		}
+                		
+                		System.out.println("Found notification. ID: " + ID);
+                		Integer count = 0;
+                		try {
+                			count = notificationService.getNotification(ID).getCount();
+                		} catch (Exception e) {
+                			count  = -1;
+                			System.out.println("First time seeing notification like this");
+                		}
+                		
+                		System.out.println("count: " + count);
+                        if(count == -1 || count == null){
+                        	receivedNotification.setCount(0);
+                            notificationService.addNotification(receivedNotification);
+                        }else {
+                        	//przy ikrementacji trzeba sprawdzac
+                        	notiDate = sdf.parse(notificationService.getNotification(ID).getTimestamp());
+                        	Date now = new Date();
+                        	notiDate = new Date(notiDate.getTime() + account.getAggregationdate() * 3600000);
+                        	System.out.println(now);
+                        	System.out.println(notiDate);
+                        	if(now.after(notiDate)) {
+                        		System.out.println("Adding notification to database. Aggregation is outdated.");
+                        		notificationService.addNotification(receivedNotification);
+                        	} else {
+                        		System.out.println("Aggregation is up to date. Increment counter.");
+                        		notificationService.IncrementCount(count, ID);
+                        	}
+                            
+                        	
+                        }
+                	} catch(Exception e) {
+                		System.out.println("Problem occured while adding notification with agregation method: COUNT");
+                		System.out.println("Exception:\n" + e.getMessage() + "\n" + e);
+                	}
 
                     break;
 
                 case Last:
-
-                    ID = notificationService.findNotificationByTopic(
-                            receivedNotification.getTopic(), receivedNotification.getUserID(), receivedNotification.getSourceID()
-                    );
-
-                    if(ID.equals(BigInteger.valueOf(-1))){
-                        notificationService.addNotification(receivedNotification);
-                    }else {
-                        notificationService.updateNotification(receivedNotification,ID);
-                    }
+                	try {
+                		ID = notificationService.findNotificationByTopic(
+                				receivedNotification.getTopic(), receivedNotification.getUserID(), receivedNotification.getSourceID()
+                        );
+                		
+                        if(ID.equals(BigInteger.valueOf(-1))){
+                            notificationService.addNotification(receivedNotification);
+                        }else {
+                        	notiDate = sdf.parse(notificationService.getNotification(ID).getTimestamp());
+                        	Date now = new Date();
+                        	notiDate = new Date(notiDate.getTime() + account.getAggregationdate() * 3600000);
+                        	if(now.after(notiDate)) {
+                        		System.out.println("Adding notification to database. Aggregation is outdated.");
+                        		notificationService.addNotification(receivedNotification);
+                        	} else {
+                        		System.out.println("Aggregation is up to date. Actualising notification.");
+                        		notificationService.updateNotification(receivedNotification,ID);
+                        	}
+                        }
+                	} catch(Exception e) {
+                		System.out.println("Problem occured while adding notification with agregation method: LAST");
+                		System.out.println("Exception:\n" + e.getMessage() + "\n" + e);
+                	}
 
                     break;
 
                 case First:
+                	try {
+                		ID = notificationService.findNotificationByTopic(
+                                receivedNotification.getTopic(), receivedNotification.getUserID(), receivedNotification.getSourceID()
+                        );
 
-                    ID = notificationService.findNotificationByTopic(
-                            receivedNotification.getTopic(), receivedNotification.getUserID(), receivedNotification.getSourceID()
-                    );
-
-                    if(ID.equals(BigInteger.valueOf(-1))){
-                        notificationService.addNotification(receivedNotification);
-                    }else {}
+                        if(ID.equals(BigInteger.valueOf(-1))){
+                            notificationService.addNotification(receivedNotification);
+                        }else {
+                        	notiDate = sdf.parse(notificationService.getNotification(ID).getTimestamp());
+                        	Date now = new Date();
+                        	notiDate = new Date(notiDate.getTime() + account.getAggregationdate() * 3600000);
+                        	if(now.after(notiDate)) {
+                        		System.out.println("Adding notification to database. Aggregation is outdated.");
+                        		notificationService.addNotification(receivedNotification);
+                        	} else {
+                        		System.out.println("Aggregation is up to date. Doing nothing.");
+                        	}
+                        	
+                        }
+                	} catch(Exception e) {
+                		System.out.println("Problem occured while adding notification with agregation method: FIRST");
+                		System.out.println("Exception:\n" + e.getMessage());
+                	}
 
                     break;
             }
+        }
+        
+        private AggregationMethod getAggregationType(int type) {
+        	if(type == 0) {
+        		return AggregationMethod.None;
+        	} else if(type == 1) {
+        		return AggregationMethod.First;
+        	} else if(type == 2) {
+        		return AggregationMethod.Last;
+        	} else if(type == 3) {
+        		return AggregationMethod.Count;
+        	}
+        	return AggregationMethod.None;
         }
     }
 

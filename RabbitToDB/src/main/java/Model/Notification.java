@@ -96,6 +96,6 @@ public class Notification
 
     public Integer getCount(){ return count; }
 
-    public void setCount(Integer count){ this.count = count; }
+    public void setCount(Integer count){ this.count = new Integer(count); }
 
 }

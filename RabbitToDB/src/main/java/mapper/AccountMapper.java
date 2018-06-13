@@ -18,6 +18,8 @@ public class AccountMapper implements RowMapper<Account>
         account.setAccessToken(resultSet.getString("accesstoken"));
         account.setAccessTokenSecret(resultSet.getString("accesstokensecret"));
         account.setSourceID(resultSet.getInt("sourceid"));
+        account.setAggregation(resultSet.getInt("aggregation"));
+        account.setAggregationdate(resultSet.getInt("aggregationdate"));
         return account;
     }
 }

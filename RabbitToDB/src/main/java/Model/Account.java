@@ -9,6 +9,10 @@ public class Account
     private String accessToken;
     private String accessTokenSecret;
     private Integer sourceID;
+    private Integer aggregation;
+    private Integer aggregationdate;
+    private Integer aggregationtype;
+    private String aggregationkey;
 
     public Integer getAccountID()
     {
@@ -76,5 +80,37 @@ public class Account
 
 	public void setSourceID(Integer sourceID) {
 		this.sourceID = sourceID;
+	}
+
+	public Integer getAggregation() {
+		return aggregation;
+	}
+
+	public void setAggregation(Integer aggregation) {
+		this.aggregation = aggregation;
+	}
+
+	public Integer getAggregationdate() {
+		return aggregationdate;
+	}
+
+	public void setAggregationdate(Integer aggregationdate) {
+		this.aggregationdate = aggregationdate;
+	}
+
+	public Integer getAggregationtype() {
+		return aggregationtype;
+	}
+
+	public void setAggregationtype(Integer aggregationtype) {
+		this.aggregationtype = aggregationtype;
+	}
+
+	public String getAggregationkey() {
+		return aggregationkey;
+	}
+
+	public void setAggregationkey(String aggregationkey) {
+		this.aggregationkey = aggregationkey;
 	}
 }
