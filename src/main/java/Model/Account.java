@@ -16,6 +16,8 @@ public class Account implements Serializable
     private Integer sourceID;
     private Integer aggregation;
     private Integer aggregationdate;
+    private String aggregationkey;
+    private Integer aggregationtype;
 
     @Id
     @Column(name ="accountid")
@@ -114,5 +116,21 @@ public class Account implements Serializable
 
 	public void setAggregationdate(Integer aggregationdate) {
 		this.aggregationdate = aggregationdate;
+	}
+
+	public String getAggregationkey() {
+		return aggregationkey;
+	}
+
+	public void setAggregationkey(String aggregationkey) {
+		this.aggregationkey = aggregationkey;
+	}
+
+	public Integer getAggregationtype() {
+		return aggregationtype;
+	}
+
+	public void setAggregationtype(Integer aggregationtype) {
+		this.aggregationtype = aggregationtype;
 	}
 }

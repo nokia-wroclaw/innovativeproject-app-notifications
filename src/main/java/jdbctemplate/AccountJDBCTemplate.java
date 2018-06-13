@@ -72,15 +72,29 @@ public class AccountJDBCTemplate implements AccountDAO
     }
 
 	@Override
-	public void updateAgregation(Integer id, Integer aggregation) {
+	public void updateAggregation(Integer id, Integer aggregation) {
 		String SQL = "update nokiaapp.account set aggregation = ? where accountid = ?";
         jdbcTemplateObject.update(SQL, aggregation, id);
 	}
 
 	@Override
-	public void updateAgregationDate(Integer id, Integer date) {
+	public void updateAggregationDate(Integer id, Integer date) {
 		String SQL = "update nokiaapp.account set aggregationdate = ? where accountid = ?";
 		jdbcTemplateObject.update(SQL, date, id);
+		
+	}
+	
+	@Override
+	public void updateAggregationBy(Integer id, Integer by) {
+		String SQL = "update nokiaapp.account set aggregationtype = ? where accountid = ?";
+		jdbcTemplateObject.update(SQL, by, id);
+		
+	}
+	
+	@Override
+	public void updateAggregationKeys(Integer id, String keys) {
+		String SQL = "update nokiaapp.account set aggregationkey = ? where accountid = ?";
+		jdbcTemplateObject.update(SQL, keys, id);
 		
 	}
 }

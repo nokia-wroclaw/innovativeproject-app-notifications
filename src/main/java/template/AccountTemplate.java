@@ -76,13 +76,25 @@ public class AccountTemplate implements AccountDAO
 	}
 
 	@Override
-	public void updateAgregation(Integer id, Integer aggregation) {
+	public void updateAggregation(Integer id, Integer aggregation) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void updateAgregationDate(Integer id, Integer date) {
+	public void updateAggregationDate(Integer id, Integer date) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateAggregationBy(Integer id, Integer by) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateAggregationKeys(Integer id, String keys) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -416,6 +416,76 @@ public class RestControll {
         }
     }
     
+    //-------------------------Change user password------------------------------------
+    @ResponseBody
+    @RequestMapping(value = "/user/password/", method = RequestMethod.POST)
+    public ResponseEntity<?> changeUserPassword(@RequestBody String body) {
+    	String token = null;
+    	String oldPassword = null;
+    	String newPassword = null;
+    	int userID = 0;
+    	try {
+    		JSONParser parser = new JSONParser();
+    		JSONObject json = (JSONObject) parser.parse(body);
+    		token = json.get("token").toString();
+    		oldPassword = json.get("oldpassword").toString();
+    		newPassword = json.get("newpassword").toString();
+    		
+    		userID = userService.getUserByToken(token).getUserId();
+    		
+    		if(userService.getUser(userID).getPassword().equals(oldPassword)) {
+    			userService.changePassword(userID, newPassword);
+        		
+        		log.info("Changing password of user {} finished with true.", userID);
+        		
+        		return new ResponseEntity<CustomStatusResponse>(new CustomStatusResponse("success"),HttpStatus.OK);
+    		} else {
+    			log.info("Old password of user {} is wrong.", userID);
+    			return new ResponseEntity<CustomErrorType>(new CustomErrorType("failure"), HttpStatus.CONFLICT);
+    		}
+    		
+    	} catch (Exception e) {
+    		log.error("Error while changing password of user {}. Exception:\n",userID);
+    		log.error(e.getMessage() + "\n" + e.getLocalizedMessage());
+    		return new ResponseEntity<CustomErrorType>(new CustomErrorType("failure"), HttpStatus.CONFLICT);
+    	}
+    }
+    
+    //-------------------------Change user mail------------------------------------
+    @ResponseBody
+    @RequestMapping(value = "/user/mail/", method = RequestMethod.POST)
+    public ResponseEntity<?> changeUserMail(@RequestBody String body) {
+    	String token = null;
+    	String password = null;
+    	String newMail = null;
+    	int userID = 0;
+    	try {
+    		JSONParser parser = new JSONParser();
+    		JSONObject json = (JSONObject) parser.parse(body);
+    		token = json.get("token").toString();
+    		password = json.get("password").toString();
+    		newMail = json.get("mail").toString();
+    		
+    		userID = userService.getUserByToken(token).getUserId();
+    		
+    		if(userService.getUser(userID).getPassword().equals(password)) {
+    			//userService.changeMail(userID, newMail);
+        		
+        		log.info("Changing mail of user {} finished with true.", userID);
+        		
+        		return new ResponseEntity<CustomStatusResponse>(new CustomStatusResponse("success"),HttpStatus.OK);
+    		} else {
+    			log.info("Password of user {} is wrong.", userID);
+    			return new ResponseEntity<CustomErrorType>(new CustomErrorType("failure"), HttpStatus.CONFLICT);
+    		}
+    		
+    	} catch (Exception e) {
+    		log.error("Error while changing mail of user {}. Exception:\n",userID);
+    		log.error(e.getMessage() + "\n" + e.getLocalizedMessage());
+    		return new ResponseEntity<CustomErrorType>(new CustomErrorType("failure"), HttpStatus.CONFLICT);
+    	}
+    }
+    
     //-------------------------Get notifiations by sources with count------------------
     @ResponseBody
     @RequestMapping(value = "/notifications/", method = RequestMethod.POST)
@@ -493,37 +563,9 @@ public class RestControll {
     	}
     }
     
-    //---------------------------------Add new user by parameters---------------------------------------
-    
-    @RequestMapping(value = "/register/", method = RequestMethod.POST)
-    public ResponseEntity<?> addUser(HttpServletRequest request,@RequestParam String username, 
-    		@RequestParam String password, @RequestParam String name, 
-    		@RequestParam String surname) {
-    	
-    	User user = null;
-    	try {
-    		user = new User();
-    		user.setName(name);
-    		user.setSurname(surname);
-    		user.setLogin(username);
-    		user.setPassword(password);
-    		String token = UUID.randomUUID().toString();
-    		while(!(userService.getUserByToken(token)==null)) {
-    			token = UUID.randomUUID().toString();
-    		}
-    		user.setToken(token);
-    		userService.createUser(user);
-    	} catch(Exception e) {
-			log.error("Error while adding new user {} {}.",name,surname);
-            return new ResponseEntity<CustomErrorType>(new CustomErrorType("failure"), HttpStatus.NOT_FOUND);
-    	}
-    	log.info("Adding new user finished with true. New user: {} {}",name,surname);
-    	return new ResponseEntity<CustomStatusResponse>(new CustomStatusResponse("confirmed"),HttpStatus.OK);
-    }
-    
     //---------------------------------Add new user by JSON---------------------------------------
     
-    @RequestMapping(value = "/register2/", method = RequestMethod.POST)
+    @RequestMapping(value = "/register/", method = RequestMethod.POST)
     public ResponseEntity<?> addUser2(HttpServletRequest request, @RequestBody User user) {
     	
     	try {
@@ -598,41 +640,6 @@ public class RestControll {
     		}
     	} catch(Exception e) {
     		log.error("Deleting notification {} returned with false. Exception:\n" + e,notfID);
-			return new ResponseEntity<CustomErrorType>(new CustomErrorType("failure"),HttpStatus.FORBIDDEN);
-    	}
-    }
-    
-    //------------------------Add account of the user---------------------------
-    @ResponseBody
-    @RequestMapping(value = "/new/twitter/", method = RequestMethod.POST)
-    public ResponseEntity<?> addAccount(@RequestBody String body) {
-    	//String 
-    	String accessToken = null;
-    	String accessTokenSecret = null;
-    	String token = null;
-    	Account acc = null;
-    	int userID = 0;
-    	try {
-    		JSONParser parser = new JSONParser();
-    		JSONObject json = (JSONObject) parser.parse(body);
-    		token = json.get("token").toString();
-    		accessToken = json.get("accessToke").toString();
-    		accessTokenSecret = json.get("secretToken").toString();
-    		userID = userService.getUserByToken(token).getUserId();
-    		acc = new Account();
-    		acc.setUserID(userID);
-    		acc.setAccessToken(accessToken);
-    		acc.setAccessTokenSecret(accessTokenSecret);
-    		acc.setSourceID(15);
-    		//DO POPRAWY
-    		acc.setLogin("login");
-    		acc.setPassword("password");
-    		//
-    		accountService.createAccount(acc);
-    		log.info("Adding new account to the user {} returned with true.",userID);
-    		return new ResponseEntity<CustomStatusResponse>(new CustomStatusResponse("confirmed"),HttpStatus.OK);
-    	} catch(Exception e) {
-    		log.error("Adding new account for the user {} returned with false. Exception:\n" + e,userID);
 			return new ResponseEntity<CustomErrorType>(new CustomErrorType("failure"),HttpStatus.FORBIDDEN);
     	}
     }
@@ -962,6 +969,8 @@ public class RestControll {
     	int aggregation = 0;
     	int aggregationDate = 0;
     	int aggregationType = 0;
+    	int aggregationBy = 0;
+    	String aggregationKey = null;
     	String token = null;
     	try {
     		JSONParser parser = new JSONParser();
@@ -971,6 +980,8 @@ public class RestControll {
     		aggregation = Integer.valueOf(json.get("aggregation").toString());
     		aggregationDate = Integer.valueOf(json.get("aggregationdate").toString());
     		aggregationType = Integer.valueOf(json.get("aggregationtype").toString());
+    		aggregationBy = Integer.valueOf(json.get("aggregationby").toString());
+    		aggregationKey = json.get("aggregationkey").toString();
     		
     		switch(aggregationType) {
     		case 0://godzina
@@ -993,8 +1004,14 @@ public class RestControll {
     		
     		userID = userService.getUserByToken(token).getUserId();
     		
-    		accountService.updateAgregation(accountID, aggregation);
-    		accountService.updateAgregationDate(accountID, aggregationDate);
+    		accountService.updateAggregation(accountID, aggregation);
+    		accountService.updateAggregationDate(accountID, aggregationDate);
+    		accountService.updateAggregationBy(accountID, aggregationBy);
+    		if(aggregationKey.equals("null")) {
+    			accountService.updateAggregationKeys(accountID, null);
+    		} else {
+    			accountService.updateAggregationKeys(accountID, aggregationKey);
+    		}
     		
     		log.info("Changing account {} agregation of user {} finished with true. His new aggregation type - {}.",accountID,userID,aggregationDate);
     		return new ResponseEntity<HttpStatus>(HttpStatus.OK);
@@ -1004,15 +1021,10 @@ public class RestControll {
     	}
     }
     
+    
+    
     //----------------------------------------------------------------
     //--------------------TEST SECTION--------------------------------
     //----------------------------------------------------------------
     
-    @ResponseBody
-    @RequestMapping(value = "/test/", method = RequestMethod.GET)
-    public ResponseEntity<?> test(@RequestHeader HttpHeaders headers, @RequestBody User body) {
-    	System.out.println(headers);
-    	System.out.println(body.getName());
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
 }

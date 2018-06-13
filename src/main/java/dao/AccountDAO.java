@@ -12,6 +12,8 @@ public interface AccountDAO
     public void updateAccessTokenSecret(Integer id, String token);
     public void removeAccount(Integer accountID);
     public void createAccount(Account account);
-    public void updateAgregation(Integer id, Integer aggregation);
-    public void updateAgregationDate(Integer id, Integer date);
+    public void updateAggregation(Integer id, Integer aggregation);
+    public void updateAggregationDate(Integer id, Integer date);
+    public void updateAggregationBy(Integer id, Integer by);
+    public void updateAggregationKeys(Integer id, String keys);
 }

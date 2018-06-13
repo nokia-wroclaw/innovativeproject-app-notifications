@@ -20,6 +20,8 @@ public class AccountMapper implements RowMapper<Account>
         account.setSourceID(resultSet.getInt("sourceid"));
         account.setAggregation(resultSet.getInt("aggregation"));
         account.setAggregationdate(resultSet.getInt("aggregationdate"));
+        account.setAggregationkey(resultSet.getString("aggregationkey"));
+        account.setAggregationtype(resultSet.getInt("aggregationtype"));
         return account;
     }
 }
