@@ -178,7 +178,7 @@ public class SecondActivity extends AppCompatActivity {
                 @Override
                 public void success(Notifications myWebServiceResponse, Response response)
                 {
-                    Log.d(CLASS_TAG, myWebServiceResponse.getNotifications().get(1).getTopic());
+                    //Log.d(CLASS_TAG, myWebServiceResponse.getNotifications().get(1).getTopic());
                     list.addAll(myWebServiceResponse.getNotifications());
                     //ArrayAdapter<String> adapter = new ArrayAdapter<String>( this, android.R.layout.simple_list_item_1, list);
                     aa.notifyDataSetChanged();

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.robinsonprogramming.www.loginrestapi.RegisterActivity">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="56dp"
+        android:paddingLeft="24dp"
+        android:background="#2d2d2d"
+        android:paddingRight="24dp">
+
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
+
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="@string/name"
+        tools:layout_editor_absoluteX="84dp"
+        tools:layout_editor_absoluteY="83dp" />
+
+    <EditText
+        android:id="@+id/editText2"
+        android:layout_below="@+id/editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
+
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="@string/surname"
+        tools:layout_editor_absoluteX="84dp"
+        tools:layout_editor_absoluteY="148dp" />
+
+    <EditText
+        android:id="@+id/editText3"
+        android:layout_below="@+id/editText2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
+
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="@string/Login"
+        tools:layout_editor_absoluteX="84dp"
+        tools:layout_editor_absoluteY="214dp" />
+
+    <EditText
+        android:id="@+id/editText4"
+        android:layout_below="@+id/editText3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
+
+        android:ems="10"
+        android:inputType="textPassword"
+        android:hint="@string/Password"
+        android:visibility="visible"
+        tools:layout_editor_absoluteX="84dp"
+        tools:layout_editor_absoluteY="275dp" />
+
+    <EditText
+        android:id="@+id/editText5"
+        android:layout_below="@+id/editText4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
+
+        android:ems="10"
+        android:inputType="textPassword"
+        android:hint="@string/retype_password"
+        tools:layout_editor_absoluteX="84dp"
+        tools:layout_editor_absoluteY="342dp" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_below="@+id/editText5"
+        android:layout_width="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
+        android:layout_height="wrap_content"
+        android:text="@string/sign_up"
+        android:background="@drawable/button"
+        tools:layout_editor_absoluteX="148dp"
+        tools:layout_editor_absoluteY="406dp" />
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>
+

@@ -15,6 +15,7 @@ import org.json.JSONException;
 public class MainActivity extends AppCompatActivity
 {
     private Button button_login_login;
+    private Button button_login_register;
     private EditText editText_login_username;
     private EditText editText_login_password;
     private String username;
@@ -48,6 +49,15 @@ public class MainActivity extends AppCompatActivity
                 {}
             }
         });
+        button_login_register = (Button) findViewById(R.id.button_login_register);
+        button_login_register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view)
+            {
+                goToRegistryActivity();
+            }
+        });
+
     }
 
     /**
@@ -120,6 +130,12 @@ public class MainActivity extends AppCompatActivity
 
         Intent intent = new Intent(this, SecondActivity.class);
         intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
+    private void goToRegistryActivity()
+    {
+        Intent intent = new Intent(this, RegisterActivity.class);
         startActivity(intent);
     }
 }

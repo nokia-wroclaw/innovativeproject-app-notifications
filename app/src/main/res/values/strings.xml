@@ -6,4 +6,8 @@
     <string name="Reminder">Forgot Password</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
+    <string name="retype_password">Retype Password</string>
+    <string name="sign_up">Sign up</string>
+    <string name="surname">Surname</string>
+    <string name="name">Name</string>
 </resources>
