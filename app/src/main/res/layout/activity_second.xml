@@ -1,15 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    tools:context="com.robinsonprogramming.www.loginrestapi.SecondActivity">
+    tools:context="com.robinsonprogramming.www.loginrestapi.SecondActivity"
+    android:background="#2d2d2d"
+    android:id="@+id/drawerLayout">
+
+    <android.support.design.widget.NavigationView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="#2d2d2d"
+        android:textColorHint="#dcdcdc"
+        android:textColor="#dcdcdc"
+        app:menu="@menu/navigation_menu"
+        android:id="@+id/nav_view"
+        android:layout_gravity="start">
+    </android.support.design.widget.NavigationView>
+
 
     <ListView
         android:id="@+id/myListView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"></ListView>
 
-</android.support.constraint.ConstraintLayout>
+</android.support.v4.widget.DrawerLayout>

@@ -4,13 +4,16 @@
     android:layout_height="fill_parent"
     android:background="#2d2d2d">
 
+
     <TextView
         android:id="@+id/topic"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
         android:textColor="#dcdcdc"
+        android:textColorHint="#dcdcdc"
         android:textSize="25sp"
+
         />
 
     <TextView
@@ -21,6 +24,7 @@
         android:gravity="center"
         android:drawablePadding="10dp"
         android:textColor="#dcdcdc"
+        android:textColorHint="#dcdcdc"
         android:layout_alignParentLeft="true"
         android:layout_below="@id/timestamp"
         android:textSize="15sp" />
@@ -40,6 +44,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
+        android:textColorHint="#dcdcdc"
         android:textColor="#dcdcdc"
         android:layout_alignParentLeft="true"
         android:layout_below="@id/topic"

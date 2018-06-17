@@ -2,6 +2,8 @@
     <string name="app_name">Notify Me</string>
     <string name="Login"><font fgcolor='#FFFFFF'></font>Login</string>
     <string name="Password">Password</string>
-    <string name="Register">register</string>
+    <string name="Register">Register</string>
     <string name="Reminder">Forgot Password</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
 </resources>

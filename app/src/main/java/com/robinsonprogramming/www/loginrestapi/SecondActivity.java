@@ -1,12 +1,17 @@
 package com.robinsonprogramming.www.loginrestapi;
 
 import android.app.Activity;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -33,7 +38,8 @@ import static android.widget.AbsListView.OnScrollListener.SCROLL_STATE_IDLE;
 public class SecondActivity extends AppCompatActivity {
 
     private static final String CLASS_TAG = "SecondActivity";
-
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mToggle;
     RestAdapter retrofit;
     MyWebService myWebService;
     ArrayList<Notification> list = new ArrayList<Notification>();
@@ -57,11 +63,22 @@ public class SecondActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+
+
         final Bundle bundle;
         bundle = getIntent().getExtras();
         String token = bundle.getString("token");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+        mToggle = new ActionBarDrawerToggle(this, mDrawerLayout,R.string.open,R.string.close);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setItemIconTintList(null);
+        navigationView.setItemTextColor(ColorStateList.valueOf(Color.parseColor("#dcdcdc")));
+        mDrawerLayout.addDrawerListener(mToggle);
+        mToggle.syncState();
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         retrofit = new RestAdapter.Builder()
                 .setEndpoint("http://35.204.202.104:8080/api/v1.0/")
                 .setLogLevel(RestAdapter.LogLevel.FULL)
@@ -119,6 +136,14 @@ public class SecondActivity extends AppCompatActivity {
 
     }
 
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        if(mToggle.onOptionsItemSelected(item))
+            return true;
+
+    return super.onOptionsItemSelected(item);
+    }
    /* private AbsListView.OnScrollListener onScrollListener(final Bundle bundle) {
         return new AbsListView.OnScrollListener() {
 
