@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Notify Me</string>
+    <string name="Login"><font fgcolor='#FFFFFF'></font>Login</string>
+    <string name="Password">Password</string>
+    <string name="Register">register</string>
+    <string name="Reminder">Forgot Password</string>
 </resources>
