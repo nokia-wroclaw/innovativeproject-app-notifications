@@ -1,5 +1,6 @@
 package com.robinsonprogramming.www.loginrestapi;
 
+import android.content.res.Configuration;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -35,6 +36,8 @@ public class MainActivity extends AppCompatActivity
 
 
 
+
+
         editText_login_username = (EditText) findViewById(R.id.editText_login_username);
         editText_login_password = (EditText) findViewById(R.id.editText_login_password);
 
@@ -67,6 +70,17 @@ public class MainActivity extends AppCompatActivity
 
 
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        // Checks the orientation of the screen
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            Toast.makeText(getApplicationContext(), "landscape", Toast.LENGTH_SHORT).show();
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            Toast.makeText(getApplicationContext(), "portrait", Toast.LENGTH_SHORT).show();
+        }
+    }
     /**
      * This subclass handles the network operations in a new thread.
      * It starts the progress bar, makes the API call, and ends the progress bar.

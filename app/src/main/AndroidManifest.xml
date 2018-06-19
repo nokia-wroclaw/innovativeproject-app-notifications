@@ -16,15 +16,26 @@
         android:gravity="center"
         >
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SecondActivity"></activity>
-        <activity android:name=".RegisterActivity"></activity>
+
+        <!--<activity android:name=".SecondActivity"-->
+            <!--android:screenOrientation="portrait"></activity>-->
+        <activity
+            android:name=".SecondActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+
+            />
+        <activity
+
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:name=".RegisterActivity"></activity>
     </application>
 
 </manifest>
