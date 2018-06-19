@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     >
+    <item android:id="@+id/nav_notifications"
+        android:textColorHint="#dcdcdc"
+        android:icon="@mipmap/notiflist"
+        android:title="My Notifications"/>
 
     <item android:id="@+id/nav_services"
         android:textColorHint="#dcdcdc"

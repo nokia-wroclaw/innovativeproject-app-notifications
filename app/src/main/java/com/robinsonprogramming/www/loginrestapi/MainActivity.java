@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,8 +32,12 @@ public class MainActivity extends AppCompatActivity
 
         // TODO: Replace this with your own IP address or URL.
         baseUrl = "http://35.204.202.104:8080/api/v1.0/login/";
+
+
+
         editText_login_username = (EditText) findViewById(R.id.editText_login_username);
         editText_login_password = (EditText) findViewById(R.id.editText_login_password);
+
         button_login_login = (Button) findViewById(R.id.button_login_login);
         button_login_login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,6 +64,8 @@ public class MainActivity extends AppCompatActivity
         });
 
     }
+
+
 
     /**
      * This subclass handles the network operations in a new thread.
@@ -123,6 +130,8 @@ public class MainActivity extends AppCompatActivity
 
     private void goToSecondActivity()
     {
+        editText_login_username.getText().clear();
+        editText_login_password.getText().clear();
         Bundle bundle = new Bundle();
         bundle.putString("username", username);
         bundle.putString("password", password);
