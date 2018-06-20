@@ -5,11 +5,18 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.example.mati.pojo.ChangeFlagBody;
 import com.example.mati.pojo.ChangePasswordBody;
 import com.example.mati.pojo.MyWebService;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import retrofit.Callback;
+import retrofit.ResponseCallback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -43,18 +50,24 @@ public class MyAccount extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-                myWebService.changeUserPassword(new ChangePasswordBody("1", "pass1", "password"), new Callback<String>() {
-                    @Override
-                    public void success(String s, Response response)
-                    {
-
-                    }
-                    @Override
-                    public void failure(RetrofitError error)
-                    {
-
-                    }
-                });
+                if(!editText_newPassword.getText().toString().equals(editText_retype_newPassword.getText().toString()))
+                {
+                    Toast.makeText(getApplicationContext(), "New Passwords is defferend", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    myWebService.changeUserPassword(new ChangePasswordBody(bundle.getString("token"), editText_password.getText().toString(), editText_newPassword.getText().toString()), new Callback<JSONObject>() {
+                        @Override
+                        public void success(JSONObject s, Response response)
+                        {
+                                Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
+                        }
+                        @Override
+                        public void failure(RetrofitError error)
+                        {
+                            Toast.makeText(getApplicationContext(), "Fail", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
             }
         });
 

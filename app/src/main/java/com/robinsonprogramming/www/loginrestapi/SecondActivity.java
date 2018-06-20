@@ -365,5 +365,4 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
             timestamp.setVisibility(View.GONE);
         }
     }
-
 }

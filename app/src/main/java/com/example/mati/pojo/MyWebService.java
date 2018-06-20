@@ -2,6 +2,7 @@ package com.example.mati.pojo;
 
 import android.telecom.Call;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import retrofit.Callback;
@@ -31,11 +32,13 @@ public interface MyWebService
 
     @Headers({"Content-Type: application/json","Accept: application/json"})
     @POST("/user/password/")
-    void changeUserPassword(@Body ChangePasswordBody changePasswordBody, Callback<String> response);
+    void changeUserPassword(@Body ChangePasswordBody changePasswordBody, Callback<JSONObject> response);
 
     @Headers({"Content-Type: application/json","Accept: application/json"})
     @POST("/setFlag/")
-    void setFlag(@Body ChangeFlagBody changeFlagBody, Callback<String> response);
+    void setFlag(@Body ChangeFlagBody changeFlagBody, Callback<JSONObject> response);
 
-  //  void setFlag(ChangeFlagBody changeFlagBody);
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    @POST("/notf/remove")
+    void removeNotification(@Body ChangeFlagBody changeFlagBody, Callback<JSONObject> response);
 }
