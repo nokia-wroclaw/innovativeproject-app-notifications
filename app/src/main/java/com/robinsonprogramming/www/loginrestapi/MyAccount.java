@@ -45,12 +45,13 @@ public class MyAccount extends AppCompatActivity
             {
                 myWebService.changeUserPassword(new ChangePasswordBody("1", "pass1", "password"), new Callback<String>() {
                     @Override
-                    public void success(String s, Response response) {
+                    public void success(String s, Response response)
+                    {
 
                     }
-
                     @Override
-                    public void failure(RetrofitError error) {
+                    public void failure(RetrofitError error)
+                    {
 
                     }
                 });

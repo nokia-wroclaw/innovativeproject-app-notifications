@@ -35,5 +35,5 @@ public interface MyWebService
 
     @Headers({"Content-Type: application/json","Accept: application/json"})
     @POST("/setFlag/")
-    Call setFlag(@Body Notification notification);
+    void setFlag(@Body ChangeFlagBody changeFlagBody, Callback<String> response);
 }
