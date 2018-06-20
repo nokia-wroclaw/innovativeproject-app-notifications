@@ -1,0 +1,44 @@
+<div>
+
+    <span ng-style="infoType">{{info}}</span>
+    <br/>
+    <label class="menu-button" for="cpBox" ng-click="resetInput()" > Change password </label><input ng-hide="true" ng-model="cpBox" id="cpBox" type="checkbox" />
+    <form ng-hide="!cpBox" ng-submit="changePassword()">
+        <br/>
+        <p><input ng-class="loginInputStyle" ng-model="oldpass" type="password" placeholder="old password "/></p>
+        <p><input ng-class="loginInputStyle" ng-model="newpass" type="password" placeholder="new password "/></p>
+        <p><input ng-class="loginInputStyle" ng-model="newpassrep" type="password" placeholder="retype new password "/></p>
+
+        <input type="submit" class="login-input login-button" value="confirm"/>
+        <br/>
+    </form >
+
+    <br/>
+    <br/>
+    <br/>
+
+    <label class="menu-button" for="ccBox" ng-click="resetInput()" > Change back color </label><input ng-hide="true" ng-model="ccBox" id="ccBox" type="checkbox" />
+    <form ng-hide="!ccBox" ng-submit="changeColor()">
+        <br/>
+        <p><input ng-class="loginInputStyle" ng-model="color" type="color" /></p>
+
+        <input type="submit" class="login-input login-button" value="confirm"/>
+        <br/>
+    </form >
+
+    <br/>
+    <br/>
+    <br/>
+
+    <label class="menu-button" for="rmBox" > Remove my account </label><input ng-hide="true" ng-model="rmBox" id="rmBox" type="checkbox" />
+    <form ng-hide="!rmBox" ng-submit="removeUser()">
+        <br/>
+        <br/>
+        <span style="font-size: 16px"><b> Are You sure You wont to delete your account ?? </b></span>
+        <br/>
+        <p><input type="submit" class="login-input login-button important-element" value="yes"/></p>
+        <p><input type="button" class="login-input login-button" ng-click="rmBox=false" value="no"/></p>
+        <br/>
+    </form >
+
+</div>

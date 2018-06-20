@@ -2,6 +2,7 @@
 
 //  Const
     const ServerAddress = "http://35.204.202.104:8080/api/v1.0";
+    const ServerAddress2 = "http://35.204.202.104:8084/api/v1.0";
 
 
 //  Module
@@ -40,7 +41,8 @@ app.component("notificationsList" ,{
     controller : 'notificationListController',
     bindings: {
         type: '=',  // type of the elements stored on this list, can by 'groups' or 'notifications'
-        from: '='   // url added after API address, under with data about list elements are stored
+        from: '=',   // url added after API address, under with data about list elements are stored
+        myGroup: '='       // data about notification group
     }
 });
 
@@ -102,6 +104,16 @@ app.component("twitterWindow" ,{
 app.component("websiteWindow" ,{
     templateUrl : '../HTML/WebsiteWindow.html',
     controller : 'websiteServiceController'
+});
+
+app.component("serviceWindow" ,{
+    templateUrl : '../HTML/ServiceWindow.html',
+    controller : 'customServiceController'
+});
+
+app.component("myAccount" ,{
+    templateUrl : '../HTML/myAccountWindow.html',
+    controller : 'myAccountController'
 });
 
 // Values
@@ -244,7 +256,9 @@ app.controller("loginController" , function($http,$cookies,$scope) {
     //  Initialize
 
     $scope.loginInputStyle = "login-input login-text";
-
+    if(app.Token === "reg"){
+        $scope.info = "registered successful";
+    }
 
 });
 
@@ -257,6 +271,8 @@ app.controller("notificationListController" , function($interval,$http,$cookies,
     };
 
     $scope.elementRequestFocus = function(element){ // This function is called when one of the elements is requesting focus
+
+
         if (element.focused===false) {
             if ($scope.type === "notifications"){ //  If list that stores elements is of "notifications" type the rest of elements loses focus
                 angular.forEach(elements, function (value) {
@@ -271,6 +287,8 @@ app.controller("notificationListController" , function($interval,$http,$cookies,
     };
 
     $scope.removeElement = function(element){   // This function removes element from list
+
+        $scope.$ctrl.myGroup.$ctrl.countDecrease();
 
         const myID = element.myNotification.notificationID;
         $http.post(ServerAddress+'/notf/remove/',{
@@ -288,7 +306,7 @@ app.controller("notificationListController" , function($interval,$http,$cookies,
             }
         );
     };
-
+    
     "../JSON/groups.json" //
     $scope.loadData = function(from,type){ // This function loads data from specified location in to storedData array
         $scope.type = type;
@@ -309,6 +327,7 @@ app.controller("notificationListController" , function($interval,$http,$cookies,
     };
 
     $scope.loadGroups = function(rom,type){
+
 
         $http.post(ServerAddress+'/notifications/',{
             token:app.Token
@@ -341,6 +360,7 @@ app.controller("userPanelController" , function($interval,$http,$cookies,$scope)
     //  Functions
 
     $scope.moveToAddExtension = function (){
+        $cookies.put("serviceState",0);
         $scope.curUserPanel = 1;
         $cookies.put("UserState",1);
     };
@@ -354,6 +374,11 @@ app.controller("userPanelController" , function($interval,$http,$cookies,$scope)
         $scope.curUserPanel = 0;
         $cookies.put("UserState",0);
         $cookies.remove("serviceState");
+    };
+
+    $scope.moveToAccount = function(){
+        $scope.curUserPanel = 3;
+        $cookies.put("UserState",3);
     };
 
     $scope.logout = function () { // This function is logging out user
@@ -376,6 +401,8 @@ app.controller("userPanelController" , function($interval,$http,$cookies,$scope)
     app.hidePopup = function(){     //  Experimental function
         $scope.showPopup = false;
     };
+
+
 
     //  Initialize
 
@@ -452,6 +479,13 @@ app.controller("notificationGroupController" , function ($scope) {
         this.focused = true;
     };
 
+    this.countDecrease = function(){
+        $scope.myCount = $scope.myCount-1;
+    };
+
+    $scope.loadCount = function (count) {
+        $scope.myCount = count;
+    };
 
     //  Initialize
 
@@ -460,7 +494,7 @@ app.controller("notificationGroupController" , function ($scope) {
 
 });
 
-app.controller("registerController", function ($http,$scope) {
+app.controller("registerController", function ($http,$scope,$window) {
 
 
     //  Functions
@@ -476,7 +510,7 @@ app.controller("registerController", function ($http,$scope) {
         const hashRePass = $scope.rePassword; // Encrypted rePassword in the future
 
         if(hashRePass===hashPass){  // Are two inserted passwords the same
-            $http.post(ServerAddress+'/register2/',{
+            $http.post(ServerAddress+'/register/',{
                 name:$scope.username,
                 surname:$scope.surname,
                 login:$scope.login,
@@ -484,9 +518,9 @@ app.controller("registerController", function ($http,$scope) {
             }).then(
                     //Success
                     function(response){
-                        this.Token = response.data.toString();
-                        $window.localStorage['Token'] = Token;
-                        app.setView(app.viewEnum.LIST);
+                        app.Token = "reg";
+                        $scope.info = "Successful created account";
+                        app.setView(app.viewEnum.LOGIN);
                     },
                     //Failure
                     function (response) {
@@ -549,8 +583,15 @@ app.controller("externalServicesController", function ($http,$scope,$cookies) {
         $cookies.put("serviceState",2);
         $scope.currentState = 2;
     };
+    
+    $scope.ToServices = function () {
 
+        $cookies.put("serviceState",3);
+        $scope.currentState = 3;
+    };
+    
     $scope.backToList = function () { // Function setting list of services window as current
+        $cookies.remove("serviceToken");
         $cookies.put("serviceState",0);
         $scope.currentState = 0;
     };
@@ -635,6 +676,51 @@ app.controller("websiteServiceController", function ($scope,$http) {
 
 });
 
+app.controller("customServiceController", function ($scope,$http,$cookies) {
+
+    //  Functions
+    $scope.GenerateToken = function () {
+
+        $http.post(ServerAddress2+'/customservice/register/',{
+            token:app.Token
+        }).then(
+            //Success
+            function(response){
+                $scope.added = true;
+                $scope.info = "Added new custom service";
+                $scope.GenToken = "Token: "+response.data.token;
+                $cookies.put("serviceToken",response.data.token);
+            },
+            //Failure
+            function (response) {
+                $scope.info = "Failure while adding service";
+                $scope.infoType = "error-info";
+            }
+        );
+
+    };
+
+    $scope.moveToInstruction = function () {
+
+        window.open('http://35.204.202.104/CustomService.pdf');
+
+    };
+
+    //  Initialize
+
+    if($cookies.get("serviceToken") == null) {
+        $scope.added = false;
+    }
+    else {
+        $scope.added = true;
+        $scope.info = "Added new custom service";
+        $scope.GenToken = "Token: "+$cookies.get("serviceToken");
+    }
+
+    $scope.loginInputStyle = "login-input login-text";
+
+});
+
 app.controller("externalServicesListController", function ($scope,$http) {
 
     //  Functions
@@ -703,8 +789,8 @@ app.controller("externalServicesListController", function ($scope,$http) {
 
 app.controller("externalServiceElementController" , function ($timeout,$http,$scope) {
 
-    console.warn("does that work");
-
+    let agrBy;
+    let subString;
     let agrDurationType;
     let agrType;
 
@@ -723,7 +809,7 @@ app.controller("externalServiceElementController" , function ($timeout,$http,$sc
         this.focused = true;
     };
 
-    $scope.setAggregation = function (type,source) {
+    $scope.setAggregation = function (type) {
 
         agrType = type;
         switch (type) {
@@ -750,7 +836,6 @@ app.controller("externalServiceElementController" , function ($timeout,$http,$sc
 
     };
 
-
     $scope.setAggregationDuration = function(type){
 
         agrDurationType = type;
@@ -770,6 +855,29 @@ app.controller("externalServiceElementController" , function ($timeout,$http,$sc
                 break;
             case 4:
                 $scope.durType= "Years";
+                break;
+        }
+
+        $scope.dropmenu_class = "dropdown-content-hide";
+        $timeout(function () {
+            $scope.dropmenu_class = "dropdown-content";
+        },100);
+    };
+
+    $scope.serviceInitSUB = function () {
+        $scope.aggSubStr = "sub";
+    };
+
+    $scope.setAggregationBy = function (type) {
+
+        agrBy = type;
+        switch (type) {
+            case 1:
+            default:
+                $scope.curAggregatonBy= "Topic";
+                break;
+            case 2:
+                $scope.curAggregatonBy= "Message";
                 break;
         }
 
@@ -839,25 +947,31 @@ app.controller("externalServiceElementController" , function ($timeout,$http,$sc
         }
     };
 
+    $scope.confirmAggregation = function(source){
 
-    $scope.confirmDuration = function(aggrDuration, source){
+        if($scope.showTimeAggr){
+            aggrDur = $scope.aggrDuration; // duration
+        }else {
+            aggrDur=0;
+        }
 
-        if(aggrDuration == null || aggrDuration===""){
-            $scope.infoType = "error-info";
-            $scope.info = "duration field is empty ";
-            return;
+        if($scope.showSubAggr){
+            subString = $scope.aggSubStr; // substring
+        }else{
+            subString="null";
         }
-        if(false){
-            $scope.infoType = "error-info";
-            $scope.info = "duration field is not numeric ";
-            return;
-        }
+
+
+        //$scope.info = "source:"+source + " type:"+agrType+" duration:"+aggrDur+" durationType:"+agrDurationType+" by:"+agrBy+" substring "+subString;
+
         $http.post(ServerAddress+'/account/aggregation/',{
             token: app.Token,
             account: source,
             aggregation: agrType,
-            aggregationdate: aggrDuration,
-            aggregationtype: agrDurationType
+            aggregationdate: aggrDur,
+            aggregationtype: agrDurationType,
+            aggregationby:agrBy,
+            aggregationkey:subString
         }).then(
             //Success
             function(response){
@@ -869,9 +983,7 @@ app.controller("externalServiceElementController" , function ($timeout,$http,$sc
                 $scope.info = "Failure to set aggregation: ";
             }
         );
-
     };
-
 
     $scope.moveToSide = function(url){
         window.open(url);
@@ -879,10 +991,94 @@ app.controller("externalServiceElementController" , function ($timeout,$http,$sc
 
     //  Initialize
 
-
+    agrDurationType=0;
+    subString = null;
+    agrBy=1;
+    $scope.curAggregatonBy = "Topic";
     $scope.dropmenu_class = "dropdown-content";
 
     this.focused = false;   // By default the element don't have focus
     $scope.notificationFocus="notification-div";
+
+});
+
+app.controller("myAccountController" , function ($http,$scope) {
+
+    $scope.changePassword = function(){
+
+        if($scope.newpass!=$scope.newpassrep){
+            $scope.info = "password and repeat password are not the same";
+            $scope.loginInputStyle = $scope.loginInputStyle + " wrong";
+            return;
+        }
+
+        $http.post(ServerAddress+'/user/password/',{
+            token:app.Token,
+            oldpassword:$scope.oldpass,
+            newpassword:$scope.newpass
+        }).then(
+            //Success
+            function(response){
+
+                $scope.oldpass = "";
+                $scope.newpass= "";
+                $scope.newpassrep= "";
+                $scope.cpBox = false;
+                $scope.loginInputStyle = "login-input login-text";
+
+                $scope.info = "Password changed";
+            },
+            //Failure
+            function (response) {
+                $scope.infoType = "error_info";
+                $scope.info = "Failure to remove website";
+            }
+        );
+
+    };
+
+    $scope.resetInput = function(){
+
+        $scope.oldpass = "";
+        $scope.newpass= "";
+        $scope.newpassrep= "";
+        $scope.infoType = "";
+        $scope.info = "";
+        $scope.loginInputStyle = "login-input login-text";
+
+    };
+
+    $scope.changeColor = function(){
+        chrome.storage.local.set({'color': $scope.color });
+    };
+
+    $scope.removeUser = function () {
+
+        $http.post(ServerAddress+'/delete/user/',{
+            token: app.Token
+        }).then(
+            //Success
+            function(response){
+                chrome.storage.local.set({'token': null });
+                $cookies.remove("Token");   //  Removing token from cookies
+                $cookies.remove("Offset");   //  Removing token from cookies
+                $cookies.remove("UserState");   //  Removing user stage from cookies
+                $cookies.remove("serviceState"); //  Removing service stage from cookies
+                app.setView(app.viewEnum.LOGIN);    //  Changing view mode to Login mode
+            },
+            //Failure
+            function (response) {
+                $scope.infoType = "error-info";
+                $scope.info = "Failure to remove account ";
+            }
+        );
+
+    };
+
+    chrome.storage.local.get('color', function(result){
+        let Color = result.color;
+        $scope.color = Color;
+    });
+    $scope.loginInputStyle = "login-input login-text";
 
 });

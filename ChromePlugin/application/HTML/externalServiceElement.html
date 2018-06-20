@@ -4,42 +4,89 @@
  <h4 ng-click=$ctrl.requestFocus($ctrl) class="service-topic">
      <span ng-if="$ctrl.myWebsite.sourceID==15">Twitter</span>
      <span ng-if="$ctrl.myWebsite.sourceID==10">Custom Website</span>
+     <span ng-if="$ctrl.myWebsite.sourceID==1">Custom serivce</span>
+
  </h4>
     <hr/>
-    <div class="menu-horizontal" ng-init="serviceInitTYP($ctrl.myWebsite.aggregationdate);serviceInitAGR($ctrl.myWebsite.aggregation)">
+    <div class="menu-horizontal">
 
-        <div style="display: inline-block;"> Aggregation type :</div>
 
-        <div class="dropdown" style="float: none" >
-            <span>{{curAggregaton}}</span>
-            <div ng-class="dropmenu_class">
-                <button ng-click="setAggregation(0,$ctrl.myWebsite.accountID)" class="dropmenu-button">None</button><br>
-                <button ng-click="setAggregation(1,$ctrl.myWebsite.accountID)" class="dropmenu-button">First</button><br>
-                <button ng-click="setAggregation(2,$ctrl.myWebsite.accountID)" class="dropmenu-button">Last</button><br>
-                <button ng-click="setAggregation(3,$ctrl.myWebsite.accountID)" class="dropmenu-button">Count</button><br>
-            </div>
-        </div>
+        <input id="agrBox" style="display: none" type="checkbox" ng-model="showAggr">
+        <label for="agrBox" class="aggregation-options-button">Aggregate: </label>
+        <div ng-hide="!showAggr">
+            <br/>
+                <div style="display: inline-block;" ng-init="serviceInitAGR($ctrl.myWebsite.aggregation)"> Aggregation type :</div>
+                <div class="dropdown" style="float: none">
 
-        <br/>
-        <br/>
+                    <span>{{curAggregaton}}</span>
+                    <div ng-class="dropmenu_class">
+                        <button ng-click="setAggregation(0)" class="dropmenu-button">None</button><br/>
+                        <button ng-click="setAggregation(1)" class="dropmenu-button">First</button><br/>
+                        <button ng-click="setAggregation(2)" class="dropmenu-button">Last</button><br/>
+                        <button ng-click="setAggregation(3)" class="dropmenu-button">Count</button><br/>
+                    </div>
 
-        <div style="display: inline-block;">
-            <span style="float: left">Aggregate every : </span>
-            <input type="text" class="inline-field" name="input" placeholder="how much" ng-model="aggrDuration"/>
-            <div class="dropdown" style="float: left" ng-init="serviceInit( $ctrl.myWebsite.aggregation )">
-                <span>{{durType}}</span>
-                <div ng-class="dropmenu_class">
-                    <button ng-click="setAggregationDuration(0)" class="dropmenu-button">Hoers</button><br>
-                    <button ng-click="setAggregationDuration(1)" class="dropmenu-button">Days</button><br>
-                    <button ng-click="setAggregationDuration(2)" class="dropmenu-button">Weeks</button><br>
-                    <button ng-click="setAggregationDuration(3)" class="dropmenu-button">Months</button><br>
-                    <button ng-click="setAggregationDuration(4)" class="dropmenu-button">Years</button><br>
                 </div>
+
+                <br/>
+                <br/>
+
+                <div style="display: inline-block;"> Aggregate by :</div>
+                <div class="dropdown" style="float: none">
+
+                    <span>{{curAggregatonBy}}</span>
+                    <div ng-class="dropmenu_class">
+                        <button ng-click="setAggregationBy(1)" class="dropmenu-button">Topic</button><br/>
+                        <button ng-click="setAggregationBy(2)" class="dropmenu-button">Message</button><br/>
+                    </div>
+
+                </div>
+            <hr>
+            <br/>
+            <br/>
+
+
+            <p><label for="agrTBox" class="aggregation-options-button" >Aggregate with interval: </label><input id="agrTBox" style="display: none" type="checkbox" ng-model="showTimeAggr" ></p>
+            <div ng-hide="!showTimeAggr">
+                <br/>
+
+                <div style="display: inline-block;" ng-init="serviceInitTYP( $ctrl.myWebsite.aggregation )">
+                    <span style="float: left">Aggregate every : </span>
+                    <input type="text" class="inline-field" name="aggrDuration" placeholder="how much" ng-model="aggrDuration" />
+                    <div class="dropdown" style="float: left" >
+                        <span>{{durType}}</span>
+                        <div ng-class="dropmenu_class">
+                            <button ng-click="setAggregationDuration(0)" class="dropmenu-button">Hours</button><br/>
+                            <button ng-click="setAggregationDuration(1)" class="dropmenu-button">Days</button><br/>
+                            <button ng-click="setAggregationDuration(2)" class="dropmenu-button">Weeks</button><br/>
+                            <button ng-click="setAggregationDuration(3)" class="dropmenu-button">Months</button><br/>
+                            <button ng-click="setAggregationDuration(4)" class="dropmenu-button">Years</button><br/>
+                        </div>
+                    </div>
+                </div>
+                <hr>
             </div>
+
+            <br/>
+            <br/>
+
+            <p><label for="agrSBox" class="aggregation-options-button" ng-init="serviceInitSUB()">Aggregate by substring: </label><input style="display: none" id="agrSBox" type="checkbox" ng-model="showSubAggr"></p>
+            <div ng-hide="!showSubAggr">
+                <br/>
+
+                <div style="display: inline-block;">
+                    <span style="float: left">substring  : </span>
+                    <input type="text" class="inline-field" name="aggSubStr" placeholder="substring" ng-model="aggSubStr"/>
+                </div>
+                <hr>
+            </div>
+
+            <br/>
+            <br/>
+            <button class="aggregation-button" ng-click="confirmAggregation($ctrl.myWebsite.accountID)">Confirm</button>
         </div>
 
     </div>
-    <button class="aggregation-button" ng-click="confirmDuration(aggrDuration,$ctrl.myWebsite.accountID)">Confirm</button>
 
     <br/>
     <hr/>
@@ -47,6 +94,9 @@
 
     <div class="notification-message"  ng-if="$ctrl.myWebsite.sourceID==10" class="notification-message">
         <button ng-click="moveToSide($ctrl.myWebsite.accessToken)" class="link-button">{{$ctrl.myWebsite.accessToken}}</button>
+    </div>
+    <div class="notification-message"  ng-if="$ctrl.myWebsite.sourceID==1" class="notification-message">
+        <span>Token: {{$ctrl.myWebsite.accessToken}}</span>
     </div>
     <hr>
     <div ng-click=$ctrl.removeMy($ctrl.myWebsite.sourceID,$ctrl.myWebsite.accessToken) class="notification-remove-button">remove</div>

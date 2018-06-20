@@ -3,18 +3,32 @@
     {{info}}
     <div ng-switch-when=0 class="service-list">
 
-        <button name="twitterButton" class="service-button twitter-button" ng-click="ToTwitter()">
+        <div class="tooltip">
+        <button name="twitterButton" class="service-button " id="twitter-button" ng-click="ToTwitter()">
+            <span class="tooltiptext">Add Twitter account</span>
             <img>
         </button>
+        </div>
 
-        <button name="pwrButton" class="service-button pwr-button" ng-click="ToPWR()">
-            <img>
-        </button>
+        <div class="tooltip">
+            <button name="pwrButton" class="service-button " id="pwr-button" ng-click="ToPWR()">
+                <span class="tooltiptext">Add external website</span>
+                <img>
+            </button>
+        </div>
+
+        <div class="tooltip">
+            <button name="pwrButton" class="service-button" id="service-button" ng-click="ToServices()">
+                <span class="tooltiptext">Add custom service</span>
+                <img>
+            </button>
+        </div>
 
     </div>
 
     <twitter-window ng-switch-when=1 ></twitter-window>
     <website-window ng-switch-when=2 ></website-window>
+    <service-window ng-switch-when=3 ></service-window>
 
     <div ng-if=" currentState!=0 ">
         <br>

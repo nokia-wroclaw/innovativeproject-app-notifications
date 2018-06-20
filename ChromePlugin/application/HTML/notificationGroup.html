@@ -2,13 +2,13 @@
 
     <h4 ng-click=$ctrl.requestFocus($ctrl) class="notification-group">
         From: <span class="info-data" ng-if="$ctrl.group.sourceID==15">Twitter</span><span class="info-data" ng-if="$ctrl.group.sourceID==10">Websites</span>,
-        <br/> <span class="info-data">{{$ctrl.group.count}}</span> notifications
+        <br/> <span class="info-data" ng-init=loadCount($ctrl.group.count) >{{myCount}}</span> notifications
     </h4>
 
     <hr>
 
     <div>
-        <notifications-list ng-if="$ctrl.focused" type="'notifications'" from="$ctrl.group.sourceID" >
+        <notifications-list ng-if="$ctrl.focused" type="'notifications'" my-group="this" from="$ctrl.group.sourceID" >
 
         </notifications-list>
     </div>

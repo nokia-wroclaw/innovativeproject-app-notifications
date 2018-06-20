@@ -18,6 +18,10 @@
     100% {max-height: 30px;}
 }
 
+body{
+    font-family: Arial;
+}
+
 .info-text{
     margin-left: 4px;
     float: left;
@@ -244,6 +248,14 @@
     overflow-x: hidden;
     overflow-y: scroll;
 }
+#account-options{
+     padding: 10px;
+     width: 500px;
+     max-height: 340px;
+     overflow-x: hidden;
+     overflow-y: scroll;
+ }
+
 ::-webkit-scrollbar{
     width: 10px;
 }
@@ -421,14 +433,24 @@ hr{
     height: 60px;
 }
 
-.twitter-button img{
+#twitter-button img{
     content: url("../../images/Twitter.png");
 }
 
-.pwr-button img{
-    content: url("../../images/PWR.png");
+#pwr-button img{
+    content: url("../../images/WWW.png");
 }
 
+#service-button img{
+    content: url("../../images/Services.png");
+}
+
+.important-element{
+    background-color: var(--subtleRed) !important;
+}
+.important-element:hover{
+    background-color: var(--lightRed) !important;
+}
 
 .login-button{
     padding: 8px;
@@ -504,6 +526,19 @@ button:active + .dropdown-content{
     margin-right: auto;
 }
 
+.aggregation-options-button{
+    font-size: 16px;
+    background-color: var(--subtleGrean);
+    -webkit-text-fill-color: var(--color-back1);
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 8px;
+    border-width: 0;
+}
+.aggregation-options-button:hover{
+    background-color: var(--lightGrean);
+}
+
 .aggregation-button{
     font-size: 16px;
     background-color: var(--color-back3);
@@ -525,4 +560,26 @@ button:active + .dropdown-content{
     margin-right: 5px;
     width: 75px;
     -webkit-text-fill-color: var(--subtleRed);
+}
+
+.tooltip {
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 140px;
+    background-color: rgba(80, 80, 80, 0.75);
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+
+    /* Position the tooltip text - see examples below! */
+    margin-top: -30px;
+    position: absolute;
+    z-index: 1;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
 }

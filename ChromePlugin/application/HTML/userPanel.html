@@ -10,11 +10,13 @@
                 <br/>
                 <div>
 
-                    <p><input ng-if="curUserPanel!=1" name="externalServices" class="menu-button" type="button" ng-click="moveToAddExtension()" value="add external service"></p>
+                    <p><input ng-if="curUserPanel!=1" name="externalServices" class="menu-button" type="button" ng-click="moveToAddExtension()" value="Add service"></p>
 
-                    <p><input ng-if="curUserPanel!=2" name="servicesList" class="menu-button" type="button" ng-click="moveToExtensionsList()" value="services list"></p>
+                    <p><input ng-if="curUserPanel!=2" name="servicesList" class="menu-button" type="button" ng-click="moveToExtensionsList()" value="Services list"></p>
 
-                    <p><input ng-if="curUserPanel!=0" name="notfList" class="menu-button" type="button" ng-click="moveToList()" value="notifications list"></p>
+                    <p><input ng-if="curUserPanel!=0" name="notfList" class="menu-button" type="button" ng-click="moveToList()" value="Notifications list"></p>
+
+                    <p><input ng-if="curUserPanel!=3" name="accountOption" class="menu-button" type="button" ng-click="moveToAccount()" value="My account"></p>
 
                 </div>
                 <br/>
@@ -54,7 +56,7 @@
 
             <div ng-switch-when=2 class="div-background user-pane-list" style="display: block">
 
-                <h1 style="cursor: default"> Your Services </h1>
+                <h1 style="cursor: default"> My Services </h1>
                 <hr>
 
                 <div  id="websites-array" >
@@ -64,6 +66,17 @@
                 <hr>
             </div>
 
+            <div ng-switch-when=3 class="div-background user-pane-list" style="display: block">
+
+                <h1 style="cursor: default"> My Account </h1>
+                <hr>
+
+                <div  id="account-options" >
+                    <my-account></my-account>
+                </div>
+
+                <hr>
+            </div>
 
         </td>
     </tr>
