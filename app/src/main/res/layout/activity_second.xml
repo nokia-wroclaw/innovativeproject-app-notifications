@@ -13,11 +13,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <ListView
+        <com.baoyz.swipemenulistview.SwipeMenuListView
             android:id="@+id/myListView"
             android:layout_width="fill_parent"
             android:layout_alignParentTop="@id/fragment_container"
-            android:layout_height="wrap_content"></ListView>
+            android:layout_height="wrap_content"></com.baoyz.swipemenulistview.SwipeMenuListView>
         <!--<android.support.v7.widget.Toolbar-->
             <!--android:id="@+id/toolbar"-->
             <!--android:layout_width="match_parent"-->

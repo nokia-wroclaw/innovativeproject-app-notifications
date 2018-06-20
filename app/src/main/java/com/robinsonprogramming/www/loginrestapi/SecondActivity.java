@@ -25,11 +25,13 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mati.pojo.ChangeFlagBody;
 import com.example.mati.pojo.MyWebService;
 import com.example.mati.pojo.Notification;
 import com.example.mati.pojo.Notifications;
@@ -77,7 +79,7 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
         final Bundle bundle;
         bundle = getIntent().getExtras();
         bundle1 = bundle;
-        String token = bundle.getString("token");
+        final String token = bundle.getString("token");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
 
@@ -127,12 +129,36 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
             public void onItemClick(AdapterView<?> arq0, View arg1, int position, long arg3) {
                 ImageView thumb_image;
                 thumb_image=(ImageView)arg1.findViewById(R.id.status1);
+               // ImageButton del_image;
+             //   del_image=(ImageView)arg1.findViewById(R.id.removeButton);
+              //  del_image=(ImageButton)arg1.findViewById(R.id.removeButton);
+                  //  del_image.setVisibility(View.VISIBLE);
+                Button del_image = (Button)arg1.findViewById(R.id.button2);
 
-                if(list.get(position).isFlag()==true) {
-                    list.get(position).setFlag(false);
-                    
+
+                del_image.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        
+                    }
+                });
+
+                if(list.get(position).isFlag()==false) {
+                    list.get(position).setFlag(true);
+                    myWebService.setFlag(new ChangeFlagBody(token,list.get(position).getNotificationID().toString()), new Callback<String>() {
+                        @Override
+                        public void success(String s, Response response) {
+
+                        }
+
+                        @Override
+                        public void failure(RetrofitError error) {
+
+                        }
+                    });
                     thumb_image.setVisibility(View.INVISIBLE);
                 }
+
                 TextView timestamp = (TextView) arg1.findViewById(R.id.timestamp);
                 if(timestamp.getVisibility()==View.GONE)
                     timestamp.setVisibility(View.VISIBLE);
@@ -148,7 +174,7 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
             }
 
         });
-      //  aa.notifyDataSetChanged();
+       aa.notifyDataSetChanged();
 
        // myListView.deferNotifyDataSetChanged();
        // aa.notifyDataSetChanged();
@@ -305,24 +331,31 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
         }
     }
 
+
     class ViewHolder{
         public TextView topic=null;
         public TextView message=null;
         public TextView timestamp=null;
         public TextView status=null;
         ImageView thumb_image;
+      //  ImageButton del_image;
+        Button del_image;
+
         ViewHolder(View row)
         {
-
+           // del_image=(ImageButton)row.findViewById(R.id.removeButton);
+            del_image=(Button)row.findViewById(R.id.button2);
            thumb_image=(ImageView)row.findViewById(R.id.status1);
             //status=(TextView)row.findViewById(R.id.status);
             topic=(TextView)row.findViewById(R.id.topic);
+
             message=(TextView)row.findViewById(R.id.message);
             timestamp=(TextView)row.findViewById(R.id.timestamp);
         }
         void populateFrom(Notification n)
         {
-            if(n.isFlag()==false)
+           // del_image.setVisibility(View.VISIBLE);
+            if(n.isFlag()==true)
                 thumb_image.setVisibility(View.GONE);
 
             topic.setText(n.getTopic());
