@@ -25,6 +25,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -63,6 +64,7 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
     //int offset = 0;
     View footerView;
     private int pageCount = 0;
+    Notification notif;
 
     FancyAdapter aa=null;
    // static ArrayList<String> resultRow;
@@ -121,9 +123,16 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
 
         });
         myListView.setOnItemClickListener(new android.widget.AdapterView.OnItemClickListener() {
+            @Override
             public void onItemClick(AdapterView<?> arq0, View arg1, int position, long arg3) {
+                ImageView thumb_image;
+                thumb_image=(ImageView)arg1.findViewById(R.id.status1);
 
-
+                if(list.get(position).isFlag()==true) {
+                    list.get(position).setFlag(false);
+                    
+                    thumb_image.setVisibility(View.INVISIBLE);
+                }
                 TextView timestamp = (TextView) arg1.findViewById(R.id.timestamp);
                 if(timestamp.getVisibility()==View.GONE)
                     timestamp.setVisibility(View.VISIBLE);
@@ -278,6 +287,7 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
                 LayoutInflater inflater = getLayoutInflater();
                 convertView=inflater.inflate(R.layout.row,null);
                 holder = new ViewHolder(convertView);
+
                 convertView.setTag(holder);
               //  aa.notifyDataSetChanged();
 
@@ -299,14 +309,22 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
         public TextView topic=null;
         public TextView message=null;
         public TextView timestamp=null;
+        public TextView status=null;
+        ImageView thumb_image;
         ViewHolder(View row)
         {
+
+           thumb_image=(ImageView)row.findViewById(R.id.status1);
+            //status=(TextView)row.findViewById(R.id.status);
             topic=(TextView)row.findViewById(R.id.topic);
             message=(TextView)row.findViewById(R.id.message);
             timestamp=(TextView)row.findViewById(R.id.timestamp);
         }
         void populateFrom(Notification n)
         {
+            if(n.isFlag()==false)
+                thumb_image.setVisibility(View.GONE);
+
             topic.setText(n.getTopic());
             message.setText(n.getMessage());
             message.setVisibility(View.GONE);
