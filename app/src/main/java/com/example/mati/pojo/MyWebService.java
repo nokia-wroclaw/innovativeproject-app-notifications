@@ -1,7 +1,14 @@
 package com.example.mati.pojo;
 
+import android.telecom.Call;
+
+import org.json.JSONObject;
+
 import retrofit.Callback;
+import retrofit.ResponseCallback;
 import retrofit.http.Body;
+import retrofit.http.Field;
+import retrofit.http.FormUrlEncoded;
 import retrofit.http.GET;
 import retrofit.http.Headers;
 import retrofit.http.POST;
@@ -18,5 +25,15 @@ public interface MyWebService
     @POST("/register/")
     void registryNewUser(@Body User user, Callback<String> pResponse);
 
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    @POST("/login/")
+    void loginToSystem(@Body User user, Callback<String> pResponse);
 
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    @POST("/user/password/")
+    void changeUserPassword(@Body ChangePasswordBody changePasswordBody, Callback<String> response);
+
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    @POST("/setFlag/")
+    Call setFlag(@Body Notification notification);
 }

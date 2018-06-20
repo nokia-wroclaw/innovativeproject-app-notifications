@@ -67,14 +67,14 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
     FancyAdapter aa=null;
    // static ArrayList<String> resultRow;
     static List<String> resultRow;
+    private Bundle bundle1;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-
-
-
+    protected void onCreate(Bundle savedInstanceState)
+    {
         final Bundle bundle;
         bundle = getIntent().getExtras();
+        bundle1 = bundle;
         String token = bundle.getString("token");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
@@ -183,10 +183,9 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
 //                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
 //                        new ChatFragment()).commit();
 //                break;
-//            case R.id.nav_account:
-//                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-//                        new ProfileFragment()).commit();
-//                break;
+            case R.id.nav_account:
+                goToMyAccount();
+                break;
 //            case R.id.settings:
 //                Toast.makeText(this, "Share", Toast.LENGTH_SHORT).show();
 //                break;
@@ -236,6 +235,12 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
         };
     }
 */
+   private void goToMyAccount()
+   {
+       Intent intent = new Intent(this, MyAccount.class);
+       intent.putExtras(bundle1);
+       startActivity(intent);
+   }
 
     private void getDataFromUrl(Bundle bundle,int offset){
         myWebService = retrofit.create(MyWebService.class);
@@ -263,9 +268,6 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
             Log.d(CLASS_TAG, e.toString());
         }
     }
- /*   private void getDataFromUrl(MyWebService myWebServiceyWebService) {
-        new LoadCountriesFromUrlTask(this, url).execute();
-    }*/
     class FancyAdapter extends ArrayAdapter<Notification>{
         FancyAdapter(){
             super(SecondActivity.this,R.layout.row,list);
@@ -293,8 +295,6 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
         }
     }
 
-
-
     class ViewHolder{
         public TextView topic=null;
         public TextView message=null;
@@ -314,9 +314,5 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
             timestamp.setVisibility(View.GONE);
         }
     }
-
-
-
-
 
 }
