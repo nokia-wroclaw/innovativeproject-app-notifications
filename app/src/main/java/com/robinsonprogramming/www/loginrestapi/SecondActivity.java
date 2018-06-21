@@ -221,9 +221,9 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
             case R.id.nav_account:
                 goToMyAccount();
                 break;
-//            case R.id.settings:
-//                Toast.makeText(this, "Share", Toast.LENGTH_SHORT).show();
-//                break;
+            case R.id.settings:
+                goToAddService();
+                break;
             case R.id.nav_logout:
                 SharedPreferences sp = getSharedPreferences("MYKEY",0);
                 SharedPreferences.Editor editor = sp.edit();
@@ -277,6 +277,13 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
        startActivity(intent);
    }
 
+   private void goToAddService()
+   {
+       Intent intent = new Intent(this, AddService.class);
+       intent.putExtras(bundle1);
+       startActivity(intent);
+   }
+
     private void getDataFromUrl(Bundle bundle,int offset){
         myWebService = retrofit.create(MyWebService.class);
         try {
@@ -303,8 +310,10 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
             Log.d(CLASS_TAG, e.toString());
         }
     }
-    class FancyAdapter extends ArrayAdapter<Notification>{
-        FancyAdapter(){
+    class FancyAdapter extends ArrayAdapter<Notification>
+    {
+        FancyAdapter()
+        {
             super(SecondActivity.this,R.layout.row,list);
         }
 

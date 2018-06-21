@@ -1,19 +1,16 @@
 package com.example.mati.pojo;
 
-import android.telecom.Call;
+import com.google.gson.Gson;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.List;
+
 import retrofit.Callback;
-import retrofit.ResponseCallback;
 import retrofit.http.Body;
-import retrofit.http.Field;
-import retrofit.http.FormUrlEncoded;
 import retrofit.http.GET;
 import retrofit.http.Headers;
 import retrofit.http.POST;
-import retrofit.http.Path;
 import retrofit.http.Query;
 
 public interface MyWebService
@@ -39,6 +36,18 @@ public interface MyWebService
     void setFlag(@Body ChangeFlagBody changeFlagBody, Callback<JSONObject> response);
 
     @Headers({"Content-Type: application/json","Accept: application/json"})
-    @POST("/notf/remove")
+    @POST("/notf/remove/")
     void removeNotification(@Body ChangeFlagBody changeFlagBody, Callback<JSONObject> response);
+
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    @POST("/accounts/")
+    void getUserAccount(@Body ChangeFlagBody changeFlagBody, Callback<JSONObject> response);
+
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    @POST("/new/twitter/confirm/")
+    void addTwitterAccount(@Body AddServiceBody addServiceBody, Callback<JSONObject> response);
+
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    @POST("/new/website/")
+    void addWebsiteToWatch(@Body AddWebsiteBody addWebsiteBody, Callback<JSONObject> response);
 }
