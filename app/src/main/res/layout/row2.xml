@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#2d2d2d">
+
+
+    <TextView
+        android:id="@+id/service_name"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textColor="#dcdcdc"
+        android:textColorHint="#dcdcdc"
+        android:textSize="25sp"
+        android:drawablePadding="2dp"
+
+
+        />
+
+    <!--<TextView-->
+        <!--android:id="@+id/aggregation_type"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:textColor="#dcdcdc"-->
+        <!--android:textColorHint="#dcdcdc"-->
+        <!--android:layout_below="@id/service_name"-->
+        <!--android:textSize="25sp"-->
+        <!--android:drawablePadding="2dp"-->
+
+
+        <!--/>-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/aggregation_by"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:textColor="#dcdcdc"-->
+        <!--android:textColorHint="#dcdcdc"-->
+        <!--android:layout_below="@id/aggregation_type"-->
+
+        <!--android:textSize="25sp"-->
+        <!--android:drawablePadding="2dp"-->
+
+
+        <!--/>-->
+    <!--<TextView-->
+        <!--android:id="@+id/aggregation_interval"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:textColor="#dcdcdc"-->
+        <!--android:textColorHint="#dcdcdc"-->
+        <!--android:layout_below="@id/aggregation_by"-->
+
+        <!--android:textSize="25sp"-->
+        <!--android:drawablePadding="2dp"-->
+
+
+        <!--/>-->
+    <!--<TextView-->
+        <!--android:id="@+id/aggregation_substring"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:textColor="#dcdcdc"-->
+        <!--android:layout_below="@id/aggregation_interval"-->
+
+        <!--android:textColorHint="#dcdcdc"-->
+        <!--android:textSize="25sp"-->
+        <!--android:drawablePadding="2dp"-->
+
+
+        <!--/>-->
+
+
+</RelativeLayout>

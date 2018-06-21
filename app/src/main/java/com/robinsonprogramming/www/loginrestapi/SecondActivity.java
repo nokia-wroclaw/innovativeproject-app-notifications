@@ -36,6 +36,8 @@ import com.example.mati.pojo.MyWebService;
 import com.example.mati.pojo.Notification;
 import com.example.mati.pojo.Notifications;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -126,7 +128,7 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
         });
         myListView.setOnItemClickListener(new android.widget.AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> arq0, View arg1, int position, long arg3) {
+            public void onItemClick(AdapterView<?> arq0, View arg1, final int position, long arg3) {
                 ImageView thumb_image;
                 thumb_image=(ImageView)arg1.findViewById(R.id.status1);
                // ImageButton del_image;
@@ -139,9 +141,24 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
                 del_image.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        
+                        myWebService.removeNotification(new ChangeFlagBody(token, list.get(position).getNotificationID().toString()), new Callback<JSONObject>() {
+                            @Override
+                            public void success(JSONObject jsonObject, Response response) {
+                                Toast.makeText(getApplicationContext(), "removed succesfully", Toast.LENGTH_SHORT).show();
+                                aa.remove(aa.getItem(position));
+
+                            }
+
+                            @Override
+                            public void failure(RetrofitError error) {
+                                Toast.makeText(getApplicationContext(), "NI CHUJA", Toast.LENGTH_SHORT).show();
+
+
+                            }
+                        });
                     }
                 });
+
 
                 if(list.get(position).isFlag()==false) {
                     list.get(position).setFlag(true);
@@ -159,6 +176,10 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
                     thumb_image.setVisibility(View.INVISIBLE);
                 }
 
+                if(del_image.getVisibility()==View.GONE)
+                    del_image.setVisibility(View.VISIBLE);
+                else
+                    del_image.setVisibility(View.GONE);
                 TextView timestamp = (TextView) arg1.findViewById(R.id.timestamp);
                 if(timestamp.getVisibility()==View.GONE)
                     timestamp.setVisibility(View.VISIBLE);
@@ -174,7 +195,9 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
             }
 
         });
-       aa.notifyDataSetChanged();
+        myListView.invalidateViews();
+
+        aa.notifyDataSetChanged();
 
        // myListView.deferNotifyDataSetChanged();
        // aa.notifyDataSetChanged();
@@ -214,10 +237,9 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
                 finish();
                 startActivity(getIntent());
                 break;
-//            case R.id.nav_services:
-//                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-//                        new ChatFragment()).commit();
-//                break;
+            case R.id.nav_services:
+                goToThirdActivity();
+                break;
             case R.id.nav_account:
                 goToMyAccount();
                 break;
@@ -276,6 +298,12 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
        intent.putExtras(bundle1);
        startActivity(intent);
    }
+    private void goToThirdActivity()
+    {
+        Intent intent = new Intent(this, ThirdActivity.class);
+        intent.putExtras(bundle1);
+        startActivity(intent);
+    }
 
    private void goToAddService()
    {
@@ -366,7 +394,7 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
            // del_image.setVisibility(View.VISIBLE);
             if(n.isFlag()==true)
                 thumb_image.setVisibility(View.GONE);
-
+            del_image.setVisibility(View.GONE);
             topic.setText(n.getTopic());
             message.setText(n.getMessage());
             message.setVisibility(View.GONE);

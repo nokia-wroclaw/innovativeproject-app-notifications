@@ -256,11 +256,11 @@ public class ThirdActivity extends AppCompatActivity  implements NavigationView.
         {
             // del_image=(ImageButton)row.findViewById(R.id.removeButton);
             servicename=(TextView)row.findViewById(R.id.service_name);
-            AggregationType=(TextView)row.findViewById(R.id.aggregation_type);
-            AggregateBy=(TextView)row.findViewById(R.id.aggregation_by);
-            AggregateInterval=(TextView)row.findViewById(R.id.aggregation_interval);
-            AggregateSubstring=(TextView)row.findViewById(R.id.aggregation_substring);
-
+//            AggregationType=(TextView)row.findViewById(R.id.aggregation_type);
+//            AggregateBy=(TextView)row.findViewById(R.id.aggregation_by);
+//            AggregateInterval=(TextView)row.findViewById(R.id.aggregation_interval);
+//            AggregateSubstring=(TextView)row.findViewById(R.id.aggregation_substring);
+//
 
 
         }
@@ -272,10 +272,10 @@ public class ThirdActivity extends AppCompatActivity  implements NavigationView.
                 servicename.setText("Custom Website");
             if(s.getSourceID()==15)
                 servicename.setText("Twitter");
-            AggregationType.setText(s.getAggregationtype());
-            AggregateBy.setText(s.getAggregation().toString());
-            AggregateInterval.setText(s.getAggregationdate().toString());
-            AggregateSubstring.setText(s.getAggregationkey().toString());
+//            AggregationType.setText(s.getAggregationtype());
+//            AggregateBy.setText(s.getAggregation().toString());
+//            AggregateInterval.setText(s.getAggregationdate().toString());
+//            AggregateSubstring.setText(s.getAggregationkey().toString());
 
         }
     }

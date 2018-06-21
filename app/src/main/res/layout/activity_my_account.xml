@@ -19,10 +19,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
+            android:textColorHint="#dcdcdc"
+
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentStart="true"
-
             android:ems="10"
             android:inputType="textPassword"
             android:hint="@string/Password"
@@ -35,11 +36,11 @@
             android:layout_below="@+id/editText1myAccount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColorHint="#dcdcdc"
             android:layout_alignParentEnd="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentStart="true"
-
             android:ems="10"
             android:inputType="textPassword"
             android:hint="New Password"
@@ -50,6 +51,7 @@
             android:id="@+id/editText3myAccount"
             android:layout_below="@+id/editText2myAccount"
             android:layout_width="match_parent"
+            android:textColorHint="#dcdcdc"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentLeft="true"

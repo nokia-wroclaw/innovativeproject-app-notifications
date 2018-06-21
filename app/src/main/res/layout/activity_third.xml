@@ -7,26 +7,31 @@
     android:layout_height="fill_parent"
     tools:context="com.robinsonprogramming.www.loginrestapi.SecondActivity"
     android:background="#2d2d2d"
-    android:id="@+id/drawerLayout">
+    android:id="@+id/drawerLayout1">
+
+    <ListView
+        android:id="@+id/myListView11"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
         <com.baoyz.swipemenulistview.SwipeMenuListView
-            android:id="@+id/myListView"
+            android:id="@+id/myListView1"
             android:layout_width="fill_parent"
             android:layout_alignParentTop="@id/fragment_container"
             android:layout_height="fill_parent"></com.baoyz.swipemenulistview.SwipeMenuListView>
         <!--<android.support.v7.widget.Toolbar-->
-            <!--android:id="@+id/toolbar"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="?attr/actionBarSize"-->
-            <!--android:background="@color/colorPrimary"-->
-            <!--android:elevation="4dp"-->
+        <!--android:id="@+id/toolbar"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="?attr/actionBarSize"-->
+        <!--android:background="@color/colorPrimary"-->
+        <!--android:elevation="4dp"-->
 
-            <!--android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"-->
-            <!--app:popupTheme="@style/ThemeOverlay.AppCompat.Light">-->
+        <!--android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"-->
+        <!--app:popupTheme="@style/ThemeOverlay.AppCompat.Light">-->
 
         <!--</android.support.v7.widget.Toolbar>-->
         <FrameLayout
@@ -43,7 +48,7 @@
         android:textColorHint="#dcdcdc"
         android:textColor="#dcdcdc"
         app:menu="@menu/navigation_menu"
-        android:id="@+id/nav_view"
+        android:id="@+id/nav_view1"
         app:headerLayout="@layout/nav_header_main"
         android:layout_gravity="start">
     </android.support.design.widget.NavigationView>

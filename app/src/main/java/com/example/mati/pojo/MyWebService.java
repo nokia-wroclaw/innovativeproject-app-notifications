@@ -20,6 +20,10 @@ public interface MyWebService
     void getData(@Query("offset") int offset,@Query("token") String token, Callback<Notifications> pResponse);
 
     @Headers({"Content-Type: application/json","Accept: application/json"})
+    @POST("/accounts/")
+    void getUserAccount(@Body ChangeFlagBody changeFlagBody, Callback<Services> response);
+
+    @Headers({"Content-Type: application/json","Accept: application/json"})
     @POST("/register/")
     void registryNewUser(@Body User user, Callback<String> pResponse);
 
@@ -33,7 +37,7 @@ public interface MyWebService
 
     @Headers({"Content-Type: application/json","Accept: application/json"})
     @POST("/setFlag/")
-    void setFlag(@Body ChangeFlagBody changeFlagBody, Callback<JSONObject> response);
+    void setFlag(@Body ChangeFlagBody changeFlagBody, Callback<String> response);
 
     @Headers({"Content-Type: application/json","Accept: application/json"})
     @POST("/notf/remove/")

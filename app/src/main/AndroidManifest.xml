@@ -30,6 +30,9 @@
             android:name=".SecondActivity"
             android:configChanges="orientation|screenSize|keyboardHidden" />
         <activity
+            android:name=".ThirdActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
+        <activity
             android:name=".RegisterActivity"
             android:configChanges="orientation|screenSize|keyboardHidden" />
         <activity android:name=".MyAccount" />
