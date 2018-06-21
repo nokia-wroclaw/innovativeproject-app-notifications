@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.robinsonprogramming.www.loginrestapi.AddServiceWebsite">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="56dp"
+        android:paddingLeft="24dp"
+        android:background="#2d2d2d"
+        android:paddingRight="24dp">
+
+
+        <EditText
+            android:id="@+id/editTextAddWebsite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:textColorHint="#dcdcdc"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentStart="true"
+            android:ems="10"
+            android:inputType="textPassword"
+            android:hint="@string/website_url"
+            tools:layout_editor_absoluteX="84dp"
+            tools:layout_editor_absoluteY="342dp" />
+
+
+        <Button
+            android:id="@+id/button2AddWebsite"
+            android:layout_below="@+id/editTextAddServices"
+            android:layout_width="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentStart="true"
+            android:layout_height="wrap_content"
+            android:text="Add"
+            android:background="@drawable/button"
+            tools:layout_editor_absoluteX="148dp"
+            tools:layout_editor_absoluteY="406dp" />
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

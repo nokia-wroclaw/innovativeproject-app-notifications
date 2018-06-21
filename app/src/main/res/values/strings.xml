@@ -15,4 +15,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="retype_new_password">Retype new Password</string>
     <string name="change_password">Change password</string>
+    <string name="access_pin">Access Pin</string>
+    <string name="website_url">Website URL</string>
 </resources>
