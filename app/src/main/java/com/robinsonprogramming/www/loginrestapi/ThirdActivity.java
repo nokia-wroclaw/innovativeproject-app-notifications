@@ -185,12 +185,6 @@ public class ThirdActivity extends AppCompatActivity  implements NavigationView.
                         }
                         aa.notifyDataSetChanged();
 
-                        for (int i=0;i<jsonArray.length();i++)
-
-                            System.out.println(jsonArray.getJSONObject(i).getString("SourceID"));
-
-
-
 
                     } catch (IOException e) {
                         e.printStackTrace();

@@ -10,6 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingTop="56dp"
+        android:textColor="#dcdcdc"
+
         android:paddingLeft="24dp"
         android:background="#2d2d2d"
         android:paddingRight="24dp">
@@ -33,12 +35,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
+            android:textColor="#dcdcdc"
+
             android:textColorHint="#dcdcdc"
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentStart="true"
             android:ems="10"
-            android:inputType="textPassword"
+            android:inputType="text"
             android:hint="@string/access_pin"
             tools:layout_editor_absoluteX="84dp"
             tools:layout_editor_absoluteY="342dp" />

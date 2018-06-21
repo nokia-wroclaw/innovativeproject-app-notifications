@@ -46,7 +46,7 @@ public class AddServiceSecond extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://api.twitter.com/oauth/authenticate?oauth_token=gf48mAAAAAAA5MBTAAABZB9sB7s"));
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://api.twitter.com/oauth/authenticate?oauth_token=6_v8rgAAAAAA5MBTAAABZCCHl6c"));
                 startActivity(browserIntent);
             }
         });

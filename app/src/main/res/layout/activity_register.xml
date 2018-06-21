@@ -24,6 +24,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentStart="true"
+        android:textColor="#dcdcdc"
 
         android:ems="10"
         android:inputType="textPersonName"
@@ -41,6 +42,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentStart="true"
+        android:textColor="#dcdcdc"
 
         android:ems="10"
         android:inputType="textPersonName"
@@ -58,6 +60,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentStart="true"
+        android:textColor="#dcdcdc"
 
         android:ems="10"
         android:inputType="textPersonName"
@@ -75,6 +78,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentStart="true"
+        android:textColor="#dcdcdc"
 
         android:ems="10"
         android:inputType="textPassword"
@@ -90,6 +94,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:textColorHint="#dcdcdc"
+        android:textColor="#dcdcdc"
+
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentStart="true"

@@ -44,46 +44,6 @@ public class AddServiceWebsite extends AppCompatActivity {
         button = (Button)findViewById(R.id.button2AddWebsite);
         editText = (EditText)findViewById(R.id.editTextAddWebsite);
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                myWebService.getUserAccount(new ChangeFlagBody("1", " "), new Callback<JSONObject>() {
-                    @Override
-                    public void success(JSONObject jsonObject, Response response) {
-                        BufferedReader in = null;
-                        try {
-                            in = new BufferedReader(new InputStreamReader(response.getBody().in()));
-
-                        String inputLine;
-                        while ((inputLine = in.readLine()) != null)
-                        {
-                            response1.append(inputLine);
-                        }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                            //response1.append(response.getBody().in());
-                        System.out.println(response1);
-                    }
-
-                    @Override
-                    public void failure(RetrofitError error) {
-
-                    }
-                });
-                /*myWebService.addWebsiteToWatch(new AddWebsiteBody(bundle.getString("token"), editText.getText().toString()), new Callback<JSONObject>() {
-                    @Override
-                    public void success(JSONObject jsonObject, Response response)
-                    {
-                        Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
-                    }
-                    @Override
-                    public void failure(RetrofitError error)
-                    {
-                        Toast.makeText(getApplicationContext(), "Fail", Toast.LENGTH_LONG).show();
-                    }
-                });*/
-            }
-        });
+       // button.setOnClickListener();
     }
 }

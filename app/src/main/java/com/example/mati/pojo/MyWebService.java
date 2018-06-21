@@ -43,9 +43,9 @@ public interface MyWebService
     @POST("/notf/remove/")
     void removeNotification(@Body ChangeFlagBody changeFlagBody, Callback<JSONObject> response);
 
-    @Headers({"Content-Type: application/json","Accept: application/json"})
-    @POST("/accounts/")
-    void getUserAccount(@Body ChangeFlagBody changeFlagBody, Callback<JSONObject> response);
+//    @Headers({"Content-Type: application/json","Accept: application/json"})
+//    @POST("/accounts/")
+//    void getUserAccount(@Body ChangeFlagBody changeFlagBody, Callback<JSONObject> response);
 
     @Headers({"Content-Type: application/json","Accept: application/json"})
     @POST("/new/twitter/confirm/")

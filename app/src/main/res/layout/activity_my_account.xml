@@ -11,6 +11,10 @@
         android:layout_height="match_parent"
         android:paddingTop="56dp"
         android:paddingLeft="24dp"
+        android:textColor="#dcdcdc"
+
+        android:textColorHint="#dcdcdc"
+
         android:background="#2d2d2d"
         android:paddingRight="24dp">
 
@@ -27,6 +31,8 @@
             android:ems="10"
             android:inputType="textPassword"
             android:hint="@string/Password"
+            android:textColor="#dcdcdc"
+
             android:visibility="visible"
             tools:layout_editor_absoluteX="84dp"
             tools:layout_editor_absoluteY="275dp" />
@@ -42,6 +48,8 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentStart="true"
             android:ems="10"
+            android:textColor="#dcdcdc"
+
             android:inputType="textPassword"
             android:hint="New Password"
             tools:layout_editor_absoluteX="84dp"
@@ -57,6 +65,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentStart="true"
+            android:textColor="#dcdcdc"
 
             android:ems="10"
             android:inputType="textPassword"
@@ -74,6 +83,7 @@
             android:layout_alignParentStart="true"
             android:layout_height="wrap_content"
             android:text="@string/change_password"
+
             android:background="@drawable/button"
             tools:layout_editor_absoluteX="148dp"
             tools:layout_editor_absoluteY="406dp" />
