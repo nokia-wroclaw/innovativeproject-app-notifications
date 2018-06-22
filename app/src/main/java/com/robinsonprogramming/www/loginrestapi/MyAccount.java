@@ -1,5 +1,9 @@
 package com.robinsonprogramming.www.loginrestapi;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -27,7 +31,11 @@ public class MyAccount extends AppCompatActivity
     private EditText editText_newPassword;
     private EditText editText_retype_newPassword;
     private Button button_change_password;
+    private Button button_remove_account;
+
     RestAdapter retrofit;
+    private Bundle bundle1;
+
     MyWebService myWebService;
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -40,6 +48,7 @@ public class MyAccount extends AppCompatActivity
         editText_newPassword = (EditText)findViewById(R.id.editText2myAccount);
         editText_retype_newPassword = (EditText)findViewById(R.id.editText3myAccount);
         button_change_password = (Button)findViewById(R.id.buttonMyAccount);
+        button_remove_account=(Button)findViewById(R.id.buttonRemoveAccount);
         retrofit = new RestAdapter.Builder()
                 .setEndpoint("http://35.204.202.104:8080/api/v1.0/")
                 .setLogLevel(RestAdapter.LogLevel.FULL)
@@ -71,5 +80,38 @@ public class MyAccount extends AppCompatActivity
             }
         });
 
+        button_remove_account.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+
+
+                AlertDialog.Builder theDialog = new AlertDialog.Builder(MyAccount.this);
+
+                theDialog.setMessage("Are You sure")
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                SharedPreferences sp = getSharedPreferences("MYKEY",0);
+                                SharedPreferences.Editor editor = sp.edit();
+                                editor.putString("username" , "username");
+                                editor.putString("password" , "password");
+                                goToMainActivity();
+                            }
+                        })
+                        .setNegativeButton("Cancel",null);
+
+                AlertDialog alert = theDialog.create();
+                alert.show();
+
+            }
+        });
+
+    }
+
+    private void goToMainActivity()
+    {
+        Intent intent = new Intent(this, MainActivity.class);
+
+        startActivity(intent);
     }
 }
