@@ -25,6 +25,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -59,14 +60,16 @@ import retrofit.client.Response;
 
 import static android.widget.AbsListView.OnScrollListener.SCROLL_STATE_IDLE;
 
-public class ThirdActivity extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener {
+public class ThirdActivity extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemSelectedListener {
 
     private static final String CLASS_TAG = "ThirdActivity";
     JSONObject myobj;
-    Spinner spinner;
     ArrayList<Service> list = new ArrayList<Service>();
     List<String> servicename;
     private DrawerLayout mDrawerLayout;
+    ArrayAdapter<String> adapter;
+    ArrayList<String> h = new ArrayList<>();
+
 
     MyWebService myWebService;
     RestAdapter retrofit;
@@ -86,6 +89,12 @@ public class ThirdActivity extends AppCompatActivity  implements NavigationView.
         final String token = bundle.getString("token");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_third);
+        Spinner spin = findViewById(R.id.aggregation_type1);
+        ArrayAdapter<CharSequence> adapt = ArrayAdapter.createFromResource(this,R.array.Aggregation_Type,android.R.layout.simple_spinner_item);
+        adapt.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spin.setAdapter(adapt);
+        spin.setOnItemSelectedListener(this);
+        spin.setVisibility(View.VISIBLE);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout1);
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout,R.string.open,R.string.close);
@@ -94,12 +103,51 @@ public class ThirdActivity extends AppCompatActivity  implements NavigationView.
         navigationView.setItemTextColor(ColorStateList.valueOf(Color.parseColor("#dcdcdc")));
         navigationView.setNavigationItemSelectedListener(this);
         getDataFromUrl(bundle);
-        ListView myListView = (ListView)findViewById(R.id.myListView11);
+        ListView myListView = (ListView)findViewById(R.id.myListView1);
         aa=new FancyAdapter();
         myListView.setAdapter(aa);
         mDrawerLayout.addDrawerListener(mToggle);
         mToggle.syncState();
 
+
+        myListView.setOnItemClickListener(new android.widget.AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> arq0, View arg1, final int position, long arg3) {
+
+               // TextView AggregationType=(TextView)arg1.findViewById(R.id.aggregation_type);
+                TextView AggregateBy=(TextView)arg1.findViewById(R.id.aggregation_by);
+                TextView AggregateInterval=(TextView)arg1.findViewById(R.id.aggregation_interval);
+                TextView AggregateSubstring=(TextView)arg1.findViewById(R.id.aggregation_substring);
+
+
+
+
+
+
+//                if(AggregationType.getVisibility()==View.GONE)
+//                    AggregationType.setVisibility(View.VISIBLE);
+//                else
+//                    AggregationType.setVisibility(View.GONE);
+
+                if(AggregateBy.getVisibility()==View.GONE)
+                    AggregateBy.setVisibility(View.VISIBLE);
+                else
+                    AggregateBy.setVisibility(View.GONE);
+
+                if(AggregateInterval.getVisibility()==View.GONE)
+                    AggregateInterval.setVisibility(View.VISIBLE);
+                else
+                    AggregateInterval.setVisibility(View.GONE);
+
+                if(AggregateSubstring.getVisibility()==View.GONE)
+                    AggregateSubstring.setVisibility(View.VISIBLE);
+                else
+                    AggregateSubstring.setVisibility(View.GONE);
+
+
+            }
+
+        });
         myListView.invalidateViews();
 
         aa.notifyDataSetChanged();
@@ -133,6 +181,7 @@ public class ThirdActivity extends AppCompatActivity  implements NavigationView.
                 SharedPreferences.Editor editor = sp.edit();
                 editor.putString("username" , "username");
                 editor.putString("password" , "password");
+
                 finish();
 
                 break;
@@ -175,9 +224,9 @@ public class ThirdActivity extends AppCompatActivity  implements NavigationView.
                         {
                             response1.append(inputLine);
                         }
-                       myobj= new JSONObject(String.valueOf(response1));
+                        myobj= new JSONObject(String.valueOf(response1));
                         JSONArray jsonArray = myobj.getJSONArray("accounts");
-                       // ObjectMapper mapper = new ObjectMapper(jsonArray,list);
+                        // ObjectMapper mapper = new ObjectMapper(jsonArray,list);
                         Gson gson = new Gson();
                         for(int i=0; i<jsonArray.length();i++) {
                             Service s = gson.fromJson(jsonArray.get(i).toString(),Service.class);
@@ -209,6 +258,18 @@ public class ThirdActivity extends AppCompatActivity  implements NavigationView.
         }
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        String txt = parent.getItemAtPosition(position).toString();
+        Toast.makeText(parent.getContext(),txt,Toast.LENGTH_SHORT).show();
+
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+    }
+
     class FancyAdapter extends ArrayAdapter<Service>{
         FancyAdapter(){
             super(ThirdActivity.this,R.layout.row2,list);
@@ -228,7 +289,7 @@ public class ThirdActivity extends AppCompatActivity  implements NavigationView.
             }
             else
             {
-                holder =(ThirdActivity.ViewHolder)convertView.getTag();
+                holder =(ViewHolder)convertView.getTag();
                 //  aa.notifyDataSetChanged();
 
             }
@@ -242,19 +303,22 @@ public class ThirdActivity extends AppCompatActivity  implements NavigationView.
         public TextView AggregateBy=null;
         public TextView AggregateInterval=null;
         public TextView AggregateSubstring=null;
+        String Interval = "";
+        String Substring = "";
 
         //  ImageButton del_image;
         Button del_image;
 
         ViewHolder(View row)
         {
+
             // del_image=(ImageButton)row.findViewById(R.id.removeButton);
             servicename=(TextView)row.findViewById(R.id.service_name);
-//            AggregationType=(TextView)row.findViewById(R.id.aggregation_type);
-//            AggregateBy=(TextView)row.findViewById(R.id.aggregation_by);
-//            AggregateInterval=(TextView)row.findViewById(R.id.aggregation_interval);
-//            AggregateSubstring=(TextView)row.findViewById(R.id.aggregation_substring);
-//
+          //  AggregationType=(TextView)row.findViewById(R.id.aggregation_type);
+            AggregateBy=(TextView)row.findViewById(R.id.aggregation_by);
+            AggregateInterval=(TextView)row.findViewById(R.id.aggregation_interval);
+            AggregateSubstring=(TextView)row.findViewById(R.id.aggregation_substring);
+
 
 
         }
@@ -262,15 +326,34 @@ public class ThirdActivity extends AppCompatActivity  implements NavigationView.
         {
             // del_image.setVisibility(View.VISIBLE);
 
-            if(s.getSourceID()==10)
+            if(s.getSourceID().equals(10))
                 servicename.setText("Custom Website");
-            if(s.getSourceID()==15)
+            if(s.getSourceID().equals(15))
                 servicename.setText("Twitter");
-//            AggregationType.setText(s.getAggregationtype());
-//            AggregateBy.setText(s.getAggregation().toString());
-//            AggregateInterval.setText(s.getAggregationdate().toString());
-//            AggregateSubstring.setText(s.getAggregationkey().toString());
-
+            if(!s.getSourceID().equals(10)&&!s.getSourceID().equals(15))
+                servicename.setText("Custom Service");
+          //  if(s.getAggregationtype().equals(0)) //none first last count
+//            AggregationType.setText("none");
+//            if(s.getAggregationtype().equals(1)) //none first last count
+//                AggregationType.setText("first");
+//            if(s.getAggregationtype().equals(2)) //none first last count
+//                AggregationType.setText("last");
+//            if(s.getAggregationtype().equals(3)) //none first last count
+//                AggregationType.setText("count");
+//            AggregationType.setVisibility(View.GONE);
+            if(s.getAggregation().equals(1))
+                AggregateBy.setText("Topic");
+            if(s.getAggregation().equals(2))
+                AggregateBy.setText("Message");
+            if(!s.getAggregation().equals(1)&&!s.getAggregation().equals(2))
+                AggregateBy.setText("Aggregate By");
+            AggregateBy.setVisibility(View.GONE);
+            Interval = s.getAggregationdate().toString();
+            Substring = s.getAggregationkey();
+            AggregateInterval.setText(Interval);
+            AggregateInterval.setVisibility(View.GONE);
+            AggregateSubstring.setText(Substring);
+            AggregateSubstring.setVisibility(View.GONE);
         }
     }
 
