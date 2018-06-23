@@ -43,6 +43,10 @@ public interface MyWebService
     @POST("/notf/remove/")
     void removeNotification(@Body ChangeFlagBody changeFlagBody, Callback<JSONObject> response);
 
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    @POST("/delete/user/")
+    void removeAccount(@Body RemoveAccountBody removeAccountBody, Callback<JSONObject> response);
+
 
     
 //    @Headers({"Content-Type: application/json","Accept: application/json"})

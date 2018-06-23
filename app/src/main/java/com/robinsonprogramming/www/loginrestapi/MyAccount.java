@@ -33,6 +33,7 @@ public class MyAccount extends AppCompatActivity
     private EditText editText_retype_newPassword;
     private Button button_change_password;
     private Button button_remove_account;
+    private String tocen="";
 
     RestAdapter retrofit;
     private Bundle bundle1;
@@ -85,37 +86,43 @@ public class MyAccount extends AppCompatActivity
 
             public void onClick(View v) {
 
+                if (!editText_password.getText().toString().equals(bundle.getString("password"))) {
+                    Toast.makeText(getApplicationContext(), "Bad Password", Toast.LENGTH_LONG).show();
 
-                AlertDialog.Builder theDialog = new AlertDialog.Builder(MyAccount.this);
+                    //tocen =bundle.getString("token");
+                    return;
+                } else {
 
-                theDialog.setMessage("Are You sure")
-                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                myWebService.removeAccount(new RemoveAccountBody(bundle.getString("token"), editText_password.getText().toString()), new Callback<JSONObject>() {
-                                    @Override
-                                    public void success(JSONObject s, Response response)
-                                    {
-                                        Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
-                                        SharedPreferences sp = getSharedPreferences("MYKEY",0);
-                                        SharedPreferences.Editor editor = sp.edit();
-                                        editor.putString("username" , "username");
-                                        editor.putString("password" , "password");
-                                        goToMainActivity();
-                                    }
-                                    @Override
-                                    public void failure(RetrofitError error)
-                                    {
-                                        Toast.makeText(getApplicationContext(), "Fail", Toast.LENGTH_LONG).show();
-                                    }
-                                });
+                    AlertDialog.Builder theDialog = new AlertDialog.Builder(MyAccount.this);
 
-                            }
-                        })
-                        .setNegativeButton("Cancel",null);
+                    theDialog.setMessage("Are You sure")
+                            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    myWebService.removeAccount(new RemoveAccountBody(bundle.getString("token"), editText_password.getText().toString()), new Callback<JSONObject>() {
+                                        @Override
+                                        public void success(JSONObject s, Response response) {
+                                            Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
+                                            SharedPreferences sp = getSharedPreferences("MYKEY", 0);
+                                            SharedPreferences.Editor editor = sp.edit();
+                                            editor.putString("username", "username");
+                                            editor.putString("password", "password");
+                                            goToMainActivity();
+                                        }
 
-                AlertDialog alert = theDialog.create();
-                alert.show();
+                                        @Override
+                                        public void failure(RetrofitError error) {
+                                            Toast.makeText(getApplicationContext(), "Fail", Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+
+                                }
+                            })
+                            .setNegativeButton("Cancel", null);
+
+                    AlertDialog alert = theDialog.create();
+                    alert.show();
+                }
 
             }
         });

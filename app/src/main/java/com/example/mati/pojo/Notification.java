@@ -5,7 +5,6 @@ import java.math.BigInteger;
 public class Notification
 {
     private BigInteger notificationID;
-    private Integer userID;
     private Integer sourceID;
     private boolean flag;
     private String topic;
@@ -24,15 +23,7 @@ public class Notification
         this.notificationID = bigInteger;
     }
 
-    public Integer getUserID()
-    {
-        return userID;
-    }
 
-    public void setUserID(Integer userID)
-    {
-        this.userID = userID;
-    }
 
     public Integer getSourceID()
     {
