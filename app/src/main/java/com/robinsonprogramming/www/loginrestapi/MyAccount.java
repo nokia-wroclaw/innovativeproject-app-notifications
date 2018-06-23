@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.example.mati.pojo.ChangeFlagBody;
 import com.example.mati.pojo.ChangePasswordBody;
 import com.example.mati.pojo.MyWebService;
+import com.example.mati.pojo.RemoveAccountBody;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -61,7 +62,7 @@ public class MyAccount extends AppCompatActivity
             {
                 if(!editText_newPassword.getText().toString().equals(editText_retype_newPassword.getText().toString()))
                 {
-                    Toast.makeText(getApplicationContext(), "New Passwords is defferend", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "New Passwords is different", Toast.LENGTH_LONG).show();
                 }
                 else {
                     myWebService.changeUserPassword(new ChangePasswordBody(bundle.getString("token"), editText_password.getText().toString(), editText_newPassword.getText().toString()), new Callback<JSONObject>() {
@@ -91,11 +92,24 @@ public class MyAccount extends AppCompatActivity
                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                SharedPreferences sp = getSharedPreferences("MYKEY",0);
-                                SharedPreferences.Editor editor = sp.edit();
-                                editor.putString("username" , "username");
-                                editor.putString("password" , "password");
-                                goToMainActivity();
+                                myWebService.removeAccount(new RemoveAccountBody(bundle.getString("token"), editText_password.getText().toString()), new Callback<JSONObject>() {
+                                    @Override
+                                    public void success(JSONObject s, Response response)
+                                    {
+                                        Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
+                                        SharedPreferences sp = getSharedPreferences("MYKEY",0);
+                                        SharedPreferences.Editor editor = sp.edit();
+                                        editor.putString("username" , "username");
+                                        editor.putString("password" , "password");
+                                        goToMainActivity();
+                                    }
+                                    @Override
+                                    public void failure(RetrofitError error)
+                                    {
+                                        Toast.makeText(getApplicationContext(), "Fail", Toast.LENGTH_LONG).show();
+                                    }
+                                });
+
                             }
                         })
                         .setNegativeButton("Cancel",null);
