@@ -61,5 +61,12 @@ public interface MyWebService
     @POST("/new/twitter/request/")
     void getLink(@Body AddWebsiteBody addWebsiteBody, Callback<JSONObject> response);
 
+    //New funkctions
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    @POST("/remove/account/")
+    void removeUserAccount(@Body RemoveUserAccountBody removeUserAccountBody, Callback<JSONObject> response);
 
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    @POST("/account/aggregation/")
+    void setAggregation(@Body AggregationBody aggregationBody, Callback<JSONObject> response);
 }

@@ -97,11 +97,6 @@ public class ThirdActivity extends AppCompatActivity  implements NavigationView.
         final String token = bundle.getString("token");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_third);
-//        checkBoxA = (CheckBox) findViewById(R.id.checkBoxA);
-//        checkBoxB = (CheckBox) findViewById(R.id.checkBoxB);
-//        checkBoxC = (CheckBox) findViewById(R.id.checkBoxC);
-//        checkBoxD = (CheckBox) findViewById(R.id.checkBoxD);
-
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout1);
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout,R.string.open,R.string.close);
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view1);
@@ -114,9 +109,6 @@ public class ThirdActivity extends AppCompatActivity  implements NavigationView.
         myListView.setAdapter(aa);
         mDrawerLayout.addDrawerListener(mToggle);
         mToggle.syncState();
-
-
-
 
         myListView.setOnItemClickListener(new android.widget.AdapterView.OnItemClickListener() {
             @Override
@@ -281,8 +273,6 @@ public class ThirdActivity extends AppCompatActivity  implements NavigationView.
         // myListView.deferNotifyDataSetChanged();
         // aa.notifyDataSetChanged();
         // Adding button to listview at footer
-
-
 
     }
 
@@ -454,8 +444,6 @@ public class ThirdActivity extends AppCompatActivity  implements NavigationView.
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         String txt = parent.getItemAtPosition(position).toString();
         Toast.makeText(parent.getContext(),txt,Toast.LENGTH_SHORT).show();
-
-
     }
 
     @Override
@@ -499,11 +487,8 @@ public class ThirdActivity extends AppCompatActivity  implements NavigationView.
         public EditText AggregateInterval=null;
         public EditText AggregateSubstring=null;
         public TextView AggregateEvery=null;
-
         public TextView Aggregatet=null;
         public TextView Aggregateint=null;
-
-
         public RadioButton checkBoxA=null;
         public RadioButton checkBoxB=null;
         public RadioButton checkBoxC=null;
