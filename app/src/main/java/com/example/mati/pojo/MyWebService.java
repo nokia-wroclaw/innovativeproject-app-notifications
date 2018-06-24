@@ -1,10 +1,6 @@
 package com.example.mati.pojo;
 
-import com.google.gson.Gson;
-
 import org.json.JSONObject;
-
-import java.util.List;
 
 import retrofit.Callback;
 import retrofit.http.Body;
@@ -25,7 +21,7 @@ public interface MyWebService
 
     @Headers({"Content-Type: application/json","Accept: application/json"})
     @POST("/register/")
-    void registryNewUser(@Body User user, Callback<String> pResponse);
+    void registryNewUser(@Body User user, Callback<JSONObject> pResponse);
 
     @Headers({"Content-Type: application/json","Accept: application/json"})
     @POST("/login/")
@@ -60,4 +56,10 @@ public interface MyWebService
     @Headers({"Content-Type: application/json","Accept: application/json"})
     @POST("/new/website/")
     void addWebsiteToWatch(@Body AddWebsiteBody addWebsiteBody, Callback<JSONObject> response);
+
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    @POST("/new/twitter/request/")
+    void getLink(@Body AddWebsiteBody addWebsiteBody, Callback<JSONObject> response);
+
+
 }

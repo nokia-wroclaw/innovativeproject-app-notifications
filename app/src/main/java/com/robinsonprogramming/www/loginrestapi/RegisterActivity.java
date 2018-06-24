@@ -11,6 +11,8 @@ import android.widget.Toast;
 import com.example.mati.pojo.MyWebService;
 import com.example.mati.pojo.User;
 
+import org.json.JSONObject;
+
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
@@ -50,9 +52,9 @@ public class RegisterActivity extends AppCompatActivity {
                 if(editText_sing_in_password.getText().toString().equals(editText_sing_in_retype_password.getText().toString()))
                 {
                     user = new User(editText_sing_in_name.getText().toString(),editText_sing_in_surname.getText().toString(),editText_sing_in_login.getText().toString(),editText_sing_in_password.getText().toString());
-                    myWebService.registryNewUser(user, new Callback<String>() {
+                    myWebService.registryNewUser(user, new Callback<JSONObject>() {
                         @Override
-                        public void success(String s, Response response)
+                        public void success(JSONObject s, Response response)
                         {
                             Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
                             goToLogin();

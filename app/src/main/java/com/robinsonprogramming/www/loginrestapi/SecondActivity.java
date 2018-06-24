@@ -69,7 +69,6 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
     View footerView;
     private int pageCount = 0;
     Notification notif;
-
     FancyAdapter aa=null;
    // static ArrayList<String> resultRow;
     static List<String> resultRow;
@@ -146,14 +145,11 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
                             public void success(JSONObject jsonObject, Response response) {
                                 Toast.makeText(getApplicationContext(), "removed succesfully", Toast.LENGTH_SHORT).show();
                                 aa.remove(aa.getItem(position));
-
                             }
 
                             @Override
                             public void failure(RetrofitError error) {
-                                Toast.makeText(getApplicationContext(), "NI CHUJA", Toast.LENGTH_SHORT).show();
-
-
+                                Toast.makeText(getApplicationContext(), "Fail", Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
@@ -385,7 +381,6 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
            thumb_image=(ImageView)row.findViewById(R.id.status1);
             //status=(TextView)row.findViewById(R.id.status);
             topic=(TextView)row.findViewById(R.id.topic);
-
             message=(TextView)row.findViewById(R.id.message);
             timestamp=(TextView)row.findViewById(R.id.timestamp);
         }

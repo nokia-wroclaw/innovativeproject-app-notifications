@@ -1,4 +1,4 @@
-package com.robinsonprogramming.www.loginrestapi;
+/*package com.robinsonprogramming.www.loginrestapi;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +10,8 @@ import android.widget.Toast;
 
 import com.example.mati.pojo.MyWebService;
 import com.example.mati.pojo.User;
+
+import org.json.JSONObject;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -50,9 +52,9 @@ public class FourthActivity extends AppCompatActivity {
                 if(editText_sing_in_password.getText().toString().equals(editText_sing_in_retype_password.getText().toString()))
                 {
                     user = new User(editText_sing_in_name.getText().toString(),editText_sing_in_surname.getText().toString(),editText_sing_in_login.getText().toString(),editText_sing_in_password.getText().toString());
-                    myWebService.registryNewUser(user, new Callback<String>() {
+                    *//*myWebService.registryNewUser(user, new Callback<JSONObject>() {
                         @Override
-                        public void success(String s, Response response)
+                        public void success(JSONObject s, Response response)
                         {
                             Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
                             goToLogin();
@@ -64,9 +66,7 @@ public class FourthActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), "Connection Failed", Toast.LENGTH_LONG).show();
                             goToLogin();
                         }
-                    });
-                    //System.out.println(user.getName() +" "+user.getSurname()+" "+user.getLogin()+" "+user.getPassword());
-
+                    });*//*
                 }
                 else
                 {
@@ -81,4 +81,4 @@ public class FourthActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
-}
+}*/

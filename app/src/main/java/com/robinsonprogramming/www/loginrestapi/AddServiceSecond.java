@@ -10,9 +10,14 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.mati.pojo.AddServiceBody;
+import com.example.mati.pojo.AddWebsiteBody;
 import com.example.mati.pojo.MyWebService;
 
 import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -26,7 +31,7 @@ public class AddServiceSecond extends AppCompatActivity
     private EditText editText;
     private RestAdapter retrofit;
     private MyWebService myWebService;
-
+    private StringBuffer response1;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -46,8 +51,34 @@ public class AddServiceSecond extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com"));
-                startActivity(browserIntent);
+                myWebService.getLink(new AddWebsiteBody("1", " "), new Callback<JSONObject>() {
+                    @Override
+                    public void success(JSONObject jsonObject, Response response) {
+                        BufferedReader in = null;
+                        response1 = new StringBuffer();
+                        try {
+                            in = new BufferedReader(new InputStreamReader(response.getBody().in()));
+
+
+                        String inputLine;
+                            while ((inputLine = in.readLine()) != null)
+                            {
+                                response1.append(inputLine);
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        String url = response1.substring(11,response1.length()-2);
+                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                        startActivity(browserIntent);
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        System.out.println("Fail");
+                    }
+                });
+
             }
         });
 
