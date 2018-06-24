@@ -5,6 +5,13 @@
     android:background="#2d2d2d">
 
 
+    <!--<RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="vertical">-->
+     <!---->
+    <!--</RadioGroup>-->
+
     <TextView
         android:id="@+id/service_name"
         android:layout_width="match_parent"
@@ -13,9 +20,80 @@
         android:textColorHint="#dcdcdc"
         android:textSize="25sp"
         android:drawablePadding="2dp"
-
-
         />
+
+    <!--<TextView android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/spin"-->
+        <!--android:prompt="@string/aggregation"-->
+        <!--android:layout_weight="0.5" />-->
+    <TextView
+        android:id="@+id/aggregation_t"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#dcdcdc"
+        android:layout_below="@id/service_name"
+        android:gravity="center"
+        android:maxLines="5"
+        android:singleLine="false"
+        android:textColorHint="#dcdcdc"
+        android:text="@string/aggregation_type"
+        android:textSize="19sp"
+        android:drawablePadding="2dp"
+        />
+
+    <RadioButton android:id="@+id/radioA"
+        android:layout_width="wrap_content"
+        android:layout_below="@id/service_name"
+        android:textColor="#dcdcdc"
+        android:textSize="16sp"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:layout_toRightOf="@id/aggregation_t"
+        android:textColorHint="#dcdcdc"
+        android:layout_height="wrap_content"
+        android:text="@string/check_a"
+        android:onClick="onRadioButtonClicked"/>
+    <RadioButton android:id="@+id/radioB"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_toRightOf="@id/radioA"
+        android:layout_below="@id/service_name"
+        android:textColor="#dcdcdc"
+        android:textSize="16sp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textColorHint="#dcdcdc"
+        android:layout_height="wrap_content"
+        android:text="@string/check_b"
+        android:onClick="onRadioButtonClicked"/>
+    <RadioButton android:id="@+id/radioC"
+        android:layout_toRightOf="@id/radioB"
+        android:layout_below="@id/service_name"
+        android:layout_marginTop="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/check_c"
+        android:textColor="#dcdcdc"
+        android:textSize="16sp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textColorHint="#dcdcdc"
+        android:onClick="onRadioButtonClicked"/>
+    <RadioButton android:id="@+id/radioD"
+        android:layout_toRightOf="@id/radioC"
+        android:textColor="#dcdcdc"
+        android:layout_marginTop="8dp"
+        android:layout_below="@id/service_name"
+        android:textColorHint="#dcdcdc"
+        android:layout_width="wrap_content"
+        android:textSize="16sp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:text="@string/check_d"
+        android:onClick="onRadioButtonClicked"/>
 
     <!--<TextView-->
         <!--android:id="@+id/aggregation_type"-->
@@ -23,52 +101,113 @@
         <!--android:layout_height="match_parent"-->
         <!--android:textColor="#dcdcdc"-->
         <!--android:textColorHint="#dcdcdc"-->
-        <!--android:layout_below="@id/service_name"-->
+        <!--android:layout_below="@id/radioA"-->
         <!--android:textSize="25sp"-->
         <!--android:drawablePadding="2dp"-->
-
-
         <!--/>-->
 
+    <TextView
+        android:id="@+id/aggregation_by"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#dcdcdc"
+        android:layout_below="@id/aggregation_t"
+        android:gravity="center"
+        android:textColorHint="#dcdcdc"
+        android:text="@string/aggregation_by"
+        android:textSize="20sp"
+        android:drawablePadding="2dp"
+        />
+    <RadioButton android:id="@+id/radiot"
+        android:layout_width="wrap_content"
+        android:layout_below="@id/aggregation_t"
+        android:textColor="#dcdcdc"
+        android:layout_toRightOf="@id/aggregation_by"
+        android:textColorHint="#dcdcdc"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/check_t"
+        android:onClick="onRadioButtonClicked"/>
+    <RadioButton android:id="@+id/radiom"
+        android:layout_width="wrap_content"
+        android:layout_toRightOf="@id/radiot"
+        android:layout_below="@id/aggregation_t"
+        android:textColor="#dcdcdc"
+        android:layout_marginTop="8dp"
+        android:textColorHint="#dcdcdc"
+        android:layout_height="wrap_content"
+        android:text="@string/check_m"
+        android:onClick="onRadioButtonClicked"/>
+
+        <TextView
+            android:orientation="horizontal"
+            android:id="@+id/aggregation_every"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#dcdcdc"
+            android:gravity="center"
+            android:layout_below="@id/aggregation_by"
+            android:textSize="20dp"
+            android:textColorHint="#dcdcdc"
+            android:text="@string/aggregation_every"
+            android:layout_weight="1"
+            />
+
+        <EditText
+            android:orientation="horizontal"
+            android:id="@+id/aggregation_interval"
+            android:gravity="center"
+            android:layout_toRightOf="@id/aggregation_every"
+
+            android:layout_below="@id/aggregation_by"
+            android:textColor="#dcdcdc"
+            android:inputType="number|numberDecimal"
+            android:layout_width="wrap_content"
+            android:textColorHint="#dcdcdc"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            />
+
     <!--<TextView-->
-        <!--android:id="@+id/aggregation_by"-->
+        <!--android:id="@+id/aggregation_every"-->
         <!--android:layout_width="match_parent"-->
         <!--android:layout_height="match_parent"-->
         <!--android:textColor="#dcdcdc"-->
+        <!--android:layout_below="@id/aggregation_by"-->
         <!--android:textColorHint="#dcdcdc"-->
-        <!--android:layout_below="@id/aggregation_type"-->
+        <!--android:text="@string/aggregation_every"-->
+        <!--android:layout_toRightOf="@id/aggregation_every"-->
 
-        <!--android:textSize="25sp"-->
+        <!--android:gravity="center"-->
+        <!--android:textSize="19sp"-->
         <!--android:drawablePadding="2dp"-->
-
-
         <!--/>-->
-    <!--<TextView-->
+
+    <!--<EditText-->
         <!--android:id="@+id/aggregation_interval"-->
         <!--android:layout_width="match_parent"-->
         <!--android:layout_height="match_parent"-->
+        <!--android:layout_toRightOf="@id/aggregation_every"-->
         <!--android:textColor="#dcdcdc"-->
+        <!--android:inputType="number"-->
+        <!--android:gravity="center"-->
+
         <!--android:textColorHint="#dcdcdc"-->
         <!--android:layout_below="@id/aggregation_by"-->
-
-        <!--android:textSize="25sp"-->
+        <!--android:textSize="19sp"-->
         <!--android:drawablePadding="2dp"-->
-
-
         <!--/>-->
-    <!--<TextView-->
-        <!--android:id="@+id/aggregation_substring"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:textColor="#dcdcdc"-->
-        <!--android:layout_below="@id/aggregation_interval"-->
 
-        <!--android:textColorHint="#dcdcdc"-->
-        <!--android:textSize="25sp"-->
-        <!--android:drawablePadding="2dp"-->
-
-
-        <!--/>-->
+    <TextView
+        android:id="@+id/aggregation_substring"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textColor="#dcdcdc"
+        android:layout_below="@id/aggregation_interval"
+        android:textColorHint="#dcdcdc"
+        android:textSize="25sp"
+        android:drawablePadding="2dp"
+        />
 
 
 </RelativeLayout>

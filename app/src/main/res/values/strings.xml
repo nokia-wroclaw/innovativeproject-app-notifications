@@ -10,8 +10,24 @@
     <string name="sign_up">Sign up</string>
     <string name="surname">Surname</string>
     <string name="name">Name</string>
-    <string name="Remove_Account">Remove Account</string>
+    <string name="check_a">None</string>
+    <string name="check_b">First</string>
+    <string name="check_c">Last</string>
+    <string name="check_d">Count</string>
+    <string name="check_t">Topic</string>
+    <string name="check_m">Message</string>
+    <string name="aggregation_type">Aggregation\n Type:  </string>
+    <string name="aggregation_by">Aggregate\n By:  </string>
+    <string name="aggregation_every">Aggregate\n Every:  </string>
 
+    <string name="Remove_Account">Remove Account</string>
+    <string name="aggregation">Aggregation Type</string>
+    <string-array name="Aggregation_Type">
+        <item>None</item>
+        <item>First</item>
+        <item>Last</item>
+        <item>Count</item>
+    </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

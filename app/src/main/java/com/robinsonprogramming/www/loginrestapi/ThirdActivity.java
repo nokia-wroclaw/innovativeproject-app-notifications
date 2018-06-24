@@ -25,10 +25,12 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -69,6 +71,7 @@ public class ThirdActivity extends AppCompatActivity  implements NavigationView.
     private DrawerLayout mDrawerLayout;
     ArrayAdapter<String> adapter;
     ArrayList<String> h = new ArrayList<>();
+    private RadioButton checkBoxA, checkBoxB, checkBoxC,checkBoxD, checkBoxT, checkBoxM;
 
 
     MyWebService myWebService;
@@ -89,12 +92,10 @@ public class ThirdActivity extends AppCompatActivity  implements NavigationView.
         final String token = bundle.getString("token");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_third);
-        Spinner spin = findViewById(R.id.aggregation_type1);
-        ArrayAdapter<CharSequence> adapt = ArrayAdapter.createFromResource(this,R.array.Aggregation_Type,android.R.layout.simple_spinner_item);
-        adapt.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spin.setAdapter(adapt);
-        spin.setOnItemSelectedListener(this);
-        spin.setVisibility(View.VISIBLE);
+//        checkBoxA = (CheckBox) findViewById(R.id.checkBoxA);
+//        checkBoxB = (CheckBox) findViewById(R.id.checkBoxB);
+//        checkBoxC = (CheckBox) findViewById(R.id.checkBoxC);
+//        checkBoxD = (CheckBox) findViewById(R.id.checkBoxD);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout1);
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout,R.string.open,R.string.close);
@@ -116,11 +117,17 @@ public class ThirdActivity extends AppCompatActivity  implements NavigationView.
 
                // TextView AggregationType=(TextView)arg1.findViewById(R.id.aggregation_type);
                 TextView AggregateBy=(TextView)arg1.findViewById(R.id.aggregation_by);
-                TextView AggregateInterval=(TextView)arg1.findViewById(R.id.aggregation_interval);
+                TextView Aggregatet=(TextView)arg1.findViewById(R.id.aggregation_t);
+                TextView AggregateEvery=(TextView)arg1.findViewById(R.id.aggregation_every);
+
+                EditText AggregateInterval=(EditText)arg1.findViewById(R.id.aggregation_interval);
                 TextView AggregateSubstring=(TextView)arg1.findViewById(R.id.aggregation_substring);
-
-
-
+                 checkBoxA = (RadioButton)arg1.findViewById(R.id.radioA);
+                 checkBoxB = (RadioButton)arg1.findViewById(R.id.radioB);
+                 checkBoxC = (RadioButton)arg1.findViewById(R.id.radioC);
+                 checkBoxD = (RadioButton)arg1.findViewById(R.id.radioD);
+                 checkBoxT = (RadioButton)arg1.findViewById(R.id.radiot);
+                 checkBoxM = (RadioButton)arg1.findViewById(R.id.radiom);
 
 
 
@@ -129,10 +136,43 @@ public class ThirdActivity extends AppCompatActivity  implements NavigationView.
 //                else
 //                    AggregationType.setVisibility(View.GONE);
 
+
+                if(checkBoxA.getVisibility()==View.GONE)
+                    checkBoxA.setVisibility(View.VISIBLE);
+                else
+                    checkBoxA.setVisibility(View.GONE);
+                if(checkBoxB.getVisibility()==View.GONE)
+                    checkBoxB.setVisibility(View.VISIBLE);
+                else
+                    checkBoxB.setVisibility(View.GONE);
+                if(checkBoxC.getVisibility()==View.GONE)
+                    checkBoxC.setVisibility(View.VISIBLE);
+                else
+                    checkBoxC.setVisibility(View.GONE);
+                if(checkBoxD.getVisibility()==View.GONE)
+                    checkBoxD.setVisibility(View.VISIBLE);
+                else
+                    checkBoxD.setVisibility(View.GONE);
+                if(checkBoxT.getVisibility()==View.GONE)
+                    checkBoxT.setVisibility(View.VISIBLE);
+                else
+                    checkBoxT.setVisibility(View.GONE);
+                if(checkBoxM.getVisibility()==View.GONE)
+                    checkBoxM.setVisibility(View.VISIBLE);
+                else
+                    checkBoxM.setVisibility(View.GONE);
+                if(Aggregatet.getVisibility()==View.GONE)
+                    Aggregatet.setVisibility(View.VISIBLE);
+                else
+                    Aggregatet.setVisibility(View.GONE);
                 if(AggregateBy.getVisibility()==View.GONE)
                     AggregateBy.setVisibility(View.VISIBLE);
                 else
                     AggregateBy.setVisibility(View.GONE);
+                if(AggregateEvery.getVisibility()==View.GONE)
+                    AggregateEvery.setVisibility(View.VISIBLE);
+                else
+                    AggregateEvery.setVisibility(View.GONE);
 
                 if(AggregateInterval.getVisibility()==View.GONE)
                     AggregateInterval.setVisibility(View.VISIBLE);
@@ -159,6 +199,8 @@ public class ThirdActivity extends AppCompatActivity  implements NavigationView.
 
 
     }
+
+
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -203,7 +245,50 @@ public class ThirdActivity extends AppCompatActivity  implements NavigationView.
         intent.putExtras(bundle1);
         startActivity(intent);
     }
+    public void onRadioButtonClicked(View view) {
+        // Is the button now checked?
+        boolean checked = ((RadioButton) view).isChecked();
 
+        // Check which radio button was clicked
+        switch(view.getId()) {
+            case R.id.radioA:
+                if (checked)
+                    checkBoxB.setChecked(false);
+                    checkBoxC.setChecked(false);
+                    checkBoxD.setChecked(false);
+
+                // Pirates are the best
+                    break;
+            case R.id.radioB:
+                if (checked)
+                    checkBoxA.setChecked(false);
+                    checkBoxC.setChecked(false);
+                    checkBoxD.setChecked(false);
+                    break;
+            case R.id.radioC:
+                if (checked)
+                    checkBoxB.setChecked(false);
+                    checkBoxA.setChecked(false);
+                    checkBoxD.setChecked(false);
+                    // Ninjas rule
+                    break;
+            case R.id.radioD:
+                if (checked)
+                    checkBoxB.setChecked(false);
+                    checkBoxC.setChecked(false);
+                    checkBoxA.setChecked(false);
+                    break;
+            case R.id.radiom:
+                if(checked)
+                    checkBoxT.setChecked(false);
+                    break;
+            case R.id.radiot:
+                if(checked)
+                    checkBoxM.setChecked(false);
+                break;
+
+        }
+    }
     private void getDataFromUrl(Bundle bundle){
         myWebService = retrofit.create(MyWebService.class);
 
@@ -299,10 +384,21 @@ public class ThirdActivity extends AppCompatActivity  implements NavigationView.
     }
     class ViewHolder{
         public TextView servicename=null;
-        public TextView AggregationType=null;
+        //public TextView AggregationType=null;
         public TextView AggregateBy=null;
-        public TextView AggregateInterval=null;
+        public EditText AggregateInterval=null;
         public TextView AggregateSubstring=null;
+        public TextView AggregateEvery=null;
+
+        public TextView Aggregatet=null;
+
+        public RadioButton checkBoxA=null;
+        public RadioButton checkBoxB=null;
+        public RadioButton checkBoxC=null;
+        public RadioButton checkBoxD=null;
+        public RadioButton checkBoxM=null;
+        public RadioButton checkBoxT=null;
+
         String Interval = "";
         String Substring = "";
 
@@ -316,9 +412,18 @@ public class ThirdActivity extends AppCompatActivity  implements NavigationView.
             servicename=(TextView)row.findViewById(R.id.service_name);
           //  AggregationType=(TextView)row.findViewById(R.id.aggregation_type);
             AggregateBy=(TextView)row.findViewById(R.id.aggregation_by);
-            AggregateInterval=(TextView)row.findViewById(R.id.aggregation_interval);
+            AggregateInterval=(EditText)row.findViewById(R.id.aggregation_interval);
             AggregateSubstring=(TextView)row.findViewById(R.id.aggregation_substring);
+            Aggregatet=(TextView)row.findViewById(R.id.aggregation_t);
+            AggregateEvery=(TextView)row.findViewById(R.id.aggregation_every);
 
+            checkBoxA=(RadioButton)row.findViewById(R.id.radioA);
+
+            checkBoxB=(RadioButton)row.findViewById(R.id.radioB);
+            checkBoxC=(RadioButton)row.findViewById(R.id.radioC);
+            checkBoxD=(RadioButton)row.findViewById(R.id.radioD);
+            checkBoxM=(RadioButton)row.findViewById(R.id.radiom);
+            checkBoxT=(RadioButton)row.findViewById(R.id.radiot);
 
 
         }
@@ -341,17 +446,25 @@ public class ThirdActivity extends AppCompatActivity  implements NavigationView.
 //            if(s.getAggregationtype().equals(3)) //none first last count
 //                AggregationType.setText("count");
 //            AggregationType.setVisibility(View.GONE);
-            if(s.getAggregation().equals(1))
-                AggregateBy.setText("Topic");
-            if(s.getAggregation().equals(2))
-                AggregateBy.setText("Message");
-            if(!s.getAggregation().equals(1)&&!s.getAggregation().equals(2))
-                AggregateBy.setText("Aggregate By");
+//            if(s.getAggregation().equals(1))
+//                AggregateBy.setText("Topic");
+//            if(s.getAggregation().equals(2))
+//                AggregateBy.setText("Message");
+//            if(!s.getAggregation().equals(1)&&!s.getAggregation().equals(2))
+//                AggregateBy.setText("Aggregate By");
+            checkBoxA.setVisibility(View.GONE);
+            checkBoxB.setVisibility(View.GONE);
+            checkBoxC.setVisibility(View.GONE);
+            checkBoxD.setVisibility(View.GONE);
+            checkBoxM.setVisibility(View.GONE);
+            checkBoxT.setVisibility(View.GONE);
+            Aggregatet.setVisibility(View.GONE);
             AggregateBy.setVisibility(View.GONE);
             Interval = s.getAggregationdate().toString();
             Substring = s.getAggregationkey();
             AggregateInterval.setText(Interval);
             AggregateInterval.setVisibility(View.GONE);
+            AggregateEvery.setVisibility(View.GONE);
             AggregateSubstring.setText(Substring);
             AggregateSubstring.setVisibility(View.GONE);
         }
