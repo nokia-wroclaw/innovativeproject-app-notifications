@@ -16,9 +16,16 @@
     <string name="check_d">Count</string>
     <string name="check_t">Topic</string>
     <string name="check_m">Message</string>
+    <string name="check_h">Hours</string>
+    <string name="check_da">Days</string>
+    <string name="check_w">Weeks</string>
+    <string name="check_mo">Months</string>
+    <string name="check_y">Years</string>
     <string name="aggregation_type">Aggregation\n Type:  </string>
     <string name="aggregation_by">Aggregate\n By:  </string>
     <string name="aggregation_every">Aggregate\n Every:  </string>
+    <string name="aggregation_int">Aggregate\n By Text:  </string>
+
 
     <string name="Remove_Account">Remove Account</string>
     <string name="aggregation">Aggregation Type</string>
