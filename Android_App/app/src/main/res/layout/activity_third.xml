@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    tools:context="com.robinsonprogramming.www.loginrestapi.SecondActivity"
+    android:background="#2d2d2d"
+    android:id="@+id/drawerLayout1">
+
+    <ListView
+        android:id="@+id/myListView11"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <com.baoyz.swipemenulistview.SwipeMenuListView
+            android:id="@+id/myListView1"
+            android:layout_width="fill_parent"
+            android:layout_alignParentTop="@id/fragment_container"
+            android:layout_height="fill_parent"></com.baoyz.swipemenulistview.SwipeMenuListView>
+        <!--<android.support.v7.widget.Toolbar-->
+        <!--android:id="@+id/toolbar"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="?attr/actionBarSize"-->
+        <!--android:background="@color/colorPrimary"-->
+        <!--android:elevation="4dp"-->
+        <!--<Spinner-->
+            <!--android:id="@+id/aggregation_type1"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:textColor="#dcdcdc"-->
+            <!--android:textColorHint="#dcdcdc"-->
+
+            <!--android:textSize="25sp"-->
+            <!--android:drawablePadding="2dp"-->
+            <!--/>-->
+
+
+        <!--android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"-->
+        <!--app:popupTheme="@style/ThemeOverlay.AppCompat.Light">-->
+
+        <!--</android.support.v7.widget.Toolbar>-->
+        <FrameLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+    <android.support.design.widget.NavigationView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="#2d2d2d"
+        android:textColorHint="#dcdcdc"
+        android:textColor="#dcdcdc"
+        app:menu="@menu/navigation_menu"
+        android:id="@+id/nav_view1"
+        app:headerLayout="@layout/nav_header_main"
+        android:layout_gravity="start">
+    </android.support.design.widget.NavigationView>
+
+
+
+
+</android.support.v4.widget.DrawerLayout>

@@ -1,0 +1,45 @@
+<resources>
+    <string name="app_name">Notify Me</string>
+    <string name="Login"><font fgcolor='#FFFFFF'></font>Login</string>
+    <string name="Password">Password</string>
+    <string name="Register">Register</string>
+    <string name="Reminder">Forgot Password</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+    <string name="retype_password">Retype Password</string>
+    <string name="sign_up">Sign up</string>
+    <string name="surname">Surname</string>
+    <string name="name">Name</string>
+    <string name="check_a">None</string>
+    <string name="check_b">First</string>
+    <string name="check_c">Last</string>
+    <string name="check_d">Count</string>
+    <string name="check_t">Topic</string>
+    <string name="check_m">Message</string>
+    <string name="check_h">Hours</string>
+    <string name="check_da">Days</string>
+    <string name="check_w">Weeks</string>
+    <string name="check_mo">Months</string>
+    <string name="check_y">Years</string>
+    <string name="aggregation_type">Aggregation\n Type:  </string>
+    <string name="aggregation_by">Aggregate\n By:  </string>
+    <string name="aggregation_every">Aggregate\n Every:  </string>
+    <string name="aggregation_int">Aggregate\n By Text:  </string>
+
+
+    <string name="Remove_Account">Remove Account</string>
+    <string name="aggregation">Aggregation Type</string>
+    <string-array name="Aggregation_Type">
+        <item>None</item>
+        <item>First</item>
+        <item>Last</item>
+        <item>Count</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="retype_new_password">Retype new Password</string>
+    <string name="change_password">Change password</string>
+    <string name="access_pin">Access Pin</string>
+    <string name="website_url">Website URL</string>
+</resources>

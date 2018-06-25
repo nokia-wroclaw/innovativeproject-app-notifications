@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#2d2d2d">
+
+
+    <TextView
+        android:id="@+id/topic"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textColor="#dcdcdc"
+        android:textColorHint="#dcdcdc"
+        android:textSize="25sp"
+        android:drawablePadding="2dp"
+        android:layout_toRightOf="@+id/status1"
+
+
+        />
+
+    <TextView
+        android:id="@+id/message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:drawablePadding="10dp"
+        android:textColor="#dcdcdc"
+        android:textColorHint="#dcdcdc"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/timestamp"
+        android:textSize="15sp" />
+
+
+
+
+  <!--  <TextView
+        android:id="@+id/message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/topic"
+        /-->
+    <TextView
+        android:id="@+id/timestamp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:textColorHint="#dcdcdc"
+        android:textColor="#dcdcdc"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/topic"
+        />
+
+    <ImageView
+        android:id="@+id/status1"
+        android:layout_centerVertical="true"
+        android:drawablePadding="2dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:gravity="center_horizontal|top"
+        android:src="@drawable/unseen" />
+
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_below="@id/message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:focusable="false"
+        android:background="@drawable/button2"
+        android:text="Remove" />
+
+
+</RelativeLayout>
