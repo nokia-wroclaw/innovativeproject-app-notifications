@@ -420,23 +420,39 @@ public class ThirdActivity extends AppCompatActivity  implements NavigationView.
                 break;
             case R.id.radioh:
                 if(checked)
-                    checkBoxH.setChecked(false);
+                    //checkBoxH.setChecked(false);
+                checkBoxDa.setChecked(false);
+                checkBoxW.setChecked(false);
+                checkBoxMo.setChecked(false);
+                checkBoxY.setChecked(false);
                 break;
             case R.id.radioda:
                 if(checked)
                     checkBoxH.setChecked(false);
+                checkBoxW.setChecked(false);
+                checkBoxMo.setChecked(false);
+                checkBoxY.setChecked(false);
                 break;
             case R.id.radiodw:
                 if(checked)
                     checkBoxH.setChecked(false);
+                checkBoxDa.setChecked(false);
+                checkBoxMo.setChecked(false);
+                checkBoxY.setChecked(false);
                 break;
             case R.id.radiodm:
                 if(checked)
                     checkBoxH.setChecked(false);
+                checkBoxDa.setChecked(false);
+                checkBoxW.setChecked(false);
+                checkBoxY.setChecked(false);
                 break;
             case R.id.radiody:
                 if(checked)
                     checkBoxH.setChecked(false);
+                checkBoxDa.setChecked(false);
+                checkBoxW.setChecked(false);
+                checkBoxMo.setChecked(false);
                 break;
 
         }
