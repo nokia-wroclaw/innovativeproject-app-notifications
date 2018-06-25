@@ -63,7 +63,7 @@ public class RegisterActivity extends AppCompatActivity {
                         @Override
                         public void failure(RetrofitError error)
                         {
-                            Toast.makeText(getApplicationContext(), "Connection Failed", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "Fail, User already exists", Toast.LENGTH_LONG).show();
                             goToLogin();
                         }
                     });

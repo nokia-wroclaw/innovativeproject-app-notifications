@@ -37,10 +37,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mati.pojo.AggregationBody;
 import com.example.mati.pojo.ChangeFlagBody;
 import com.example.mati.pojo.MyWebService;
 import com.example.mati.pojo.Notification;
 import com.example.mati.pojo.Notifications;
+import com.example.mati.pojo.RemoveUserAccountBody;
 import com.example.mati.pojo.Service;
 import com.example.mati.pojo.Services;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -63,6 +65,7 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 import static android.widget.AbsListView.OnScrollListener.SCROLL_STATE_IDLE;
+import static java.sql.Types.NULL;
 
 public class ThirdActivity extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemSelectedListener {
 
@@ -76,8 +79,13 @@ public class ThirdActivity extends AppCompatActivity  implements NavigationView.
     private RadioButton checkBoxA, checkBoxB, checkBoxC,checkBoxD, checkBoxT, checkBoxM,checkBoxH, checkBoxDa, checkBoxW, checkBoxMo, checkBoxY;
     Button del_service;
     Button apply;
-
-
+    int a=-1, b=-1;
+    int c=-1;
+    int d=-1;
+    String e="";
+    int f= NULL;
+    String src="";
+    String rmtoken="";
 
     MyWebService myWebService;
     RestAdapter retrofit;
@@ -134,8 +142,48 @@ public class ThirdActivity extends AppCompatActivity  implements NavigationView.
                 checkBoxY =(RadioButton)arg1.findViewById(R.id.radiody);
                 del_service=(Button)arg1.findViewById(R.id.removeservice);
                 apply=(Button)arg1.findViewById(R.id.apply);
+                Button apply = (Button)arg1.findViewById(R.id.apply);
+                Button remove = (Button)arg1.findViewById(R.id.removeservice);
 
 
+                apply.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+  // public AggregationBody                           (String token, String account, String aggregation, String aggregationdate, String aggregationtype, String aggregationby, String aggregationkey) {
+                        AggregationBody body = new AggregationBody(token, Integer.toString(c), Integer.toString(a),Integer.toString(b),Integer.toString(d),Integer.toString(0),Integer.toString(0));
+
+                        myWebService.setAggregation(body, new Callback<JSONObject>() {
+                            @Override
+                            public void success(JSONObject jsonObject, Response response) {
+                                Toast.makeText(getApplicationContext(), "Aggregation Set Successfully", Toast.LENGTH_SHORT).show();
+                               // aa.remove(aa.getItem(position));
+                            }
+
+                            @Override
+                            public void failure(RetrofitError error) {
+                                Toast.makeText(getApplicationContext(), "Fail", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
+//String token, String source, String accesstoken
+                remove.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        myWebService.removeUserAccount(new RemoveUserAccountBody(token,src,rmtoken), new Callback<JSONObject>() {
+                            @Override
+                            public void success(JSONObject jsonObject, Response response) {
+                                Toast.makeText(getApplicationContext(), "removed succesfully", Toast.LENGTH_SHORT).show();
+                                aa.remove(aa.getItem(position));
+                            }
+
+                            @Override
+                            public void failure(RetrofitError error) {
+                                Toast.makeText(getApplicationContext(), "Fail", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
 
 //                if(AggregationType.getVisibility()==View.GONE)
 //                    AggregationType.setVisibility(View.VISIBLE);
@@ -332,35 +380,42 @@ public class ThirdActivity extends AppCompatActivity  implements NavigationView.
                     checkBoxB.setChecked(false);
                     checkBoxC.setChecked(false);
                     checkBoxD.setChecked(false);
-
+                    a = 0;
 
                 // Pirates are the best
                     break;
             case R.id.radioB:
                 if (checked)
+                    a = 1;
                     checkBoxA.setChecked(false);
                     checkBoxC.setChecked(false);
                     checkBoxD.setChecked(false);
+
                     break;
             case R.id.radioC:
                 if (checked)
+                    a = 2;
                     checkBoxB.setChecked(false);
                     checkBoxA.setChecked(false);
                     checkBoxD.setChecked(false);
-                    // Ninjas rule
+                   // Ninjas rule
                     break;
             case R.id.radioD:
                 if (checked)
+                    a = 3;
                     checkBoxB.setChecked(false);
                     checkBoxC.setChecked(false);
                     checkBoxA.setChecked(false);
+
                     break;
             case R.id.radiom:
                 if(checked)
+                    b = 2;
                     checkBoxT.setChecked(false);
-                    break;
+                   break;
             case R.id.radiot:
                 if(checked)
+                    b = 1;
                     checkBoxM.setChecked(false);
                 break;
             case R.id.radioh:
@@ -480,28 +535,29 @@ public class ThirdActivity extends AppCompatActivity  implements NavigationView.
             return (convertView);
         }
     }
-    class ViewHolder{
-        public TextView servicename=null;
+    class ViewHolder {
+        public TextView servicename = null;
         //public TextView AggregationType=null;
-        public TextView AggregateBy=null;
-        public EditText AggregateInterval=null;
-        public EditText AggregateSubstring=null;
-        public TextView AggregateEvery=null;
-        public TextView Aggregatet=null;
-        public TextView Aggregateint=null;
-        public RadioButton checkBoxA=null;
-        public RadioButton checkBoxB=null;
-        public RadioButton checkBoxC=null;
-        public RadioButton checkBoxD=null;
-        public RadioButton checkBoxM=null;
-        public RadioButton checkBoxT=null;
-        public RadioButton checkBoxH=null;
-        public RadioButton checkBoxDa=null;
-        public RadioButton checkBoxW=null;
-        public RadioButton checkBoxMo=null;
-        public RadioButton checkBoxY=null;
-        public Button del_service=null;
-        public Button apply=null;
+        public TextView AggregateBy = null;
+        public EditText AggregateInterval = null;
+        public EditText AggregateSubstring = null;
+        public TextView AggregateEvery = null;
+        public TextView Aggregatet = null;
+        public TextView Aggregateint = null;
+        public RadioButton checkBoxA = null;
+        public RadioButton checkBoxB = null;
+        public RadioButton checkBoxC = null;
+        public RadioButton checkBoxD = null;
+        public RadioButton checkBoxM = null;
+        public RadioButton checkBoxT = null;
+        public RadioButton checkBoxH = null;
+        public RadioButton checkBoxDa = null;
+        public RadioButton checkBoxW = null;
+        public RadioButton checkBoxMo = null;
+        public RadioButton checkBoxY = null;
+        public Button del_service = null;
+        public Button apply = null;
+
 
         String Interval = "";
         String Substring = "";
@@ -509,38 +565,38 @@ public class ThirdActivity extends AppCompatActivity  implements NavigationView.
         //  ImageButton del_image;
         Button del_image;
 
-        ViewHolder(View row)
-        {
+        ViewHolder(View row) {
 
             // del_image=(ImageButton)row.findViewById(R.id.removeButton);
-            servicename=(TextView)row.findViewById(R.id.service_name);
-          //  AggregationType=(TextView)row.findViewById(R.id.aggregation_type);
-            AggregateBy=(TextView)row.findViewById(R.id.aggregation_by);
-            AggregateInterval=(EditText)row.findViewById(R.id.aggregation_interval);
-            AggregateSubstring=(EditText)row.findViewById(R.id.aggregation_substring);
-            Aggregatet=(TextView)row.findViewById(R.id.aggregation_t);
-            AggregateEvery=(TextView)row.findViewById(R.id.aggregation_every);
-            Aggregateint=(TextView)row.findViewById(R.id.aggregation_int) ;
-            del_service=(Button)row.findViewById(R.id.removeservice);
-            apply=(Button)row.findViewById(R.id.apply);
+            servicename = (TextView) row.findViewById(R.id.service_name);
+            //  AggregationType=(TextView)row.findViewById(R.id.aggregation_type);
+            AggregateBy = (TextView) row.findViewById(R.id.aggregation_by);
+            AggregateInterval = (EditText) row.findViewById(R.id.aggregation_interval);
+            AggregateSubstring = (EditText) row.findViewById(R.id.aggregation_substring);
+            Aggregatet = (TextView) row.findViewById(R.id.aggregation_t);
+            AggregateEvery = (TextView) row.findViewById(R.id.aggregation_every);
+            Aggregateint = (TextView) row.findViewById(R.id.aggregation_int);
+            del_service = (Button) row.findViewById(R.id.removeservice);
+            apply = (Button) row.findViewById(R.id.apply);
 
-            checkBoxA=(RadioButton)row.findViewById(R.id.radioA);
+            checkBoxA = (RadioButton) row.findViewById(R.id.radioA);
 
-            checkBoxB=(RadioButton)row.findViewById(R.id.radioB);
-            checkBoxC=(RadioButton)row.findViewById(R.id.radioC);
-            checkBoxD=(RadioButton)row.findViewById(R.id.radioD);
-            checkBoxM=(RadioButton)row.findViewById(R.id.radiom);
-            checkBoxT=(RadioButton)row.findViewById(R.id.radiot);
-            checkBoxH =(RadioButton)row.findViewById(R.id.radioh);
-            checkBoxDa =(RadioButton)row.findViewById(R.id.radioda);
-            checkBoxW =(RadioButton)row.findViewById(R.id.radiodw);
-            checkBoxMo =(RadioButton)row.findViewById(R.id.radiodm);
-            checkBoxY =(RadioButton)row.findViewById(R.id.radiody);
+            checkBoxB = (RadioButton) row.findViewById(R.id.radioB);
+            checkBoxC = (RadioButton) row.findViewById(R.id.radioC);
+            checkBoxD = (RadioButton) row.findViewById(R.id.radioD);
+            checkBoxM = (RadioButton) row.findViewById(R.id.radiom);
+            checkBoxT = (RadioButton) row.findViewById(R.id.radiot);
+            checkBoxH = (RadioButton) row.findViewById(R.id.radioh);
+            checkBoxDa = (RadioButton) row.findViewById(R.id.radioda);
+            checkBoxW = (RadioButton) row.findViewById(R.id.radiodw);
+            checkBoxMo = (RadioButton) row.findViewById(R.id.radiodm);
+            checkBoxY = (RadioButton) row.findViewById(R.id.radiody);
 
             AggregateInterval.addTextChangedListener(new TextWatcher() {
 
                 @Override
-                public void afterTextChanged(Editable s) {}
+                public void afterTextChanged(Editable s) {
+                }
 
                 @Override
                 public void beforeTextChanged(CharSequence s, int start,
@@ -550,7 +606,7 @@ public class ThirdActivity extends AppCompatActivity  implements NavigationView.
                 @Override
                 public void onTextChanged(CharSequence s, int start,
                                           int before, int count) {
-                    if(s.length() != 0)
+                    if (s.length() != 0)
                         AggregateInterval.setText("");
                 }
             });
@@ -558,7 +614,8 @@ public class ThirdActivity extends AppCompatActivity  implements NavigationView.
             AggregateSubstring.addTextChangedListener(new TextWatcher() {
 
                 @Override
-                public void afterTextChanged(Editable s) {}
+                public void afterTextChanged(Editable s) {
+                }
 
                 @Override
                 public void beforeTextChanged(CharSequence s, int start,
@@ -568,66 +625,100 @@ public class ThirdActivity extends AppCompatActivity  implements NavigationView.
                 @Override
                 public void onTextChanged(CharSequence s, int start,
                                           int before, int count) {
-                    if(s.length() != 0)
+                    if (s.length() != 0)
                         AggregateSubstring.setText("");
                 }
             });
 
         }
-        void populateFrom(Service s)
-        {
+
+        void populateFrom(Service s) {
             // del_image.setVisibility(View.VISIBLE);
 
-            if(s.getSourceID().equals(10))
+            c = s.getAccountID();
+            //type by key
+            d = s.getAggregationtype();
+            e = s.getAggregationkey();
+            if(e==null)
+                e="NULL";
+            src=s.getAccessToken();
+            rmtoken=s.getUserID().toString();
+
+            // f=s.getAggregationkey();
+            if (s.getSourceID().equals(10))
                 servicename.setText("Custom Website");
-            if(s.getSourceID().equals(15))
+            if (s.getSourceID().equals(15))
                 servicename.setText("Twitter");
-            if(!s.getSourceID().equals(10)&&!s.getSourceID().equals(15))
+            if (!s.getSourceID().equals(10) && !s.getSourceID().equals(15))
                 servicename.setText("Custom Service");
-          //  if(s.getAggregationtype().equals(0)) //none first last count
-//            AggregationType.setText("none");
-//            if(s.getAggregationtype().equals(1)) //none first last count
-//                AggregationType.setText("first");
-//            if(s.getAggregationtype().equals(2)) //none first last count
-//                AggregationType.setText("last");
-//            if(s.getAggregationtype().equals(3)) //none first last count
-//                AggregationType.setText("count");
+            if (s.getAggregation().equals(0)) //none first last count
+            {
+                checkBoxA.setChecked(true);
+                a = 0;
+            }
+            if (s.getAggregation().equals(1)) //none first last count
+            {
+                checkBoxB.setChecked(true);
+                a = 1;
+            }
+            if (s.getAggregation().equals(2)) //none first last count
+            {
+                checkBoxC.setChecked(true);
+                a = 2;
+            }
+            if (s.getAggregation().equals(3)) //none first last count
+            {
+
+                checkBoxD.setChecked(true);
+                a = 3;
 //            AggregationType.setVisibility(View.GONE);
-//            if(s.getAggregation().equals(1))
-//                AggregateBy.setText("Topic");
-//            if(s.getAggregation().equals(2))
-//                AggregateBy.setText("Message");
+            }
+            if (s.getAggregationtype().equals(0)) {
+                checkBoxT.setChecked(true);
+                b = 0;
+            }
+            if (s.getAggregationtype().equals(1)) {
+                checkBoxT.setChecked(true);
+                b = 1;
+            }
+            int u = s.getAggregationtype();
+            if (s.getAggregationtype().equals(2)) {
+                checkBoxM.setChecked(true);
+                b = 2;
+            }
+
 //            if(!s.getAggregation().equals(1)&&!s.getAggregation().equals(2))
-//                AggregateBy.setText("Aggregate By");
-            apply.setVisibility(View.GONE);
-            del_service.setVisibility(View.GONE);
-            checkBoxA.setVisibility(View.GONE);
-            checkBoxB.setVisibility(View.GONE);
-            checkBoxC.setVisibility(View.GONE);
-            checkBoxD.setVisibility(View.GONE);
-            checkBoxM.setVisibility(View.GONE);
-            checkBoxT.setVisibility(View.GONE);
-            Aggregatet.setVisibility(View.GONE);
-            AggregateBy.setVisibility(View.GONE);
-            checkBoxH.setVisibility(View.GONE);
-            checkBoxDa.setVisibility(View.GONE);
-            checkBoxW.setVisibility(View.GONE);
-            checkBoxMo.setVisibility(View.GONE);
-            checkBoxY.setVisibility(View.GONE);
-            Aggregateint.setVisibility(View.GONE);
+//       }         AggregateBy.setText("Aggregate By");
+                apply.setVisibility(View.GONE);
+                del_service.setVisibility(View.GONE);
+                checkBoxA.setVisibility(View.GONE);
+                checkBoxB.setVisibility(View.GONE);
+                checkBoxC.setVisibility(View.GONE);
+                checkBoxD.setVisibility(View.GONE);
+                checkBoxM.setVisibility(View.GONE);
+                checkBoxT.setVisibility(View.GONE);
+                Aggregatet.setVisibility(View.GONE);
+                AggregateBy.setVisibility(View.GONE);
+                checkBoxH.setVisibility(View.GONE);
+                checkBoxDa.setVisibility(View.GONE);
+                checkBoxW.setVisibility(View.GONE);
+                checkBoxMo.setVisibility(View.GONE);
+                checkBoxY.setVisibility(View.GONE);
+                Aggregateint.setVisibility(View.GONE);
 
-            Interval = s.getAggregationdate().toString();
-            Substring = s.getAggregationkey();
-            AggregateInterval.setText(Interval);
-            AggregateInterval.setVisibility(View.GONE);
-            AggregateEvery.setVisibility(View.GONE);
-            if(Substring==null)
-                AggregateSubstring.setText("substring");
-            else
-                AggregateSubstring.setText(Substring);
+                Interval = s.getAggregationdate().toString();
+                Substring = s.getAggregationkey();
+                AggregateInterval.setText(Interval);
+                AggregateInterval.setVisibility(View.GONE);
+                AggregateEvery.setVisibility(View.GONE);
+                if (Substring == null)
+                    AggregateSubstring.setText("substring");
+                else
+                    AggregateSubstring.setText(Substring);
 
-            AggregateSubstring.setVisibility(View.GONE);
+                AggregateSubstring.setVisibility(View.GONE);
+            }
         }
+
     }
 
-}

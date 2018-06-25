@@ -163,7 +163,6 @@
 
             android:layout_below="@id/aggregation_by"
             android:textColor="#dcdcdc"
-            android:inputType="number|numberDecimal"
             android:layout_width="wrap_content"
             android:textColorHint="#dcdcdc"
             android:layout_weight="1"
@@ -279,7 +278,6 @@
         android:layout_marginTop="10dp"
         android:layout_below="@id/radiody"
         android:textColor="#dcdcdc"
-        android:inputType="number|numberDecimal"
         android:layout_width="wrap_content"
         android:textColorHint="#dcdcdc"
         android:layout_weight="1"
